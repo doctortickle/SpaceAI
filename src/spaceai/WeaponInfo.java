@@ -16,6 +16,8 @@
  */
 package spaceai;
 
+import java.util.Objects;
+
 /**
  *
  * @author Dylan Russell
@@ -59,22 +61,86 @@ public class WeaponInfo implements ActorInfo {
 
     @Override
     public boolean isShip() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
 
     @Override
     public boolean isStructure() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
 
     @Override
     public boolean isWeapon() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return true;
     }
 
     @Override
     public boolean isEnvironment() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
+    }
+
+    public WeaponInfo(int ID, WeaponType type, Direction direction, MapLocation location) {
+        this.ID = ID;
+        this.type = type;
+        this.direction = direction;
+        this.location = location;
+    }
+    
+    /**
+     * Get the type of this weapon.
+     * @return the WeaponType of this weapon.
+     */
+    public WeaponType getType() {
+        return type;
+    }
+    /**
+     * Return the direction this weapon is currently traveling in.
+     * @return the direction this weapon is currently traveling in.
+     */
+    public Direction getDirection() {
+        return direction;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + this.ID;
+        hash = 97 * hash + Objects.hashCode(this.type);
+        hash = 97 * hash + Objects.hashCode(this.direction);
+        hash = 97 * hash + Objects.hashCode(this.location);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final WeaponInfo other = (WeaponInfo) obj;
+        if (this.ID != other.ID) {
+            return false;
+        }
+        if (this.type != other.type) {
+            return false;
+        }
+        if (!Objects.equals(this.direction, other.direction)) {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "WeaponInfo{" + "ID=" + ID + ", type=" + type + ", direction=" + direction + ", location=" + location + '}';
     }
     
 }

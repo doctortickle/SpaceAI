@@ -11,38 +11,38 @@ package spaceai;
  */
 public enum ShipType {
     
-    FIGHTER     (new StructureType[] {StructureType.SMALL_DOCK, StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK, StructureType.HOME_STATION}, 
-                new WeaponType[] {WeaponType.SMALL_LASER}, 
+    FIGHTER     (new StructureType[] {StructureType.SMALL_DOCK, StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK, StructureType.HOME_STATION}, // spawnSources
+                new WeaponType[] {WeaponType.SMALL_LASER}, // arsenal
                 5,      10,         50,     1,  10,     15,     5,      1000,         1,        10000),
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
     
-    SIEGE       (new StructureType[] {StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK},
-                new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.PLANET_BOMBARDMENT},
+    SIEGE       (new StructureType[] {StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK}, // spawnSources
+                new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.PLANET_BOMBARDMENT}, // arsenal
                 10,      50,         300,    2,  10,     10,     3,      1000,         3,        10000),
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
     
-    DESTROYER   (new StructureType[] {StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK},
-                new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.MINE},
+    DESTROYER   (new StructureType[] {StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK}, // spawnSources
+                new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.MINE}, // arsenal
                 10,      100,        300,    3,  15,     20,     3,      1000,         3,        10000),
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
     
-    CAPITAL     (new StructureType[] {StructureType.CAPITAL_DOCK},
-                new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.LARGE_BOMB, WeaponType.MINE, WeaponType.PLANET_BOMBARDMENT},
+    CAPITAL     (new StructureType[] {StructureType.CAPITAL_DOCK}, // spawnSources
+                new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.LARGE_BOMB, WeaponType.MINE, WeaponType.PLANET_BOMBARDMENT}, // arsenal
                 50,      500,       1000,   5,  20,     25,     1,      2000,         5,        10000),
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
     
-    HARVESTER   (new StructureType[] {StructureType.SMALL_DOCK, StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK, StructureType.HOME_STATION},
-                null,
+    HARVESTER   (new StructureType[] {StructureType.SMALL_DOCK, StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK, StructureType.HOME_STATION}, // spawnSources
+                null, // arsenal
                 5,      10,         50,     1,  10,     20,     5,      1000,         1,        10000),
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
     
-    REFUELER    (new StructureType[] {StructureType.SMALL_DOCK, StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK, StructureType.HOME_STATION},
-                null,
+    REFUELER    (new StructureType[] {StructureType.SMALL_DOCK, StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK, StructureType.HOME_STATION}, // spawnSources
+                null, // arsenal
                 5,      10,         50,     1,  10,     15,     5,      1000,         1,        10000),
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
     
-    BUILDER     (new StructureType[] {StructureType.HOME_STATION},
-                null,
+    BUILDER     (new StructureType[] {StructureType.HOME_STATION}, // spawnSources
+                null, // arsenal
                 5,      10,         50,     1,  10,     15,     5,      1000,         1,        10000);
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
     

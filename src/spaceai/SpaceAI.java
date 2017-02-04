@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author dr4ur
+ * @author Dylan Russell
  */
 public class SpaceAI extends Application {
     

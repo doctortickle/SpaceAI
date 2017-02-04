@@ -2,7 +2,7 @@ package spaceai;
 
 /**
  *
- * @author dr4ur
+ * @author Dylan Russell
  */
 public enum Team {
     /**

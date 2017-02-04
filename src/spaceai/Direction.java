@@ -20,6 +20,6 @@ package spaceai;
  *
  * @author dr4ur
  */
-public class MapLocation {
-    // MapLocation class will go here.
+public class Direction {
+    // Direction class will go here.
 }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package spaceai;
+package common;
 
 import java.util.Objects;
 
@@ -22,44 +22,44 @@ import java.util.Objects;
  *
  * @author Dylan Russell
  * 
- * Stores basic information about a ShipType object.
+ * Stores basic information about an EnvironmentType object.
  */
-public class ShipInfo implements ActorInfo {
+public class EnvironmentInfo implements ActorInfo {
     
     /**
-     * The unique ID of this ship.
+     * The unique ID of this environment object.
      */
     public final int ID;
 
     /**
-     * The Team that this ship is on.
+     * The Team that this environment object is on.
      */
     public final Team team;
 
     /**
-     * The ShipType of this ship.
+     * The EnvironmentType of this environment object.
      */
-    public final ShipType type;
+    public final EnvironmentType type;
 
     /**
-     * The current MapLocation of this ship.
+     * The current MapLocation of this environment object.
      */
     public final MapLocation location;
 
     /**
-     * The current health of this ship.
+     * The current health of this environment object.
      */
     public final float health;
     
     /**
-     * The number of times this ship has attacked in the current turn.
+     * The number of minerals this environment object has currently remaining.
      */
-    public final int attackCount;
+    public final int mineralCount;
     
     /**
-     * The number of times this ship has moved in the current turn.
+     * The current number of StructureType structures on this environment object.
      */
-    public final int moveCount;
+    public final int structureCount;
 
     @Override
     public int getID() {
@@ -78,7 +78,7 @@ public class ShipInfo implements ActorInfo {
 
     @Override
     public boolean isShip() {
-        return true;
+        return false;
     }
 
     @Override
@@ -93,66 +93,65 @@ public class ShipInfo implements ActorInfo {
 
     @Override
     public boolean isEnvironment() {
-        return false;
+        return true;
     }
 
-    public ShipInfo(int ID, Team team, ShipType type, MapLocation location, float health, int attackCount, int moveCount) {
-        super();
+    public EnvironmentInfo(int ID, Team team, EnvironmentType type, MapLocation location, float health, int mineralCount, int structureCount) {
         this.ID = ID;
         this.team = team;
         this.type = type;
         this.location = location;
         this.health = health;
-        this.attackCount = attackCount;
-        this.moveCount = moveCount;
+        this.mineralCount = mineralCount;
+        this.structureCount = structureCount;
     }
     
     /**
-     * Returns the Team this ship is on.
-     * @return the team this ship is on.
+     * Returns the Team this environment object is on.
+     * @return the Team this environment object is on.
      */
     public Team getTeam() {
         return team;
     }
     /**
-     * Returns the ShipType of this ship.
-     * @return the ShipType of this ship.
+     * Returns the EnvironmentType of this structure.
+     * @return the EnvironmentType of this structure.
     */
-    public ShipType getType() {
+    public EnvironmentType getType() {
         return type;
     }
     /**
-     * Returns the health of this ship.
-     * @return the health of this ship.
+     * Returns the health of this environment object.
+     * @return the health of this environment object.
      */
     public float getHealth() {
         return health;
     }
     /**
-     * Returns the current attack count of this ship this round.
-     * @return the attack count of this ship this round.
+     * Returns the current mineral count of this environment object.
+     * @return the current mineral count of this environment object.
      */
-    public int getAttackCount() {
-        return attackCount;
+    public int getMineralCount() {
+        return mineralCount;
     }
     /**
-     * Returns the current move count of this ship this round.
-     * @return the current move count of this ship this round. 
+     * Returns the current number of StructureType structures built upon this environment object.
+     * @return the current number of StructureType structures built upon this environment object.
      */
-    public int getMoveCount() {
-        return moveCount;
+    public int getStructureCount() {
+        return structureCount;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + this.ID;
-        hash = 71 * hash + Objects.hashCode(this.team);
-        hash = 71 * hash + Objects.hashCode(this.type);
-        hash = 71 * hash + Objects.hashCode(this.location);
-        hash = 71 * hash + Float.floatToIntBits(this.health);
-        hash = 71 * hash + this.attackCount;
-        hash = 71 * hash + this.moveCount;
+        int hash = 7;
+        hash = 97 * hash + this.ID;
+        hash = 97 * hash + Objects.hashCode(this.team);
+        hash = 97 * hash + Objects.hashCode(this.type);
+        hash = 97 * hash + Objects.hashCode(this.location);
+        hash = 97 * hash + Float.floatToIntBits(this.health);
+        hash = 97 * hash + this.mineralCount;
+        hash = 97 * hash + this.structureCount;
         return hash;
     }
 
@@ -167,17 +166,17 @@ public class ShipInfo implements ActorInfo {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ShipInfo other = (ShipInfo) obj;
+        final EnvironmentInfo other = (EnvironmentInfo) obj;
         if (this.ID != other.ID) {
             return false;
         }
         if (Float.floatToIntBits(this.health) != Float.floatToIntBits(other.health)) {
             return false;
         }
-        if (this.attackCount != other.attackCount) {
+        if (this.mineralCount != other.mineralCount) {
             return false;
         }
-        if (this.moveCount != other.moveCount) {
+        if (this.structureCount != other.structureCount) {
             return false;
         }
         if (this.team != other.team) {
@@ -194,7 +193,7 @@ public class ShipInfo implements ActorInfo {
 
     @Override
     public String toString() {
-        return "ShipInfo{" + "ID=" + ID + ", team=" + team + ", type=" + type + ", location=" + location + ", health=" + health + ", attackCount=" + attackCount + ", moveCount=" + moveCount + '}';
+        return "EnvironmentInfo{" + "ID=" + ID + ", team=" + team + ", type=" + type + ", location=" + location + ", health=" + health + ", mineralCount=" + mineralCount + ", structureCount=" + structureCount + '}';
     }
     
     

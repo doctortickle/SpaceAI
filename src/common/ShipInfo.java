@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package spaceai;
+package common;
 
 import java.util.Objects;
 
@@ -22,47 +22,42 @@ import java.util.Objects;
  *
  * @author Dylan Russell
  * 
- * Stores basic information about a StructureInfo object.
+ * Stores basic information about a ShipType object.
  */
-public class StructureInfo implements ActorInfo {
+public class ShipInfo implements ActorInfo {
     
     /**
-     * The unique ID of this structure.
+     * The unique ID of this ship.
      */
     public final int ID;
 
     /**
-     * The Team that this structure is on.
+     * The Team that this ship is on.
      */
     public final Team team;
 
     /**
-     * The StructureType of this structure.
+     * The ShipType of this ship.
      */
-    public final StructureType type;
+    public final ShipType type;
 
     /**
-     * The current MapLocation of this structure.
+     * The current MapLocation of this ship.
      */
     public final MapLocation location;
 
     /**
-     * The current health of this structure.
+     * The current health of this ship.
      */
     public final float health;
     
     /**
-     * The number of times this structure has built in the current turn.
+     * The number of times this ship has attacked in the current turn.
      */
-    public final int buildCount;
+    public final int attackCount;
     
     /**
-     * The number of minerals this structure has mined in the current turn.
-     */
-    public final float minedCount;
-    
-    /**
-     * The number of times this structure has moved in the current turn.
+     * The number of times this ship has moved in the current turn.
      */
     public final int moveCount;
 
@@ -78,17 +73,17 @@ public class StructureInfo implements ActorInfo {
 
     @Override
     public float getRadius() {
-        return this.type.structureRadius;
+        return this.type.bodyRadius;
     }
 
     @Override
     public boolean isShip() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isStructure() {
-        return true;
+        return false;
     }
 
     @Override
@@ -101,55 +96,48 @@ public class StructureInfo implements ActorInfo {
         return false;
     }
 
-    public StructureInfo(int ID, Team team, StructureType type, MapLocation location, float health, int buildCount, float minedCount, int moveCount) {
+    public ShipInfo(int ID, Team team, ShipType type, MapLocation location, float health, int attackCount, int moveCount) {
+        super();
         this.ID = ID;
         this.team = team;
         this.type = type;
         this.location = location;
         this.health = health;
-        this.buildCount = buildCount;
-        this.minedCount = minedCount;
+        this.attackCount = attackCount;
         this.moveCount = moveCount;
     }
-
-     /**
-     * Returns the Team this structure is on.
-     * @return the Team this structure is on.
+    
+    /**
+     * Returns the Team this ship is on.
+     * @return the team this ship is on.
      */
     public Team getTeam() {
         return team;
     }
     /**
-     * Returns the StructureType of this structure.
-     * @return the StructureType of this structure.
+     * Returns the ShipType of this ship.
+     * @return the ShipType of this ship.
     */
-    public StructureType getType() {
+    public ShipType getType() {
         return type;
     }
     /**
-     * Returns the health of this structure.
-     * @return the health of this structure.
+     * Returns the health of this ship.
+     * @return the health of this ship.
      */
     public float getHealth() {
         return health;
     }
     /**
-     * Returns the number of times this structure has built this turn.
-     * @return the number of times this structure has built this turn.
+     * Returns the current attack count of this ship this round.
+     * @return the attack count of this ship this round.
      */
-    public int getBuildCount() {
-        return buildCount;
+    public int getAttackCount() {
+        return attackCount;
     }
     /**
-     * Returns the number of minerals this structure has mined this turn.
-     * @return the number of minerals this structure has mined this turn.
-     */
-    public float getMinedCount() {
-        return minedCount;
-    }
-    /**
-     * Returns the number of times this structure has moved this turn.
-     * @return the number of times this structure has moved this turn.
+     * Returns the current move count of this ship this round.
+     * @return the current move count of this ship this round. 
      */
     public int getMoveCount() {
         return moveCount;
@@ -158,14 +146,13 @@ public class StructureInfo implements ActorInfo {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 53 * hash + this.ID;
-        hash = 53 * hash + Objects.hashCode(this.team);
-        hash = 53 * hash + Objects.hashCode(this.type);
-        hash = 53 * hash + Objects.hashCode(this.location);
-        hash = 53 * hash + Float.floatToIntBits(this.health);
-        hash = 53 * hash + this.buildCount;
-        hash = 53 * hash + Float.floatToIntBits(this.minedCount);
-        hash = 53 * hash + this.moveCount;
+        hash = 71 * hash + this.ID;
+        hash = 71 * hash + Objects.hashCode(this.team);
+        hash = 71 * hash + Objects.hashCode(this.type);
+        hash = 71 * hash + Objects.hashCode(this.location);
+        hash = 71 * hash + Float.floatToIntBits(this.health);
+        hash = 71 * hash + this.attackCount;
+        hash = 71 * hash + this.moveCount;
         return hash;
     }
 
@@ -180,17 +167,14 @@ public class StructureInfo implements ActorInfo {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final StructureInfo other = (StructureInfo) obj;
+        final ShipInfo other = (ShipInfo) obj;
         if (this.ID != other.ID) {
             return false;
         }
         if (Float.floatToIntBits(this.health) != Float.floatToIntBits(other.health)) {
             return false;
         }
-        if (this.buildCount != other.buildCount) {
-            return false;
-        }
-        if (Float.floatToIntBits(this.minedCount) != Float.floatToIntBits(other.minedCount)) {
+        if (this.attackCount != other.attackCount) {
             return false;
         }
         if (this.moveCount != other.moveCount) {
@@ -210,9 +194,9 @@ public class StructureInfo implements ActorInfo {
 
     @Override
     public String toString() {
-        return "StructureInfo{" + "ID=" + ID + ", team=" + team + ", type=" + type + ", location=" + location + ", health=" + health + ", buildCount=" + buildCount + ", minedCount=" + minedCount + ", moveCount=" + moveCount + '}';
+        return "ShipInfo{" + "ID=" + ID + ", team=" + team + ", type=" + type + ", location=" + location + ", health=" + health + ", attackCount=" + attackCount + ", moveCount=" + moveCount + '}';
     }
     
     
-           
+    
 }

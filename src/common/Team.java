@@ -1,4 +1,4 @@
-package spaceai;
+package common;
 
 /**
  *

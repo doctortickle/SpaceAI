@@ -21,6 +21,8 @@ import java.util.Objects;
 /**
  *
  * @author Dylan Russell
+ * 
+ * Stores basic information about a WeaponType object.
  */
 public class WeaponInfo implements ActorInfo {
     

@@ -21,6 +21,8 @@ import java.util.Objects;
 /**
  *
  * @author Dylan Russell
+ * 
+ * Stores basic information about a ShipType object.
  */
 public class ShipInfo implements ActorInfo {
     

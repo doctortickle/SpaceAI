@@ -19,6 +19,8 @@ package spaceai;
 /**
  *
  * @author Dylan Russell
+ * 
+ * Contains the attributes of various EnvironmentType objects.
  */
 public enum EnvironmentType {
     

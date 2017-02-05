@@ -19,6 +19,8 @@ package spaceai;
 /**
  *
  * @author Dylan Russell
+ * 
+ * Contains the attributes of various WeaponType objects.
  */
 public enum WeaponType {
     /**

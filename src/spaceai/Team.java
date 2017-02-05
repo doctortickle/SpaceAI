@@ -3,6 +3,8 @@ package spaceai;
 /**
  *
  * @author Dylan Russell
+ * 
+ * Contains the team constants - A, B, and NEUTRAL.
  */
 public enum Team {
     /**

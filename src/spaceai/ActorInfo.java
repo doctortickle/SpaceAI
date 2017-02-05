@@ -19,6 +19,8 @@ package spaceai;
 /**
  *
  * @author Dylan Russell
+ * 
+ * Interface for all actors in SpaceAI.
  */
 public interface ActorInfo {
     

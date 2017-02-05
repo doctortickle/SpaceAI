@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 dr4ur
+ * Copyright (C) 2017 Dylan Russell
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,9 @@ import java.util.Objects;
 
 /**
  *
- * @author dr4ur
+ * @author Dylan Russell
+ * 
+ * Stores basic information about an EnvironmentType object.
  */
 public class EnvironmentInfo implements ActorInfo {
     

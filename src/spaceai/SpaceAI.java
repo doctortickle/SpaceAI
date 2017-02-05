@@ -45,7 +45,9 @@ public class SpaceAI extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+        //launch(args);
+        ShipInfo fighter = new ShipInfo(1, Team.A, ShipType.FIGHTER, new MapLocation(0,0),ShipType.FIGHTER.maxHealth,1,1);
+        System.out.println(fighter.type);
     }
     
 }

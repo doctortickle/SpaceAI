@@ -25,22 +25,22 @@ import java.util.Objects;
 public class WeaponInfo implements ActorInfo {
     
     /**
-     * The unique ID of the weapon.
+     * The unique ID of this weapon.
      */
     public final int ID;
 
     /**
-     * The type of weapon.
+     * The WeaponType of this weapon.
      */
     public final WeaponType type;
 
     /**
-     * The direction in which this weapon is moving.
+     * The Direction in which this weapon is moving.
      */
     public final Direction direction;
 
     /**
-     * The current location of this weapon.
+     * The current MapLocation of this weapon.
      */
     public final MapLocation location;
 
@@ -87,14 +87,14 @@ public class WeaponInfo implements ActorInfo {
     }
     
     /**
-     * Get the type of this weapon.
+     * Get the WeaponType of this weapon.
      * @return the WeaponType of this weapon.
      */
     public WeaponType getType() {
         return type;
     }
     /**
-     * Return the direction this weapon is currently traveling in.
+     * Return the Direction this weapon is currently traveling in.
      * @return the direction this weapon is currently traveling in.
      */
     public Direction getDirection() {

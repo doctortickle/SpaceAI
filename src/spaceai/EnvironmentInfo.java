@@ -35,12 +35,12 @@ public class EnvironmentInfo implements ActorInfo {
     public final Team team;
 
     /**
-     * The type of this environment object.
+     * The EnvironmentType of this environment object.
      */
     public final EnvironmentType type;
 
     /**
-     * The current location of this environment object.
+     * The current MapLocation of this environment object.
      */
     public final MapLocation location;
 
@@ -55,7 +55,7 @@ public class EnvironmentInfo implements ActorInfo {
     public final int mineralCount;
     
     /**
-     * The current number of structures on this environment object.
+     * The current number of StructureType structures on this environment object.
      */
     public final int structureCount;
 
@@ -105,8 +105,8 @@ public class EnvironmentInfo implements ActorInfo {
     }
     
     /**
-     * Returns the team this environment object is on.
-     * @return the team this environment object is on.
+     * Returns the Team this environment object is on.
+     * @return the Team this environment object is on.
      */
     public Team getTeam() {
         return team;
@@ -133,8 +133,8 @@ public class EnvironmentInfo implements ActorInfo {
         return mineralCount;
     }
     /**
-     * Returns the current number of structures built upon this environment object.
-     * @return the current number of structures built upon this environment object.
+     * Returns the current number of StructureType structures built upon this environment object.
+     * @return the current number of StructureType structures built upon this environment object.
      */
     public int getStructureCount() {
         return structureCount;

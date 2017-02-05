@@ -35,12 +35,12 @@ public class StructureInfo implements ActorInfo {
     public final Team team;
 
     /**
-     * The type of this structure.
+     * The StructureType of this structure.
      */
     public final StructureType type;
 
     /**
-     * The current location of this structure.
+     * The current MapLocation of this structure.
      */
     public final MapLocation location;
 
@@ -111,8 +111,8 @@ public class StructureInfo implements ActorInfo {
     }
 
      /**
-     * Returns the team this structure is on.
-     * @return the team this structure is on.
+     * Returns the Team this structure is on.
+     * @return the Team this structure is on.
      */
     public Team getTeam() {
         return team;

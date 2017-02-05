@@ -35,12 +35,12 @@ public class ShipInfo implements ActorInfo {
     public final Team team;
 
     /**
-     * The type of this ship.
+     * The ShipType of this ship.
      */
     public final ShipType type;
 
     /**
-     * The current location of this ship.
+     * The current MapLocation of this ship.
      */
     public final MapLocation location;
 
@@ -50,12 +50,12 @@ public class ShipInfo implements ActorInfo {
     public final float health;
     
     /**
-     * The number of times this Ship has attacked in the current turn.
+     * The number of times this ship has attacked in the current turn.
      */
     public final int attackCount;
     
     /**
-     * The number of times this Ship has moved in the current turn.
+     * The number of times this ship has moved in the current turn.
      */
     public final int moveCount;
 
@@ -106,7 +106,7 @@ public class ShipInfo implements ActorInfo {
     }
     
     /**
-     * Returns the team this ship is on.
+     * Returns the Team this ship is on.
      * @return the team this ship is on.
      */
     public Team getTeam() {

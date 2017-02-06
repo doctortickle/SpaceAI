@@ -1,5 +1,8 @@
 /*
  * Copyright (C) 2017 Dylan Russell
+* This game is a heavily modified version of Battlecode 2017. I give 
+ * significant credit to the team at MIT for their work on Battlecode and for
+ * inspiring this body of work. Please check out battlecode.org for more info.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

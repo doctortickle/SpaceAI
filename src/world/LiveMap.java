@@ -67,7 +67,7 @@ public strictfp class LiveMap {
      * i.e. in game correct MapLocations that need to have the origin
      * subtracted from them to be used to index into the map arrays.
      */
-    private final ActorInfo[] initialActors;
+    private final Actor[] initialActors;
 
     public LiveMap(float width,
                    float height,
@@ -75,7 +75,7 @@ public strictfp class LiveMap {
                    int seed,
                    int rounds,
                    String mapName,
-                   ActorInfo[] initialBodies) {
+                   Actor[] initialBodies) {
         this.width = width;
         this.height = height;
         this.origin = origin;
@@ -206,7 +206,7 @@ public strictfp class LiveMap {
      * @return the list of starting actors on the map.
      *         MUST NOT BE MODIFIED.
      */
-    public ActorInfo[] getInitialActors() {
+    public Actor[] getInitialActors() {
         return initialActors;
     }
 

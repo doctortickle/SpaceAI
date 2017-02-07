@@ -173,7 +173,7 @@ public final strictfp class MapLocation implements Serializable, Comparable<MapL
      * @return true if this location is within one flight radius of the given ship; false otherwise
      *
      */
-    public final boolean isWithinFlightRadius(ShipInfo ship){
+    public final boolean isWithinFlightRadius(Ship ship){
         return isWithinDistance(ship.location, ship.type.flightRadius);
     }
     
@@ -186,7 +186,7 @@ public final strictfp class MapLocation implements Serializable, Comparable<MapL
      *         false otherwise
      *
      */
-    public final boolean isWithinEnemySensorRadius(ShipInfo ship){
+    public final boolean isWithinEnemySensorRadius(Ship ship){
         return isWithinDistance(ship.location, ship.type.enemySensorRadius);
     }
 
@@ -199,7 +199,7 @@ public final strictfp class MapLocation implements Serializable, Comparable<MapL
      *         false otherwise
      *
      */
-    public final boolean isWithinIncomingDetectionRadius(ShipInfo ship){
+    public final boolean isWithinIncomingDetectionRadius(Ship ship){
         return isWithinDistance(ship.location, ship.type.incomingDetectionRadius);
     }
     
@@ -212,7 +212,7 @@ public final strictfp class MapLocation implements Serializable, Comparable<MapL
      *         false otherwise
      *
      */
-    public final boolean isWithinDetectionRadius(WeaponInfo mine){
+    public final boolean isWithinDetectionRadius(Weapon mine){
         return isWithinDistance(mine.location, mine.type.detectionRadius);
     }
     
@@ -226,7 +226,7 @@ public final strictfp class MapLocation implements Serializable, Comparable<MapL
      *         false otherwise
      *
      */
-    public final boolean isWithinExplosionRadius(WeaponInfo weapon){
+    public final boolean isWithinExplosionRadius(Weapon weapon){
         return isWithinDistance(weapon.location, weapon.type.explosionRadius);
     }
     
@@ -237,7 +237,7 @@ public final strictfp class MapLocation implements Serializable, Comparable<MapL
      * @return true if this location is within one flight radius of the given structure; false otherwise
      *
      */
-    public final boolean isWithinFlightRadius(StructureInfo structure){
+    public final boolean isWithinFlightRadius(Structure structure){
         return isWithinDistance(structure.location, structure.type.flightRadius);
     }
     
@@ -249,7 +249,7 @@ public final strictfp class MapLocation implements Serializable, Comparable<MapL
      * @return true if this location is within the refuel radius radius of the given structure; false otherwise
      *
      */
-    public final boolean isWithinRefuelRadius(StructureInfo fuelStation){
+    public final boolean isWithinRefuelRadius(Structure fuelStation){
         return isWithinDistance(fuelStation.location, fuelStation.type.refuelRadius);
     }
 

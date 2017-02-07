@@ -15,33 +15,52 @@ import javafx.scene.image.ImageView;
  * @author Dylan Russell
  */
 public abstract class Actor {
-    protected int ID, health, damage, radius;
-    protected double iX, iY, vX, vY;
+    protected int ID, health;
+    protected float radius;
     protected Team team;
-    protected boolean isUnit, isObject;
+    protected MapLocation location;
     protected ImageView spriteFrame;
     protected List<Image> imageStates;
-    
-    public Actor(double xLocation, double yLocation, Image... spriteCels) { //Used to instantiate an actor object
-        spriteFrame = new ImageView(spriteCels[0]);
-        imageStates.addAll(Arrays.asList(spriteCels));
-        iX = xLocation;
-        iY = yLocation;
-        vX = vY = 0;
-        isUnit = true;
-        isObject = false;
-    }
-    
-    public Actor(double xLocation, double yLocation, boolean unit, boolean object, Image... spriteCels) { //Used to instantiate an actor object
-        spriteFrame = new ImageView(spriteCels[0]);
-        imageStates.addAll(Arrays.asList(spriteCels));
-        iX = xLocation;
-        iY = yLocation;
-        vX = vY = 0;
-        isUnit = unit;
-        isObject = object;
+
+    public Actor(int ID, int health, float radius, Team team, MapLocation location, ImageView spriteFrame, List<Image> imageStates) {
+        this.ID = ID;
+        this.health = health;
+        this.radius = radius;
+        this.team = team;
+        this.location = location;
+        this.spriteFrame = spriteFrame;
+        this.imageStates = imageStates;
     }
     
     public abstract void update(); // Used to update the sprites every pulse.
 
+    public int getID() {
+        return ID;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public MapLocation getLocation() {
+        return location;
+    }
+    
+    public abstract boolean isShip();
+
+    public abstract boolean isStructure();
+    
+    public abstract boolean isWeapon();
+
+    public abstract boolean isEnvironment();
+    
+    public abstract boolean collide(Actor object);
 }

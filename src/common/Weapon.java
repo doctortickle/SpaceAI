@@ -16,7 +16,9 @@
  */
 package common;
 
-import java.util.Objects;
+import java.util.List;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -24,13 +26,8 @@ import java.util.Objects;
  * 
  * Stores basic information about a WeaponType object.
  */
-public class WeaponInfo implements ActorInfo {
+public class Weapon extends Actor {
     
-    /**
-     * The unique ID of this weapon.
-     */
-    public final int ID;
-
     /**
      * The WeaponType of this weapon.
      */
@@ -40,26 +37,6 @@ public class WeaponInfo implements ActorInfo {
      * The Direction in which this weapon is moving.
      */
     public final Direction direction;
-
-    /**
-     * The current MapLocation of this weapon.
-     */
-    public final MapLocation location;
-
-    @Override
-    public int getID() {
-        return this.ID;
-    }
-
-    @Override
-    public MapLocation getLocation() {
-        return this.location;
-    }
-
-    @Override
-    public float getRadius() {
-        return this.type.weaponRadius;
-    }
 
     @Override
     public boolean isShip() {
@@ -81,13 +58,12 @@ public class WeaponInfo implements ActorInfo {
         return false;
     }
 
-    public WeaponInfo(int ID, WeaponType type, Direction direction, MapLocation location) {
-        this.ID = ID;
+    public Weapon(WeaponType type, Direction direction, int ID, Team team, MapLocation location, ImageView spriteFrame, List<Image> imageStates) {
+        super(ID, Integer.MAX_VALUE, type.weaponRadius, Team.NEUTRAL, location, spriteFrame, imageStates);
         this.type = type;
         this.direction = direction;
-        this.location = location;
     }
-    
+  
     /**
      * Get the WeaponType of this weapon.
      * @return the WeaponType of this weapon.
@@ -104,45 +80,13 @@ public class WeaponInfo implements ActorInfo {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + this.ID;
-        hash = 97 * hash + Objects.hashCode(this.type);
-        hash = 97 * hash + Objects.hashCode(this.direction);
-        hash = 97 * hash + Objects.hashCode(this.location);
-        return hash;
+    public void update() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final WeaponInfo other = (WeaponInfo) obj;
-        if (this.ID != other.ID) {
-            return false;
-        }
-        if (this.type != other.type) {
-            return false;
-        }
-        if (!Objects.equals(this.direction, other.direction)) {
-            return false;
-        }
-        if (!Objects.equals(this.location, other.location)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "WeaponInfo{" + "ID=" + ID + ", type=" + type + ", direction=" + direction + ", location=" + location + '}';
+    public boolean collide(Actor object) {
+        return false;
     }
     
 }

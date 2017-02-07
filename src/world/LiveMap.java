@@ -206,7 +206,7 @@ public strictfp class LiveMap {
      * @return the list of starting actors on the map.
      *         MUST NOT BE MODIFIED.
      */
-    public ActorInfo[] getInitialBodies() {
+    public ActorInfo[] getInitialActors() {
         return initialActors;
     }
 

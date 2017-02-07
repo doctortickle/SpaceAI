@@ -26,7 +26,7 @@ import javafx.stage.Stage;
  */
 public class SpaceAI extends Application {
     
-    static final double WIDTH = 640, HEIGHT = 400;
+    static final double WIDTH = (2*640), HEIGHT = (2*400);
     Scene scene;
     StackPane root;
     Image splashScreen, instructionLayer, legalLayer, scoresLayer;
@@ -38,14 +38,15 @@ public class SpaceAI extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        //primaryStage.setFullScreen(true);
         createSplashScreenNodes();
         addNodesToStackPane();
-        primaryStage.setTitle("InvinciBagel");
+        primaryStage.setTitle("SpaceAI");
         primaryStage.setScene(scene);
         primaryStage.show();
         
         gameButton.setOnAction((ActionEvent) -> {
-            splashScreenBackplate.setVisible(false);
+            splashScreenBackplate.setVisible(true);
             splashScreenTextArea.setVisible(false);
         });
                 
@@ -78,7 +79,7 @@ public class SpaceAI extends Application {
     
     private void createSplashScreenNodes() {
         root = new StackPane();
-        scene = new Scene(root, WIDTH, HEIGHT, Color.WHITE);
+        scene = new Scene(root, WIDTH, HEIGHT, Color.BLACK);
         buttonContainer = new HBox(12);
         buttonContainer.setAlignment(Pos.BOTTOM_LEFT);
         buttonContainerPadding = new Insets(0,0,10,16);
@@ -92,14 +93,14 @@ public class SpaceAI extends Application {
         legalButton = new Button();
         legalButton.setText("LEGAL & CREDITS");
         buttonContainer.getChildren().addAll(gameButton, helpButton, scoreButton, legalButton);
-        splashScreen = new Image("/invincibagelsplash.png", 640, 400, true, false, true);
+        splashScreen = new Image("/SpaceAITitleScreen.png", 1280, 800, true, false, true);
         splashScreenBackplate = new ImageView();
         splashScreenBackplate.setImage(splashScreen);
-        instructionLayer = new Image("/invincibagelinstruct.png", 640, 400, true, false, true);
+        instructionLayer = new Image("/invincibagelinstruct.png", (2*640), (2*400), true, false, true);
         splashScreenTextArea = new ImageView();
         splashScreenTextArea.setImage(instructionLayer);
-        legalLayer = new Image("/invincibagelcreds.png", 640, 400, true, false, true);
-        scoresLayer = new Image("/invincibagelscores.png", 640, 400, true, false, true);
+        legalLayer = new Image("/invincibagelcreds.png", (2*640), (2*400), true, false, true);
+        scoresLayer = new Image("/invincibagelscores.png", (2*640), (2*400), true, false, true);
     }
     
     private void addNodesToStackPane() {

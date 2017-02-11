@@ -22,10 +22,13 @@ package common;
  */
 public class AIController {
     
-    Actor actor;
+    private final Actor actor;
     
-    AIController() {
-       this.actor = actor;
+    public AIController(Actor actor) {
+        this.actor = actor;
     }
     
+    public GameConstants getType() {
+        return actor.actorType;
+    }
 }

@@ -22,12 +22,14 @@ package common;
  */
 public class AICommand {
     
-    Actor actor;
+    static AIController ac;
     
-    AICommand(Actor actor) {
-        this.actor =  actor;
+    public static void run(AIController ac) {
+        
+        AICommand.ac = ac;
+        
+        
+        
     }
-    
-    actor.getActorType();
     
 }

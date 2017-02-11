@@ -42,6 +42,14 @@ public class Unit extends Actor {
         // Updates go here.
     }
 
+    public UnitType getType() {
+        return type;
+    }
+
+    public int getFuel() {
+        return fuel;
+    }
+    
     @Override
     public boolean isCommandable() {
         return true;

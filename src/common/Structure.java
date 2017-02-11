@@ -73,8 +73,8 @@ public class Structure extends Actor {
         return false;
     }
 
-    public Structure(StructureType type, int ID, Team team, MapLocation location, ImageView spriteFrame, List<Image> imageStates) {
-        super(ID, type.maxHealth, type.structureRadius, team, location, spriteFrame, imageStates);
+    public Structure(StructureType type, int ID, Team team, MapLocation location, Image imageSprite) {
+        super(type.actorType, ID, type.maxHealth, type.structureRadius, team, location, imageSprite);
         this.type = type;
         this.buildCount = 0;
         this.minedCount = 0;

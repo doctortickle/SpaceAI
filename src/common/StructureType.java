@@ -16,6 +16,8 @@
  */
 package common;
 
+import javafx.scene.image.Image;
+
 /**
  *
  * @author Dylan Russell
@@ -29,48 +31,54 @@ public enum StructureType {
     HOME_STATION        (   null,
                             null,
                             new ShipType[] {ShipType.BUILDER, ShipType.HARVESTER, ShipType.REFUELER, ShipType.FIGHTER},
-                            2000,   0,      10,     10,     10,     1,      10000   ),
+                            2000,   0,      10,     10,     10,     1,      10000,
     /*                      HP      cost    rad     rfRad   mRate   fRad    bCL     */
+                            new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.HOME_STATION),
     /**
      * The smallest and most basic StructureType. Capable of producing necessary early game units.
      */
     SMALL_DOCK          (   new ShipType[] {ShipType.BUILDER},
                             new EnvironmentType[] {EnvironmentType.SMALL_PLANET, EnvironmentType.LARGE_PLANET},
                             new ShipType[] {ShipType.FIGHTER, ShipType.HARVESTER, ShipType.REFUELER},
-                            500,    500,     5,     0,      0,      0,      10000   ),
+                            500,    500,     5,     0,      0,      0,      10000,
     /*                      HP      cost    rad     rfRad   mRate   fRad    bCL     */
+                            new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.SMALL_DOCK),
     /**
      * An upgraded variant of the SMALL_DOCK. Capable of producing the necessary mid game units - a DESTROYER and a SIEGE ship.
      */
     LARGE_DOCK          (   new ShipType[] {ShipType.BUILDER},
                             new EnvironmentType[] {EnvironmentType.SMALL_PLANET, EnvironmentType.LARGE_PLANET},
                             new ShipType[] {ShipType.FIGHTER, ShipType.SIEGE, ShipType.DESTROYER, ShipType.HARVESTER, ShipType.REFUELER},
-                            1200,   1000,    8,     0,      0,      0,      10000   ),
+                            1200,   1000,    8,     0,      0,      0,      10000,
     /*                      HP      cost    rad     rfRad   mRate   fRad    bCL     */
+                            new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.LARGE_DOCK),
     /**
      * The largest and most capable of StructureTypes. Capable of producing all units (except BUILDER), notably the deadly CAPITAL ship.
      */
     CAPITAL_DOCK        (   new ShipType[] {ShipType.BUILDER},
                             new EnvironmentType[] {EnvironmentType.LARGE_PLANET},
                             new ShipType[] {ShipType.FIGHTER, ShipType.SIEGE, ShipType.DESTROYER, ShipType.CAPITAL, ShipType.HARVESTER, ShipType.REFUELER},
-                            3000,   3000,    15,     0,      0,     0,      10000   ),
+                            3000,   3000,    15,     0,      0,     0,      10000,
     /*                      HP      cost    rad     rfRad   mRate   fRad    bCL     */
+                            new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.CAPITAL_DOCK),
     /**
      * A facility that can be built upon a SMALL_METEOR or a LARGE_METEOR to harvest minerals. Can only be built by a HARVESTER.
      */
     MINING_FACILITY     (   new ShipType[] {ShipType.HARVESTER},
                             new EnvironmentType[] {EnvironmentType.SMALL_METEOR, EnvironmentType.LARGE_METEOR},
                             null,
-                            500,    500,     5,      0,     10,     0,      10000   ),
+                            500,    500,     5,      0,     10,     0,      10000,
     /*                      HP      cost    rad     rfRad   mRate   fRad    bCL     */
+                            new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.MINING_FACILITY),
     /**
      * A station that can refuel ShipTypes within a given radius. Can only be built by a REFUELER.
      */
     FUEL_STATION        (   new ShipType[] {ShipType.REFUELER},
                             null,
                             null,
-                            200,    100,     5,      10,    0,      0,      10000   );
+                            200,    100,     5,      10,    0,      0,      10000,
     /*                      HP      cost    rad     rfRad   mRate   fRad    bCL     */
+                            new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.FUEL_STATION);
     
     /**
      * The ShipTypes that may spawn a given StructureType.
@@ -114,6 +122,16 @@ public enum StructureType {
     public final float bytecodeLimit;
     
     /**
+     * Contains the sprite data for a given WeaponType.
+     */
+    public final Image spriteImage;
+    
+    /**
+     * Declares the actor type as a game constant to be used with AI controller.
+     */
+    public final GameConstants actorType;
+    
+    /**
      * If the given StructureType can produce one or more ShipType, as indicated by buildShips[], will return true.
      * @return true if given StructureType can produce one or more ShipType.
      */
@@ -135,7 +153,10 @@ public enum StructureType {
         return this == MINING_FACILITY;
     }
 
-    private StructureType(ShipType[] buildSources, EnvironmentType[] buildLocations, ShipType[] buildShips, int maxHealth, int mineralCost, float structureRadius, float refuelRadius, float miningRate, float flightRadius, float bytecodeLimit) {
+    private StructureType(ShipType[] buildSources, EnvironmentType[] buildLocations, 
+            ShipType[] buildShips, int maxHealth, int mineralCost, float structureRadius, 
+            float refuelRadius, float miningRate, float flightRadius, float bytecodeLimit,
+            Image spriteImage, GameConstants actorType) {
         this.buildSources       = buildSources;
         this.buildLocations     = buildLocations;
         this.buildShips         = buildShips;
@@ -146,6 +167,8 @@ public enum StructureType {
         this.miningRate         = miningRate;
         this.flightRadius       = flightRadius;
         this.bytecodeLimit      = bytecodeLimit;
+        this.spriteImage        = spriteImage;
+        this.actorType          = actorType;
     }
     /**
      * Returns the ShipTypes that may spawn a given StructureType.

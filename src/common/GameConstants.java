@@ -23,6 +23,44 @@ package common;
  * GameConstants not contained in other classes (i.e. ShipType, WeaponType, 
  * etc.) is stored here.
  */
-public class GameConstants {
-    // GameConstants class will go here.
+public enum GameConstants {
+    
+    /**
+     * All ShipTypes.
+     */
+    FIGHTER,
+    SIEGE,
+    DESTROYER,
+    CAPITAL,
+    HARVESTER,
+    REFUELER,
+    BUILDER, 
+    /**
+     * All WeaponTypes.
+     */
+    SMALL_LASER,
+    LARGE_LASER,
+    SMALL_BOMB,
+    LARGE_BOMB,
+    MINE,
+    PLANET_BOMBARDMENT,
+    /**
+     * All StructureTypes.
+     */
+    HOME_STATION,
+    SMALL_DOCK,
+    LARGE_DOCK,
+    CAPITAL_DOCK,
+    MINING_FACILITY,
+    FUEL_STATION,
+    /**
+     * All EnvironmentTypes.
+     */
+    SMALL_METEOR,
+    LARGE_METEOR,
+    SMALL_ASTEROID,
+    LARGE_ASTEROID,
+    SMALL_PLANET,
+    LARGE_PLANET;
+    
 }

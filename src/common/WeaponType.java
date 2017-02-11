@@ -16,6 +16,8 @@
  */
 package common;
 
+import javafx.scene.image.Image;
+
 /**
  *
  * @author Dylan Russell
@@ -26,33 +28,39 @@ public enum WeaponType {
     /**
      * The most basic WeaponType, quick and light. Can be fired by all attack-capable units.
      */
-    SMALL_LASER         (10,         1,      0,      0,      1,  1,      0.5    ),
+    SMALL_LASER         (10,         1,      0,      0,      1,  1,      0.5,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.SMALL_LASER),
     /**
      * An upgraded laser variant; more powerful, but twice as slow. Can be fired by a DESTROYER and a CAPITAL ship.
      */
-    LARGE_LASER         (7,          3,      0,      0,      3,  3,      1      ),
+    LARGE_LASER         (7,          3,      0,      0,      3,  3,      1,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.LARGE_LASER),
     /**
      * A projectile that explodes on impact with an Actor and does damage to adjacent Actors. Can be fired by a DESTROYER and a CAPITAL ship.
      */
-    SMALL_BOMB          (6,          3,      6,      0,      10, 10,     5      ),
+    SMALL_BOMB          (6,          3,      6,      0,      10, 10,     5,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.SMALL_BOMB),
     /**
      * A heavy bomb variant; more powerful, a greater explosion radius, and twice as slow. Can be fired only by a CAPITAL ship.
      */
-    LARGE_BOMB          (4,          4,      12,     0,      20, 20,     10     ),
+    LARGE_BOMB          (4,          4,      12,     0,      20, 20,     10,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.LARGE_BOMB),
     /**
      * A deployable mine that will explode when an enemy ShipType enters its detection radius. Can be deployed by a DESTROYER and a CAPITAL ship.
      */
-    MINE                (0,          3,      10,     7,      15, 15,     20     ),
+    MINE                (0,          3,      10,     7,      15, 15,     20,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.MINE),
     /**
      * A powerful blast that will deal increased damage to StructureTypes and EnvironmentalType objects. Can be fired by SIEGE and CAPITAL ships.
      */
-    PLANET_BOMBARDMENT  (4,          4,      0,      0,      20, 50,     10     );
+    PLANET_BOMBARDMENT  (4,          4,      0,      0,      20, 50,     10,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.PLANET_BOMBARDMENT);
     
     /**
      * The speed of a WeaponType when launched and during flight.
@@ -82,8 +90,20 @@ public enum WeaponType {
      * The amount of time a ShipType must wait after firing or deploying a given WeaponType before firing or deploying again.
      */
     public final double reloadTime; //Used for all weapons.
+    
+    /**
+     * Contains the sprite data for a given WeaponType.
+     */
+    public final Image spriteImage;
+    
+    /**
+     * Declares the actor type as a game constant to be used with AI controller.
+     */
+    public final GameConstants actorType;
 
-    private WeaponType(float launchSpeed, float weaponRadius, float explosionRadius, float detectionRadius, int damage, int structureDamage, double reloadTime) {
+    private WeaponType(float launchSpeed, float weaponRadius, float explosionRadius, 
+            float detectionRadius, int damage, int structureDamage, double reloadTime,
+            Image spriteImage, GameConstants actorType) {
         this.launchSpeed        = launchSpeed;
         this.weaponRadius       = weaponRadius;
         this.explosionRadius    = explosionRadius;
@@ -91,6 +111,8 @@ public enum WeaponType {
         this.damage             = damage;
         this.structureDamage    = structureDamage;
         this.reloadTime         = reloadTime;
+        this.spriteImage        = spriteImage;
+        this.actorType          = actorType;
     }
     
     /**

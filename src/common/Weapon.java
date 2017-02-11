@@ -58,8 +58,8 @@ public class Weapon extends Actor {
         return false;
     }
 
-    public Weapon(WeaponType type, Direction direction, int ID, Team team, MapLocation location, ImageView spriteFrame, List<Image> imageStates) {
-        super(ID, Integer.MAX_VALUE, type.weaponRadius, Team.NEUTRAL, location, spriteFrame, imageStates);
+    public Weapon(WeaponType type, Direction direction, int ID, Team team, MapLocation location, Image imageSprite) {
+        super(type.actorType, ID, Integer.MAX_VALUE, type.weaponRadius, Team.NEUTRAL, location, imageSprite);
         this.type = type;
         this.direction = direction;
     }

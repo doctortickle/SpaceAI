@@ -14,26 +14,33 @@ import javafx.scene.image.ImageView;
  *
  * @author Dylan Russell
  */
-public abstract class Actor {
+public class Actor {
+    protected GameConstants actorType;
     protected int ID, health;
     protected float radius;
     protected Team team;
     protected MapLocation location;
     protected ImageView spriteFrame;
-    protected List<Image> imageStates;
+    protected Image spriteImage;
 
-    public Actor(int ID, int health, float radius, Team team, MapLocation location, ImageView spriteFrame, List<Image> imageStates) {
+    public Actor(GameConstants actorType, int ID, int health, float radius, Team team, MapLocation location, Image spriteImage) {
+        this.actorType = actorType;
         this.ID = ID;
         this.health = health;
         this.radius = radius;
         this.team = team;
         this.location = location;
-        this.spriteFrame = spriteFrame;
-        this.imageStates = imageStates;
+        spriteFrame = new ImageView(spriteImage);
     }
     
-    public abstract void update(); // Used to update the sprites every pulse.
+    public void update() {
+        // Used to update the sprites every pulse.
+    } 
 
+    public GameConstants getActorType() {
+        return actorType;
+    }
+    
     public int getID() {
         return ID;
     }
@@ -54,13 +61,13 @@ public abstract class Actor {
         return location;
     }
     
-    public abstract boolean isShip();
+    public boolean isShip() { return false; };
 
-    public abstract boolean isStructure();
+    public boolean isStructure() { return false; };
     
-    public abstract boolean isWeapon();
+    public boolean isWeapon() { return false; };
 
-    public abstract boolean isEnvironment();
+    public boolean isEnvironment() { return false; };
     
-    public abstract boolean collide(Actor object);
+    public boolean collide(Actor object) { return false; };
 }

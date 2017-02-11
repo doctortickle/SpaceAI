@@ -73,8 +73,8 @@ public class Ship extends Actor {
         return false;
     }
 
-    public Ship(ShipType type,int ID, Team team, MapLocation location, ImageView spriteFrame, List<Image> imageStates) {
-        super(ID, type.maxHealth, type.bodyRadius, team, location, spriteFrame, imageStates);
+    public Ship(ShipType type, int ID, Team team, MapLocation location) {
+        super(type.actorType, ID, type.maxHealth, type.bodyRadius, team, location, type.spriteImage);
         this.type = type;
         this.attackCount = 0;
         this.moveCount = 0;

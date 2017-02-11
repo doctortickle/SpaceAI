@@ -16,6 +16,8 @@
  */
 package common;
 
+import javafx.scene.image.Image;
+
 /**
  *
  * @author Dylan Russell
@@ -27,33 +29,39 @@ public enum EnvironmentType {
     /**
      * A small meteor, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
      */
-    SMALL_METEOR    (1000,  10,     1,      5000,   (Math.PI)/6),
+    SMALL_METEOR    (1000,  10,     1,      5000,   (Math.PI)/6,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.SMALL_METEOR),
     /**
      * A large meteor, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
      */
-    LARGE_METEOR    (3000,  20,     1,      12000,  (Math.PI)/9),
+    LARGE_METEOR    (3000,  20,     1,      12000,  (Math.PI)/9,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.LARGE_METEOR),
     /**
      * A small asteroid, capable of being harvested by a HARVESTER.
      */
-    SMALL_ASTEROID  (700,   3,      0,      500,    (Math.PI)/6),
+    SMALL_ASTEROID  (700,   3,      0,      500,    (Math.PI)/6,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.SMALL_ASTEROID),
     /**
      * A large asteroid, capable of being harvested by a HARVESTER.
      */
-    LARGE_ASTEROID  (1500,  6,      0,      1000,   (Math.PI)/9),
+    LARGE_ASTEROID  (1500,  6,      0,      1000,   (Math.PI)/9,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.LARGE_ASTEROID),
     /**
      * A small planet, capable of hosting a SMALL_DOCK, LARGE_DOCK, or CAPITAL_DOCK. Maximum capacity of 2.
      */
-    SMALL_PLANET    (10000, 30,     2,      0,      (Math.PI)/9),
+    SMALL_PLANET    (10000, 30,     2,      0,      (Math.PI)/9,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.SMALL_PLANET),
     /**
      * A large planet, capable of hosting a SMALL_DOCK, LARGE_DOCK, or CAPITAL_DOCK. Maximum capacity of 2.
      */
-    LARGE_PLANET    (30000, 50,     4,      0,      (Math.PI)/12);
+    LARGE_PLANET    (30000, 50,     4,      0,      (Math.PI)/12,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.LARGE_PLANET);
     
     /**
      * The maximum (not current) health of a given EnvironmentType.
@@ -75,6 +83,14 @@ public enum EnvironmentType {
      * The rotational velocity of a given EnvironmentType.
      */
     public final double rotationV;
+    /**
+     * Contains the sprite data for a given WeaponType.
+     */
+    public final Image spriteImage;
+    /**
+     * Declares the actor type as a game constant to be used with AI controller.
+     */
+    public final GameConstants actorType;
     
     /**
      * Returns true if a given EnvironmentType has minerals to be mined or harvested. 
@@ -91,12 +107,15 @@ public enum EnvironmentType {
         return structureCap > 0;
     }
 
-    private EnvironmentType(int maxHealth, float bodyRadius, int structureCap, int mineralMax, double rotationV) {
+    private EnvironmentType(int maxHealth, float bodyRadius, int structureCap, 
+            int mineralMax, double rotationV, Image spriteImage, GameConstants actorType) {
         this.maxHealth      = maxHealth;
         this.bodyRadius     = bodyRadius;
         this.structureCap   = structureCap;
         this.mineralMax     = mineralMax;
         this.rotationV      = rotationV;
+        this.spriteImage    = spriteImage;
+        this.actorType      = actorType;
     }
     
     /**

@@ -64,8 +64,8 @@ public class Environment extends Actor{
         return true;
     }
 
-    public Environment(EnvironmentType type, int ID, Team team, MapLocation location, ImageView spriteFrame, List<Image> imageStates) {
-        super(ID, type.maxHealth, type.bodyRadius, team, location, spriteFrame, imageStates);
+    public Environment(EnvironmentType type, int ID, Team team, MapLocation location, Image imageSprite) {
+        super(type.actorType, ID, type.maxHealth, type.bodyRadius, team, location, imageSprite);
         this.type = type;
         this.mineralCount = type.mineralMax;
         this.structureCount = 0;

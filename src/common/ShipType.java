@@ -16,6 +16,8 @@
  */
 package common;
 
+import javafx.scene.image.Image;
+
 /**
  *
  * @author Dylan Russell
@@ -28,50 +30,57 @@ public enum ShipType {
      */
     FIGHTER     (new StructureType[] {StructureType.SMALL_DOCK, StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK, StructureType.HOME_STATION}, // spawnSources
                 new WeaponType[] {WeaponType.SMALL_LASER}, // arsenal
-                5,      10,         50,     1,  10,     15,     5,      1000,         1,        10000),
+                5,      10,         50,     1,  10,     15,     5,      1000,         1,        10000,
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
+                new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.FIGHTER),
     /**
      * A unit specialized in damaging StructureType and EnvironmentType objects. Requires LARGE_DOCK or CAPITAL_DOCK.
      */
     SIEGE       (new StructureType[] {StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK}, // spawnSources
                 new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.PLANET_BOMBARDMENT}, // arsenal
-                10,      50,         300,    2,  10,     10,     3,      1000,         3,        10000),
+                10,      50,         300,    2,  10,     10,     3,      1000,         3,        10000,
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
+                new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.SIEGE),
     /**
      * A unit specialized in deploying a large arsenal against other ShipTypes. Requires LARGE_DOCK or CAPITAL_DOCK.
      */
     DESTROYER   (new StructureType[] {StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK}, // spawnSources
                 new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.MINE}, // arsenal
-                10,      100,        300,    3,  15,     20,     3,      1000,         3,        10000),
+                10,      100,        300,    3,  15,     20,     3,      1000,         3,        10000,
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
+                new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.DESTROYER),
     /**
      * The biggest, toughest ShipType in the game. End game ShipType only producable from CAPITAL_DOCK that can wreak havoc.
      */
     CAPITAL     (new StructureType[] {StructureType.CAPITAL_DOCK}, // spawnSources
                 new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.LARGE_BOMB, WeaponType.MINE, WeaponType.PLANET_BOMBARDMENT}, // arsenal
-                50,      500,       1000,   5,  20,     25,     1,      2000,         5,        10000),
+                50,      500,       1000,   5,  20,     25,     1,      2000,         5,        10000,
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
+                new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.CAPITAL ),
     /**
      * Unit specialized in harvesting minerals from SMALL_ASTEROID, LARGE_ASTEROID, SMALL_METEOR, and LARGE_METEOR. May mine directly or produce a MINING_FACILITY. Does not attack.
      */
     HARVESTER   (new StructureType[] {StructureType.SMALL_DOCK, StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK, StructureType.HOME_STATION}, // spawnSources
                 null, // arsenal
-                5,      10,         50,     1,  10,     20,     5,      1000,         1,        10000),
+                5,      10,         50,     1,  10,     20,     5,      1000,         1,        10000,
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
+                new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.HARVESTER),
     /**
      * Unit specialized in refueling all ShipTypes. May refuel directly or deploy FUEL_STATION. Does not attack.
      */
     REFUELER    (new StructureType[] {StructureType.SMALL_DOCK, StructureType.LARGE_DOCK, StructureType.CAPITAL_DOCK, StructureType.HOME_STATION}, // spawnSources
                 null, // arsenal
-                5,      10,         50,     1,  10,     15,     5,      1000,         1,        10000),
+                5,      10,         50,     1,  10,     15,     5,      1000,         1,        10000,
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
+                new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.REFUELER),
     /**
      * Standard builder unit. May construct all types of docks. Does not attack.
      */
     BUILDER     (new StructureType[] {StructureType.HOME_STATION}, // spawnSources
                 null, // arsenal
-                5,      10,         50,     1,  10,     15,     5,      1000,         1,        10000);
+                5,      10,         50,     1,  10,     15,     5,      1000,         1,        10000,
     /*          bCD,    maxHealth   cost    rad eRad    iRad    fRad    fuelMax     fuelBR    bCL    */
+                new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.BUILDER);
     
     /**
      * The StructureTypes that may spawn a given ShipType.
@@ -121,6 +130,16 @@ public enum ShipType {
      * The bytecode usage limit per turn for a given ShipType.
      */
     public final int bytecodeLimit;
+    
+    /**
+     * Contains the sprite data for a given ShipType.
+     */
+    public final Image spriteImage;
+    
+    /**
+     * Declares the actor type as a game constant to be used with AI controller.
+     */
+    public final GameConstants actorType;
     
     /**
      * If the ShipType has WeaponTypes in its arsenal, it may attack.
@@ -173,7 +192,8 @@ public enum ShipType {
     }
           
     private ShipType(StructureType[] spawnSources, WeaponType[] arsenal, int buildCooldownTurns, int maxHealth, int mineralCost, float bodyRadius,
-              float enemySensorRadius, float incomingDetectionRadius, float flightRadius, int fuelMax, int fuelBurnRate, int bytecodeLimit) {
+            float enemySensorRadius, float incomingDetectionRadius, float flightRadius, int fuelMax, int fuelBurnRate, int bytecodeLimit, Image spriteImage,
+            GameConstants actorType) {
         this.spawnSources             = spawnSources;
         this.arsenal                  = arsenal;
         this.buildCooldownTurns       = buildCooldownTurns;
@@ -186,6 +206,8 @@ public enum ShipType {
         this.bytecodeLimit            = bytecodeLimit;
         this.fuelMax                  = fuelMax;
         this.fuelBurnRate             = fuelBurnRate;
+        this.spriteImage              = spriteImage;
+        this.actorType                = actorType;
     }
     /**
      * For all ShipTypes, this is the StructureType(s) capable of spawning that ShipType.

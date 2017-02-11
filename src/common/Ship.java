@@ -15,11 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package common;
-
-import java.util.List;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
 /**
  *
  * @author Dylan Russell

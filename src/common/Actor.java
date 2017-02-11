@@ -5,8 +5,6 @@
  */
 package common;
 
-import java.util.Arrays;
-import java.util.List;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -14,7 +12,7 @@ import javafx.scene.image.ImageView;
  *
  * @author Dylan Russell
  */
-public class Actor {
+public abstract class Actor {
     protected GameConstants actorType;
     protected int ID, health;
     protected float radius;
@@ -61,13 +59,13 @@ public class Actor {
         return location;
     }
     
-    public boolean isShip() { return false; };
+    public abstract boolean isShip();
 
-    public boolean isStructure() { return false; };
+    public abstract boolean isStructure();
     
-    public boolean isWeapon() { return false; };
+    public abstract boolean isWeapon();
 
-    public boolean isEnvironment() { return false; };
+    public abstract boolean isEnvironment();
     
-    public boolean collide(Actor object) { return false; };
+    public abstract boolean collide(Actor object);
 }

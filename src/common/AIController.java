@@ -31,4 +31,33 @@ public class AIController {
     public GameConstants getType() {
         return actor.actorType;
     }
+    
+    public int getID() {
+        return actor.getID();
+    }
+
+    public int getHealth() {
+        return actor.getHealth();
+    }
+
+    public float getRadius() {
+        return actor.getRadius();
+    }
+
+    public Team getTeam() {
+        return actor.getTeam();
+    }
+
+    public MapLocation getLocation() {
+        return actor.getLocation();
+    }
+
+    public boolean isShip() { return actor.isShip(); };
+
+    public boolean isStructure() { return actor.isStructure(); };
+
+    public boolean isWeapon() { return actor.isWeapon(); };
+
+    public boolean isEnvironment() { return actor.isEnvironment(); };
+    
 }

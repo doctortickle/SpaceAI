@@ -36,7 +36,7 @@ public class SpaceAI extends Application {
     private HBox buttonContainer;
     private Insets buttonContainerPadding;  
     private GamePlayLoop gamePlayLoop;
-    Ship testFighter;
+    public static Ship testFighter;
     private CastingDirector castDirector;
     
     @Override

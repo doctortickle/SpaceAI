@@ -47,6 +47,7 @@ public class Ship extends Actor {
      * The number of bytecodes used in the current turn.
      */
     public final int bytecodeUsed;
+    public int x;
 
     @Override
     public boolean isShip() {
@@ -75,6 +76,7 @@ public class Ship extends Actor {
         this.moveCount = 0;
         this.fuel = type.fuelMax;
         this.bytecodeUsed = 0;
+        this.x = 0;
     }
     
     /**
@@ -106,14 +108,13 @@ public class Ship extends Actor {
 
     @Override
     public void update() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        x += type.flightRadius;
+        spriteFrame.setTranslateX(x);
     }
 
     @Override
     public boolean collide(Actor object) {
         return false;
     }
-    
-    
     
 }

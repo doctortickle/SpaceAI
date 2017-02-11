@@ -28,12 +28,10 @@ public abstract class Actor {
         this.radius = radius;
         this.team = team;
         this.location = location;
-        spriteFrame = new ImageView(spriteImage);
+        this.spriteFrame = new ImageView(spriteImage);
     }
     
-    public void update() {
-        // Used to update the sprites every pulse.
-    } 
+    public abstract void update();
 
     public GameConstants getActorType() {
         return actorType;

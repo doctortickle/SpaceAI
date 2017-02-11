@@ -20,7 +20,47 @@ package common;
  *
  * @author dr4ur
  */
-public class Unit {
+public class Unit extends Actor {
+
+    /**
+     * The UnitType of this unit.
+     */
+    private final UnitType type;
+    /**
+     * The current fuel in this unit's tank.
+     */
+    private final int fuel;
+    
+    public Unit(UnitType type, int ID, int x, int y, Team team) {
+        super(ID, type.maxHealth, type.bodyRadius, x, y, team, type.spriteImage);
+        this.fuel = type.fuelMax;
+        this.type = type;
+    }
+
+    @Override
+    public void update() {
+        // Updates go here.
+    }
+
+    @Override
+    public boolean isCommandable() {
+        return true;
+    }
+
+    @Override
+    public boolean isWeapon() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnvironment() {
+        return false;
+    }
+
+    @Override
+    public boolean collide(Actor object) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     

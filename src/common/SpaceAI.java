@@ -36,7 +36,7 @@ public class SpaceAI extends Application {
     private HBox buttonContainer;
     private Insets buttonContainerPadding;  
     private GamePlayLoop gamePlayLoop;
-    public static Ship testFighter;
+    public static Unit testFighter;
     private CastingDirector castDirector;
     
     @Override
@@ -97,7 +97,7 @@ public class SpaceAI extends Application {
     }
     
     private void createGameActors() {
-        testFighter = new Ship(ShipType.FIGHTER, 1, Team.A, new MapLocation(0,0));
+        testFighter = new Unit(UnitType.FIGHTER, 1, 0, 0, Team.A);
     }
     
     private void addGameActorNodes() {

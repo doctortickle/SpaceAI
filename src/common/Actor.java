@@ -13,29 +13,22 @@ import javafx.scene.image.ImageView;
  * @author Dylan Russell
  */
 public abstract class Actor {
-    protected GameConstants actorType;
-    protected int ID, health;
-    protected float radius;
+    protected int ID, health, radius, x, y;
     protected Team team;
-    protected MapLocation location;
     protected ImageView spriteFrame;
     protected Image spriteImage;
 
-    public Actor(GameConstants actorType, int ID, int health, float radius, Team team, MapLocation location, Image spriteImage) {
-        this.actorType = actorType;
+    public Actor(int ID, int health, int radius, int x, int y, Team team, Image spriteImage) {
         this.ID = ID;
         this.health = health;
         this.radius = radius;
         this.team = team;
-        this.location = location;
+        this.x  = x;
+        this.y  = y;
         this.spriteFrame = new ImageView(spriteImage);
     }
     
     public abstract void update();
-
-    public GameConstants getActorType() {
-        return actorType;
-    }
     
     public int getID() {
         return ID;
@@ -53,13 +46,15 @@ public abstract class Actor {
         return team;
     }
 
-    public MapLocation getLocation() {
-        return location;
+    public int getX() {
+        return x;
     }
-    
-    public abstract boolean isShip();
 
-    public abstract boolean isStructure();
+    public int getY() {
+        return y;
+    }
+
+    public abstract boolean isCommandable();
     
     public abstract boolean isWeapon();
 

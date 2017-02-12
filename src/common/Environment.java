@@ -22,7 +22,7 @@ package common;
  * 
  * Stores basic information about an EnvironmentType object.
  */
-public class Environment extends Actor{
+public final class Environment extends Actor{
     
     /**
      * The EnvironmentType of this environment object.

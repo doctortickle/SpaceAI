@@ -24,7 +24,7 @@ import javafx.scene.image.Image;
  * 
  * Stores basic information about a WeaponType object.
  */
-public class Weapon extends Actor {
+public final class Weapon extends Actor {
     
     /**
      * The WeaponType of this weapon.

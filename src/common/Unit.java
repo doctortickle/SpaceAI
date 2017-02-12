@@ -20,7 +20,7 @@ package common;
  *
  * @author dr4ur
  */
-public class Unit extends Actor {
+public final class Unit extends Actor {
 
     /**
      * The UnitType of this unit.

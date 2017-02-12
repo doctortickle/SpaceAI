@@ -28,56 +28,56 @@ public enum WeaponType {
     /**
      * The most basic WeaponType, quick and light. Can be fired by all attack-capable units.
      */
-    SMALL_LASER         (10,         1,      0,      0,      1,  1,      0.5,
+    SMALL_LASER         (10,         1,      0,      0,      1,  1,      1,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.SMALL_LASER),
+                    new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * An upgraded laser variant; more powerful, but twice as slow. Can be fired by a DESTROYER and a CAPITAL ship.
      */
-    LARGE_LASER         (7,          3,      0,      0,      3,  3,      1,
+    LARGE_LASER         (7,          3,      0,      0,      3,  3,      3,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.LARGE_LASER),
+                    new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A projectile that explodes on impact with an Actor and does damage to adjacent Actors. Can be fired by a DESTROYER and a CAPITAL ship.
      */
     SMALL_BOMB          (6,          3,      6,      0,      10, 10,     5,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.SMALL_BOMB),
+                    new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A heavy bomb variant; more powerful, a greater explosion radius, and twice as slow. Can be fired only by a CAPITAL ship.
      */
     LARGE_BOMB          (4,          4,      12,     0,      20, 20,     10,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.LARGE_BOMB),
+                    new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
-     * A deployable mine that will explode when an enemy ShipType enters its detection radius. Can be deployed by a DESTROYER and a CAPITAL ship.
+     * A deployable mine that will explode when an enemy UnitType enters its detection radius. Can be deployed by a DESTROYER and a CAPITAL ship.
      */
     MINE                (0,          3,      10,     7,      15, 15,     20,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.MINE),
+                    new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
-     * A powerful blast that will deal increased damage to StructureTypes and EnvironmentalType objects. Can be fired by SIEGE and CAPITAL ships.
+     * A powerful blast that will deal increased damage to UnitTypes and EnvironmentType objects. Can be fired by SIEGE and CAPITAL ships.
      */
     PLANET_BOMBARDMENT  (4,          4,      0,      0,      20, 50,     10,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/TestImage.png", 50, 50, true, false, true), GameConstants.PLANET_BOMBARDMENT);
+                    new Image("/TestImage.png", 50, 50, true, false, true));
     
     /**
      * The speed of a WeaponType when launched and during flight.
      */
-    public final float launchSpeed;
+    public final int launchSpeed;
     /**
      * The radius of a given WeaponType. This radius determines collision with other Actors.
      */
-    public final float weaponRadius; //Used for all weapons.
+    public final int weaponRadius; //Used for all weapons.
     /**
      * The radius within which damage will be incurred by an Actor when a MINE is detonated.
      */
-    public final float explosionRadius; //Used for bombs and mines.
+    public final int explosionRadius; //Used for bombs and mines.
     /**
-     * The radius at which a MINE will detect an enemy ShipType and subsequently detonate.
+     * The radius at which a MINE will detect an enemy UnitType and subsequently detonate.
      */
-    public final float detectionRadius; //Used for mines.
+    public final int detectionRadius; //Used for mines.
     /**
      * The damage inflicted upon an Actor that collides with a WeaponType.
      */
@@ -87,23 +87,18 @@ public enum WeaponType {
      */
     public final int structureDamage; //Used for all weapons.
     /**
-     * The amount of time a ShipType must wait after firing or deploying a given WeaponType before firing or deploying again.
+     * The amount of time a UnitType must wait after firing or deploying a given WeaponType before firing or deploying again.
      */
-    public final double reloadTime; //Used for all weapons.
-    
+    public final int reloadTime; //Used for all weapons.
     /**
      * Contains the sprite data for a given WeaponType.
      */
     public final Image spriteImage;
     
-    /**
-     * Declares the actor type as a game constant to be used with AI controller.
-     */
-    public final GameConstants actorType;
 
-    private WeaponType(float launchSpeed, float weaponRadius, float explosionRadius, 
-            float detectionRadius, int damage, int structureDamage, double reloadTime,
-            Image spriteImage, GameConstants actorType) {
+    private WeaponType(int launchSpeed, int weaponRadius, int explosionRadius, 
+            int detectionRadius, int damage, int structureDamage, int reloadTime,
+            Image spriteImage) {
         this.launchSpeed        = launchSpeed;
         this.weaponRadius       = weaponRadius;
         this.explosionRadius    = explosionRadius;
@@ -112,7 +107,6 @@ public enum WeaponType {
         this.structureDamage    = structureDamage;
         this.reloadTime         = reloadTime;
         this.spriteImage        = spriteImage;
-        this.actorType          = actorType;
     }
     
     /**
@@ -137,8 +131,8 @@ public enum WeaponType {
         return explosionRadius;
     }
     /**
-     * Returns the radius at which a MINE will detect an enemy ShipType and subsequently detonate.
-     * @return the radius at which a MINE will detect an enemy ShipType and subsequently detonate.
+     * Returns the radius at which a MINE will detect an enemy UnitType and subsequently detonate.
+     * @return the radius at which a MINE will detect an enemy UnitType and subsequently detonate.
      */
     public float getDetectionRadius() {
         return detectionRadius;
@@ -158,8 +152,8 @@ public enum WeaponType {
         return structureDamage;
     }
     /**
-     * Returns the amount of time a ShipType must wait after firing or deploying a given WeaponType before firing or deploying again.
-     * @return the amount of time a ShipType must wait after firing or deploying a given WeaponType before firing or deploying again.
+     * Returns the amount of time a UnitType must wait after firing or deploying a given WeaponType before firing or deploying again.
+     * @return the amount of time a UnitType must wait after firing or deploying a given WeaponType before firing or deploying again.
      */
     public double getReloadTime() {
         return reloadTime;

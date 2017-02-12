@@ -28,10 +28,6 @@ public class AIController {
         this.actor = actor;
     }
     
-    public GameConstants getType() {
-        return actor.actorType;
-    }
-    
     public int getID() {
         return actor.getID();
     }
@@ -48,13 +44,7 @@ public class AIController {
         return actor.getTeam();
     }
 
-    public MapLocation getLocation() {
-        return actor.getLocation();
-    }
-
-    public boolean isShip() { return actor.isShip(); };
-
-    public boolean isStructure() { return actor.isStructure(); };
+    public boolean isUnit() { return actor.isCommandable(); };
 
     public boolean isWeapon() { return actor.isWeapon(); };
 

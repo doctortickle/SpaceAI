@@ -16,10 +16,8 @@
  */
 package common;
 
-import java.util.List;
-import java.util.Objects;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
 
 /**
  *
@@ -45,12 +43,7 @@ public class Environment extends Actor{
     public final int structureCount;
     
     @Override
-    public boolean isShip() {
-        return false;
-    }
-
-    @Override
-    public boolean isStructure() {
+    public boolean isCommandable() {
         return false;
     }
 
@@ -64,8 +57,8 @@ public class Environment extends Actor{
         return true;
     }
 
-    public Environment(EnvironmentType type, int ID, Team team, MapLocation location, Image imageSprite) {
-        super(type.actorType, ID, type.maxHealth, type.bodyRadius, team, location, imageSprite);
+    public Environment(EnvironmentType type, int ID, int x, int y, Team team, Image imageSprite) {
+        super(ID, type.maxHealth, type.bodyRadius, x, y, team, imageSprite);
         this.type = type;
         this.mineralCount = type.mineralMax;
         this.structureCount = 0;

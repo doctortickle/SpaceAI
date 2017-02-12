@@ -16,9 +16,7 @@
  */
 package common;
 
-import java.util.List;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 /**
  *
@@ -33,18 +31,8 @@ public class Weapon extends Actor {
      */
     public final WeaponType type;
 
-    /**
-     * The Direction in which this weapon is moving.
-     */
-    public final Direction direction;
-
     @Override
-    public boolean isShip() {
-        return false;
-    }
-
-    @Override
-    public boolean isStructure() {
+    public boolean isCommandable() {
         return false;
     }
 
@@ -58,10 +46,9 @@ public class Weapon extends Actor {
         return false;
     }
 
-    public Weapon(WeaponType type, Direction direction, int ID, Team team, MapLocation location, Image imageSprite) {
-        super(type.actorType, ID, Integer.MAX_VALUE, type.weaponRadius, Team.NEUTRAL, location, imageSprite);
+    public Weapon(WeaponType type, int ID, int x, int y, Team team, Image imageSprite) {
+        super(ID, Integer.MAX_VALUE, type.weaponRadius, x, y, Team.NEUTRAL, imageSprite);
         this.type = type;
-        this.direction = direction;
     }
   
     /**
@@ -70,13 +57,6 @@ public class Weapon extends Actor {
      */
     public WeaponType getType() {
         return type;
-    }
-    /**
-     * Return the Direction this weapon is currently traveling in.
-     * @return the direction this weapon is currently traveling in.
-     */
-    public Direction getDirection() {
-        return direction;
     }
 
     @Override

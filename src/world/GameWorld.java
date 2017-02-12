@@ -1,9 +1,6 @@
 /*
  * Copyright (C) 2017 dr4ur
- * This game is a heavily modified version of Battlecode 2017. I give 
- * significant credit to the team at MIT for their work on Battlecode and for
- * inspiring this body of work. Please check out battlecode.org for more info.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,7 +17,12 @@
 package world;
 
 /**
- * An empty interface for internally representing ships, weapons, structures,
- * and environment objects.
+ *
+ * @author Dylan Russell
+ * 
+ * This class makes certain calculations pertaining to the game world.
  */
-public strictfp interface InternalActor {}
+public class GameWorld {
+    
+    
+}

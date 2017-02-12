@@ -18,7 +18,7 @@ package common;
 
 /**
  *
- * @author dr4ur
+ * @author Dylan Russell
  */
 public class AICommand {
     
@@ -26,10 +26,9 @@ public class AICommand {
     
     public static void run(AIController ac) {
         
-        AICommand.ac = ac;
+        ac.getCurrentLocation();
+        ac.move(new Location(70, 10));
         
-        
-        
-    }
+    }    
     
 }

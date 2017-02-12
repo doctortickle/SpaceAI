@@ -30,17 +30,21 @@ public final class Unit extends Actor {
      * The current fuel in this unit's tank.
      */
     private final int fuel;
+    /**
+     * Defines the AIController for this unit.
+     */
+    private final AIController ac;
     
-    public Unit(UnitType type, int ID, int x, int y, Team team) {
+    public Unit(UnitType type, int ID, double x, double y, Team team) {
         super(ID, type.getMaxHealth(), type.getBodyRadius(), x, y, team, type.getSpriteImage());
         this.fuel = type.getFuelMax();
         this.type = type;
+        this.ac = new AIController(this);
     }
 
     @Override
     public void update() {
-        this.x += this.type.getFlightRadius();
-        this.spriteFrame.setTranslateX(x);
+        AICommand.run(ac);
     }
 
     public UnitType getType() {

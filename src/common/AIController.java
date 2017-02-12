@@ -18,36 +18,55 @@ package common;
 
 /**
  *
- * @author dr4ur
+ * @author Dylan Russell
+ * This class is used to control the units the player will command.
  */
 public class AIController {
     
-    private final Actor actor;
+    Unit unit;
     
-    public AIController(Actor actor) {
-        this.actor = actor;
+    public AIController(Unit unit) {
+        this.unit = unit;
     }
     
-    public int getID() {
-        return actor.getID();
+    public final void move(Location location) {
+       if(getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius()) {
+            System.out.println("In A");
+            unit.getSpriteFrame().setTranslateX(location.getPixelX());
+            unit.getSpriteFrame().setTranslateY(location.getPixelY());
+            unit.setX(location.getX());
+            unit.setY(location.getY());
+       }
+       else {
+            System.out.println("In B");
+            double dx = getCurrentLocation().getX()-location.getX();
+            double dy = getCurrentLocation().getY()-location.getY();
+            double theta = Math.tan(dy/dx);
+            double newDx = Math.cos(theta) * unit.getType().getFlightRadius();
+            System.out.println("newDx = " + newDx);
+            double newDy = Math.sin(theta) * unit.getType().getFlightRadius();
+            System.out.println("newDy = " + newDy);
+            double newX = getCurrentLocation().getX() + newDx;
+            System.out.println("newX = " + newX);
+            double newY = getCurrentLocation().getY() + newDy;
+            System.out.println("newY = " + newY);
+            double newPixelX = Location.coordinateToPixel(newX);
+            System.out.println("newPixelX = " + newPixelX);
+            double newPixelY = Location.coordinateToPixel(newY);
+            System.out.println("newPixelY = " + newPixelY);
+            unit.getSpriteFrame().setTranslateX(5);
+            unit.getSpriteFrame().setTranslateY(5);
+            unit.setX(newX);
+            unit.setY(newY);
+       }
     }
-
-    public int getHealth() {
-        return actor.getHealth();
-    }
-//test
-    public float getRadius() {
-        return actor.getRadius();
-    }
-
-    public Team getTeam() {
-        return actor.getTeam();
-    }
-
-    public boolean isUnit() { return actor.isCommandable(); };
-
-    public boolean isWeapon() { return actor.isWeapon(); };
-
-    public boolean isEnvironment() { return actor.isEnvironment(); };
+    
+    public final Location getCurrentLocation() {
+        double x = unit.getX();
+        double y = unit.getY();
+        System.out.println(x + ", " + y);
+        
+        return new Location(x,y);
+    }    
     
 }

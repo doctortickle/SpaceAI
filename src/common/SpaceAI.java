@@ -101,7 +101,7 @@ public class SpaceAI extends Application {
     }
     
     private void addGameActorNodes() {
-        root.getChildren().add(testFighter.spriteFrame);
+        root.getChildren().add(testFighter.getSpriteFrame());
     }
     
     private void createCastingDirection() {

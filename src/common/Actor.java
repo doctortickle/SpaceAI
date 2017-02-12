@@ -13,12 +13,13 @@ import javafx.scene.image.ImageView;
  * @author Dylan Russell
  */
 public abstract class Actor {
-    protected int ID, health, radius, x, y;
-    protected Team team;
-    protected ImageView spriteFrame;
-    protected Image spriteImage;
+    private int ID, health, radius;
+    private double x, y;
+    private Team team;
+    private ImageView spriteFrame;
+    private Image spriteImage;
 
-    public Actor(int ID, int health, int radius, int x, int y, Team team, Image spriteImage) {
+    public Actor(int ID, int health, int radius, double x, double y, Team team, Image spriteImage) {
         this.ID = ID;
         this.health = health;
         this.radius = radius;
@@ -46,12 +47,24 @@ public abstract class Actor {
         return team;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
+    }
+
+    void setX(double x) {
+        this.x = x;
+    }
+
+    void setY(double y) {
+        this.y = y;
+    }
+    
+    protected ImageView getSpriteFrame() {
+        return spriteFrame;
     }
 
     public abstract boolean isCommandable();

@@ -32,14 +32,14 @@ public class Unit extends Actor {
     private final int fuel;
     
     public Unit(UnitType type, int ID, int x, int y, Team team) {
-        super(ID, type.maxHealth, type.bodyRadius, x, y, team, type.spriteImage);
-        this.fuel = type.fuelMax;
+        super(ID, type.getMaxHealth(), type.getBodyRadius(), x, y, team, type.getSpriteImage());
+        this.fuel = type.getFuelMax();
         this.type = type;
     }
 
     @Override
     public void update() {
-        this.x += this.type.flightRadius;
+        this.x += this.type.getFlightRadius();
         this.spriteFrame.setTranslateX(x);
     }
 

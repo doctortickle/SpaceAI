@@ -65,35 +65,35 @@ public enum WeaponType {
     /**
      * The speed of a WeaponType when launched and during flight.
      */
-    public final int launchSpeed;
+    private final int launchSpeed;
     /**
      * The radius of a given WeaponType. This radius determines collision with other Actors.
      */
-    public final int weaponRadius; //Used for all weapons.
+    private final int weaponRadius; //Used for all weapons.
     /**
      * The radius within which damage will be incurred by an Actor when a MINE is detonated.
      */
-    public final int explosionRadius; //Used for bombs and mines.
+    private final int explosionRadius; //Used for bombs and mines.
     /**
      * The radius at which a MINE will detect an enemy UnitType and subsequently detonate.
      */
-    public final int detectionRadius; //Used for mines.
+    private final int detectionRadius; //Used for mines.
     /**
      * The damage inflicted upon an Actor that collides with a WeaponType.
      */
-    public final int damage; //Used for all weapons.
+    private final int damage; //Used for all weapons.
     /**
      * The damage inflicted specifically to a StructureType if it collides with a WeaponType. Only varies for PLANET_BOMBARDMENT.
      */
-    public final int structureDamage; //Used for all weapons.
+    private final int structureDamage; //Used for all weapons.
     /**
      * The amount of time a UnitType must wait after firing or deploying a given WeaponType before firing or deploying again.
      */
-    public final int reloadTime; //Used for all weapons.
+    private final int reloadTime; //Used for all weapons.
     /**
      * Contains the sprite data for a given WeaponType.
      */
-    public final Image spriteImage;
+    private final Image spriteImage;
     
 
     private WeaponType(int launchSpeed, int weaponRadius, int explosionRadius, 
@@ -113,28 +113,28 @@ public enum WeaponType {
      * Returns the speed of a WeaponType when launched and during flight.
      * @return the speed of a WeaponType when launched and during flight.
      */    
-    public float getLaunchSpeed() {
+    public int getLaunchSpeed() {
         return launchSpeed;
     }
     /**
      * Returns the radius of a given WeaponType. This radius determines collision with other Actors.
      * @return The radius of a given WeaponType.
      */
-    public float getWeaponRadius() {
+    public int getWeaponRadius() {
         return weaponRadius;
     }
     /**
      * Returns the radius within which damage will be incurred by Actors when a MINE is detonated.
      * @return the radius within which damage will be incurred by Actors when a MINE is detonated.
      */
-    public float getExplosionRadius() {
+    public int getExplosionRadius() {
         return explosionRadius;
     }
     /**
      * Returns the radius at which a MINE will detect an enemy UnitType and subsequently detonate.
      * @return the radius at which a MINE will detect an enemy UnitType and subsequently detonate.
      */
-    public float getDetectionRadius() {
+    public int getDetectionRadius() {
         return detectionRadius;
     }
     /**
@@ -155,8 +155,12 @@ public enum WeaponType {
      * Returns the amount of time a UnitType must wait after firing or deploying a given WeaponType before firing or deploying again.
      * @return the amount of time a UnitType must wait after firing or deploying a given WeaponType before firing or deploying again.
      */
-    public double getReloadTime() {
+    public int getReloadTime() {
         return reloadTime;
+    }
+
+    public Image getSpriteImage() {
+        return spriteImage;
     }
         
 }

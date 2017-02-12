@@ -46,8 +46,8 @@ public class Weapon extends Actor {
         return false;
     }
 
-    public Weapon(WeaponType type, int ID, int x, int y, Team team, Image imageSprite) {
-        super(ID, Integer.MAX_VALUE, type.weaponRadius, x, y, Team.NEUTRAL, imageSprite);
+    public Weapon(WeaponType type, int ID, int x, int y) {
+        super(ID, Integer.MAX_VALUE, type.getWeaponRadius(), x, y, Team.NEUTRAL, type.getSpriteImage());
         this.type = type;
     }
   

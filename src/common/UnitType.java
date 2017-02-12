@@ -187,67 +187,67 @@ public enum UnitType {
     /**
      * The EnvironmentTypes upon which a given UnitType must be built.
      */
-    public final EnvironmentType[] spawnLocations;
+    private final EnvironmentType[] spawnLocations;
     /**
      * The WeaponTypes available to a given UnitType.
      */
-    public final WeaponType[] arsenal;
+    private final WeaponType[] arsenal;
     /**
      * The turns after producing a given UnitType that a spawn source must wait to produce again.
      */
-    public final int spawnCooldown;
+    private final int spawnCooldown;
     /**
      * The maximum (not current) health of a given UnitType.
      */
-    public final int maxHealth;
+    private final int maxHealth;
     /**
      * The cost in minerals to produce a given UnitType.
      */
-    public final int mineralCost;
+    private final int mineralCost;
     /**
      * The body radius of a given UnitType.
      */
-    public final int bodyRadius;
+    private final int bodyRadius;
     /**
      * The radius at which a given UnitType can sense enemy UnitTypes.
      */
-    public final int enemySensorRadius;
+    private final int enemySensorRadius;
     /**
      * The radius at which a given UnitType can detect incoming WeaponTypes.
      */
-    public final int incomingDetectionRadius;
+    private final int incomingDetectionRadius;
     /**
      * The distance a given UnitType can move in one turn.
      */
-    public final int flightRadius;
+    private final int flightRadius;
     /**
      * The maximum (not current) fuel capacity of a given UnitType.
      */
-    public final int fuelMax;
+    private final int fuelMax;
     /**
      * The rate at which a given UnitType will burn fuel while moving per turn.
      */
-    public final int fuelBurnRate;
+    private final int fuelBurnRate;
     /**
      * The radius at which a FUEL_STATION can refuel ships.
      */
-    public final int refuelRadius;
+    private final int refuelRadius;
     /**
      * The rate at which a FUEL_STATION refuels a unit.
      */
-    public final int refuelRate;
+    private final int refuelRate;
     /**
      * The rate at which a MINING_FACILITY can mine minerals from a SMALL_METEOR or LARGE_METEOR. 
      */
-    public final int miningRate;
+    private final int miningRate;
     /**
      * The bytecode usage limit per turn for a given UnitType.
      */
-    public final int bytecodeLimit;
+    private final int bytecodeLimit;
     /**
      * Contains the sprite data for a given UnitType.
      */
-    public final Image spriteImage;
+    private final Image spriteImage;
     
     static {
         FIGHTER.spawnSources = new UnitType[]{UnitType.SMALL_DOCK, UnitType.LARGE_DOCK, UnitType.CAPITAL_DOCK, UnitType.HOME_STATION};
@@ -446,5 +446,9 @@ public enum UnitType {
     public int getBytecodeLimit() {
         return bytecodeLimit;
     }
-        
+
+    public Image getSpriteImage() {
+        return spriteImage;
+    }
+    
 }

@@ -16,9 +16,6 @@
  */
 package common;
 
-import javafx.scene.image.Image;
-
-
 /**
  *
  * @author Dylan Russell
@@ -57,17 +54,17 @@ public class Environment extends Actor{
         return true;
     }
 
-    public Environment(EnvironmentType type, int ID, int x, int y, Team team, Image imageSprite) {
-        super(ID, type.maxHealth, type.bodyRadius, x, y, team, imageSprite);
+    public Environment(EnvironmentType type, int ID, int x, int y) {
+        super(ID, type.getMaxHealth(), type.getBodyRadius(), x, y, Team.NEUTRAL, type.getSpriteImage());
         this.type = type;
-        this.mineralCount = type.mineralMax;
+        this.mineralCount = type.getMineralMax();
         this.structureCount = 0;
     }
        
     /**
      * Returns the EnvironmentType of this structure.
      * @return the EnvironmentType of this structure.
-    */
+     */
     public EnvironmentType getType() {
         return type;
     }

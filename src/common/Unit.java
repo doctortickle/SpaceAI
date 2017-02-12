@@ -39,7 +39,8 @@ public class Unit extends Actor {
 
     @Override
     public void update() {
-        // Updates go here.
+        this.x += this.type.flightRadius;
+        this.spriteFrame.setTranslateX(x);
     }
 
     public UnitType getType() {

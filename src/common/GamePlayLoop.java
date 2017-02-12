@@ -16,14 +16,14 @@
  */
 package common;
 
-import static common.SpaceAI.testFighter;
+
 import javafx.animation.AnimationTimer;
 
 public class GamePlayLoop extends AnimationTimer {
     
     @Override
     public void handle(long now) {
-        testFighter.update();
+        SpaceAI.testFighter.update();
     }
     
     @Override

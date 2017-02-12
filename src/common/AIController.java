@@ -35,7 +35,7 @@ public class AIController {
     public int getHealth() {
         return actor.getHealth();
     }
-
+//test
     public float getRadius() {
         return actor.getRadius();
     }

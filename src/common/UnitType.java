@@ -16,7 +16,6 @@
  */
 package common;
 
-import static common.GameConstants.GAME_SPEED;
 import javafx.scene.image.Image;
 
 /**

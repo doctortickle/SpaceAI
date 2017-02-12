@@ -17,13 +17,27 @@
 package common;
 
 
+import static common.GameConstants.FRAMES_PER_ROUND;
 import javafx.animation.AnimationTimer;
+
 
 public class GamePlayLoop extends AnimationTimer {
     
+    int pulse=0;
+    
     @Override
     public void handle(long now) {
-        SpaceAI.testFighter.update();
+        if(pulse<FRAMES_PER_ROUND) {
+            pulse++;
+            System.out.println(pulse);
+        }
+        else{
+            pulse = 0;
+        }
+        if(pulse==0) {
+            SpaceAI.gameWorld.update();
+            SpaceAI.testFighter.update();
+            }    
     }
     
     @Override

@@ -27,7 +27,7 @@ public class AICommand {
     public static void run(AIController ac) {
         
         ac.getCurrentLocation();
-        ac.move(new Location(70, 10));
+        ac.move(new Location(20, 50));
         
     }    
     

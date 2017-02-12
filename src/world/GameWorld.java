@@ -24,5 +24,14 @@ package world;
  */
 public class GameWorld {
     
+    int gameRound;
     
+    public void gameRound() {
+        this.gameRound = 0;
+    }
+    
+    public void update() {
+        gameRound++;
+        System.out.print("Game Round : " + gameRound);
+    }
 }

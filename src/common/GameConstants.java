@@ -26,6 +26,6 @@ public interface GameConstants {
     
     double PIXEL_TO_COORDINATE = 1/2;
     double COORDINATE_TO_PIXEL = 2/1;
-    double GAME_SPEED = 1/60;
+    int FRAMES_PER_ROUND = 5; 
     
 }

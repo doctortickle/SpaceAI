@@ -30,6 +30,7 @@ public class AIController {
     }
     
     public final void move(Location location) {
+       System.out.println("\nMoving to " + location.getX() +", "+ location.getY());
        if(getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius()) {
             System.out.println("In A");
             unit.getSpriteFrame().setTranslateX(location.getPixelX());
@@ -39,34 +40,67 @@ public class AIController {
        }
        else {
             System.out.println("In B");
-            double dx = getCurrentLocation().getX()-location.getX();
-            double dy = getCurrentLocation().getY()-location.getY();
-            double theta = Math.tan(dy/dx);
-            double newDx = Math.cos(theta) * unit.getType().getFlightRadius();
-            System.out.println("newDx = " + newDx);
-            double newDy = Math.sin(theta) * unit.getType().getFlightRadius();
-            System.out.println("newDy = " + newDy);
-            double newX = getCurrentLocation().getX() + newDx;
-            System.out.println("newX = " + newX);
-            double newY = getCurrentLocation().getY() + newDy;
-            System.out.println("newY = " + newY);
-            double newPixelX = Location.coordinateToPixel(newX);
-            System.out.println("newPixelX = " + newPixelX);
-            double newPixelY = Location.coordinateToPixel(newY);
-            System.out.println("newPixelY = " + newPixelY);
-            unit.getSpriteFrame().setTranslateX(5);
-            unit.getSpriteFrame().setTranslateY(5);
-            unit.setX(newX);
-            unit.setY(newY);
+            moveDirection(location);
        }
+    }
+    
+    public final void moveDirection(Location location) {
+        
+        double dx = calcDx(getCurrentLocation(),location);
+        double dy = calcDy(getCurrentLocation(),location);
+        if (dx == 0 && dy == 0) {
+            dy = 1;
+        }
+        double theta = Math.atan2(dy, dx);
+        double newDx = Math.cos(theta) * unit.getType().getFlightRadius();
+        double newDy = Math.sin(theta) * unit.getType().getFlightRadius();
+        double x = getCurrentLocation().getX();
+        double y = getCurrentLocation().getY();
+        double newX = x + newDx;
+        double newY = y + newDy;
+        move(new Location(newX,newY));
     }
     
     public final Location getCurrentLocation() {
         double x = unit.getX();
         double y = unit.getY();
-        System.out.println(x + ", " + y);
         
         return new Location(x,y);
     }    
     
+    private double calcDx(Location location1, Location location2) {
+        double dx = location1.getX()-location2.getX();
+        return dx;
+    }
+    
+    private double calcDy(Location location1, Location location2) {
+        double dy = location1.getY()-location2.getY();
+        return dy;
+    }
+    
+    private double calcTheta(Location location) {
+        double theta = Math.tan(calcDy(location, getCurrentLocation())/calcDx(location, getCurrentLocation()));
+        System.out.println("Theta = " + theta);
+        return theta;
+    }
+    
+    private double calcNewDx(Location location) {
+        double newDx = Math.cos(calcTheta(location)) * unit.getType().getFlightRadius();
+        return newDx;
+    }
+    
+    private double calcNewDy(Location location) {
+        double newDy = Math.sin(calcTheta(location)) * unit.getType().getFlightRadius();
+        return newDy;
+    }
+    
+    private double getNewX(double newDx) {
+        double newX = getCurrentLocation().getX() + newDx;
+        return newX;
+    }
+    
+    private double getNewY(double newDy) {
+        double newY = getCurrentLocation().getY() + newDy;
+        return newY;
+    }
 }

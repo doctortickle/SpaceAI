@@ -24,7 +24,7 @@ import javafx.scene.image.Image;
  * 
  * Contains the attributes of various WeaponType objects.
  */
-public enum WeaponType {
+public strictfp enum WeaponType {
     /**
      * The most basic WeaponType, quick and light. Can be fired by all attack-capable units.
      */

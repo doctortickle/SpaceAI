@@ -22,7 +22,7 @@ package common;
  * 
  * This class represents directions on the game map.
  */
-public class Direction {
+public strictfp class Direction {
     
     public final double radians;
     
@@ -36,7 +36,7 @@ public class Direction {
         if (dx == 0 && dy == 0) {
             dy = 1;
         }
-        this.radians = reduce((double)Math.atan2(dy, dx));
+        this.radians = (double)Math.atan2(dy, dx);
     }
     
     // Internally used to keep angles in the range (-Math.PI,Math.PI]
@@ -58,6 +58,10 @@ public class Direction {
         } else if (Double.isInfinite(num)) {
             throw new RuntimeException("Direction can not take +/- infinity as an argument");
         }
+    }
+    
+    public double getRadians() {
+        return this.radians;
     }
     
 }

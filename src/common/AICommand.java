@@ -26,9 +26,66 @@ public class AICommand {
     
     public static void run(AIController ac) {
         
-        ac.getCurrentLocation();
-        ac.move(new Location(20, 50));
+        AICommand.ac = ac;
         
+        System.out.println(ac.getType());
+        switch(ac.getType()) {
+            case FIGHTER : runFighter(); break;
+            case SIEGE : runSiege(); break;
+            case DESTROYER : runDestroyer(); break;
+            case CAPITAL : runCapital(); break;
+            case BUILDER : runBuilder(); break;
+            case HARVESTER : runHarvester(); break;
+            case REFUELER : runRefueler(); break;
+            case HOME_STATION: runHomeStation(); break;
+            case SMALL_DOCK: runSmallDock(); break;
+            case LARGE_DOCK: runLargeDock(); break;
+            case CAPITAL_DOCK: runCapitalDock(); break;
+            case MINING_FACILITY: runMiningFacility(); break;
+            case FUEL_STATION: runFuelStation(); break;
+        }    
     }    
+    
+    public static void runFighter() {
+            ac.getCurrentLocation();
+            ac.move(new Location(100, 100));
+    }
+    
+    public static void runSiege() {
+           // Siege code here.
+    }
+    public static void runDestroyer() {
+           // Destroyer code here.
+    }
+    public static void runCapital() {
+           // Capital code here.
+    }
+    public static void runBuilder() {
+           // Builder code here.
+    }
+    public static void runHarvester() {
+           // Harvester code here.
+    }
+    public static void runRefueler() {
+           // Refueler code here.
+    }
+    public static void runHomeStation() {
+           // Home Station code here.
+    }
+    public static void runSmallDock() {
+           // Small Dock code here.
+    }
+    public static void runLargeDock() {
+           // Large Dock code here.
+    }
+    public static void runCapitalDock() {
+           // Capital Dock code here.
+    }
+    public static void runMiningFacility() {
+           // Mining Facility code here.
+    }
+    public static void runFuelStation() {
+           // Fuel Station code here.
+    }
     
 }

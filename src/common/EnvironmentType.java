@@ -24,7 +24,7 @@ import javafx.scene.image.Image;
  * 
  * Contains the attributes of various EnvironmentType objects.
  */
-public enum EnvironmentType {
+public strictfp enum EnvironmentType {
     
     /**
      * A small meteor, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.

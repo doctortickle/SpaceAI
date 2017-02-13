@@ -22,7 +22,7 @@ import javafx.scene.image.Image;
  *
  * @author dr4ur
  */
-public enum UnitType {
+public strictfp enum UnitType {
     
     FIGHTER (   new WeaponType[] {WeaponType.SMALL_LASER},  // arsenal
                 5,      // spawnCooldown

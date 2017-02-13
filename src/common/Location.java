@@ -18,6 +18,7 @@ package common;
 
 import static common.GameConstants.COORDINATE_TO_PIXEL;
 import static common.GameConstants.PIXEL_TO_COORDINATE;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -26,7 +27,7 @@ import static common.GameConstants.PIXEL_TO_COORDINATE;
  * This class intended to convert pixel locations into a coordinate system for 
  * use in the SpaceAI game. 
  */
-public class Location {
+public strictfp class Location {
     
     private final double x;
     private final double y;
@@ -37,7 +38,7 @@ public class Location {
         this.x = x == Float.NaN ? 0 : x;
         this.y = y == Float.NaN ? 0 : y;
         this.pixelX = coordinateToPixel(x);
-        this.pixelY = -(coordinateToPixel(y));
+        this.pixelY = coordinateToPixel(y);
     }
     
     static double coordinateToPixel(double i) {
@@ -70,7 +71,27 @@ public class Location {
     public final double distanceTo(Location location) {
         double dx = this.getX() - location.getX();
         double dy = this.getY() - location.getY();
-        return Math.sqrt(dx * dx + dy * dy);
+        double distance = Math.sqrt(dx * dx + dy * dy);
+        distance = (double)Math.round(distance * 1000d) / 1000d;
+        return distance;
+    }
+    
+    public final Direction directionTo(Location location) {
+        double dx = location.getX() - this.getX();
+        double dy = location.getY() - this.getY();
+        System.out.println(new Direction(dx,dy).getRadians());
+        return new Direction(dx, dy);
+    }
+    
+    public final Location add(float distance, Direction direction) {
+        
+        double dx = Math.cos(direction.getRadians()) * distance;
+        System.out.println("dx = " + dx);
+        double dy = Math.sin(direction.getRadians()) * distance;
+        System.out.println("dy = " + dy);
+        double x = this.x + dx;
+        double y = this.y + dy;
+        return new Location(x,y);
     }
    
 }

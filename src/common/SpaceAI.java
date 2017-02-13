@@ -28,7 +28,7 @@ import world.GameWorld;
  * @author Dylan Russell
  */
 public class SpaceAI extends Application {
- static final double WIDTH = 640, HEIGHT = 400;
+ static final double WIDTH = 1080, HEIGHT = 800;
     private boolean up, down, left, right, wKey, sKey, aKey, dKey;
     private Scene scene;
     private StackPane root;

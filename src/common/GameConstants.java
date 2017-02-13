@@ -22,7 +22,7 @@ package common;
  * 
  * GameConstants are stored here.
  */
-public interface GameConstants {
+public strictfp interface GameConstants {
     
     double PIXEL_TO_COORDINATE = 1/2;
     double COORDINATE_TO_PIXEL = 2/1;

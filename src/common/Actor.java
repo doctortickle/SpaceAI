@@ -5,8 +5,6 @@
  */
 package common;
 
-import java.util.Arrays;
-import java.util.List;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -15,33 +13,65 @@ import javafx.scene.image.ImageView;
  * @author Dylan Russell
  */
 public abstract class Actor {
-    protected int ID, health, damage, radius;
-    protected double iX, iY, vX, vY;
-    protected Team team;
-    protected boolean isUnit, isObject;
-    protected ImageView spriteFrame;
-    protected List<Image> imageStates;
-    
-    public Actor(double xLocation, double yLocation, Image... spriteCels) { //Used to instantiate an actor object
-        spriteFrame = new ImageView(spriteCels[0]);
-        imageStates.addAll(Arrays.asList(spriteCels));
-        iX = xLocation;
-        iY = yLocation;
-        vX = vY = 0;
-        isUnit = true;
-        isObject = false;
-    }
-    
-    public Actor(double xLocation, double yLocation, boolean unit, boolean object, Image... spriteCels) { //Used to instantiate an actor object
-        spriteFrame = new ImageView(spriteCels[0]);
-        imageStates.addAll(Arrays.asList(spriteCels));
-        iX = xLocation;
-        iY = yLocation;
-        vX = vY = 0;
-        isUnit = unit;
-        isObject = object;
-    }
-    
-    public abstract void update(); // Used to update the sprites every pulse.
+    private int ID, health, radius;
+    private double x, y;
+    private Team team;
+    private ImageView spriteFrame;
+    private Image spriteImage;
 
+    public Actor(int ID, int health, int radius, double x, double y, Team team, Image spriteImage) {
+        this.ID = ID;
+        this.health = health;
+        this.radius = radius;
+        this.team = team;
+        this.x  = x;
+        this.y  = y;
+        this.spriteFrame = new ImageView(spriteImage);
+    }
+    
+    public abstract void update();
+    
+    public int getID() {
+        return ID;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    void setX(double x) {
+        this.x = x;
+    }
+
+    void setY(double y) {
+        this.y = y;
+    }
+    
+    protected ImageView getSpriteFrame() {
+        return spriteFrame;
+    }
+
+    public abstract boolean isCommandable();
+    
+    public abstract boolean isWeapon();
+
+    public abstract boolean isEnvironment();
+    
+    public abstract boolean collide(Actor object);
 }

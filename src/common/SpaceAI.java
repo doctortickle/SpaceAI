@@ -6,48 +6,96 @@
 package common;
 
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import world.GameWorld;
 
 /**
  *
  * @author Dylan Russell
  */
 public class SpaceAI extends Application {
+ static final double WIDTH = 1080, HEIGHT = 800;
+    private boolean up, down, left, right, wKey, sKey, aKey, dKey;
+    private Scene scene;
+    private StackPane root;
+    private Image splashScreen, instructionLayer, legalLayer, scoresLayer;
+    private ImageView splashScreenBackplate, splashScreenTextArea;
+    private Button gameButton, helpButton, scoreButton, legalButton;
+    private HBox buttonContainer;
+    private Insets buttonContainerPadding;  
+    private GamePlayLoop gamePlayLoop;
+    public static Unit testFighter;
+    private CastingDirector castDirector;
+    public static GameWorld gameWorld;
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
-        
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("SpaceAI");
+        root = new StackPane();
+        scene = new Scene(root, WIDTH, HEIGHT, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.show();
+        createSceneEventHandling();
+        loadImageAssets();
+        createGameActors();
+        addGameActorNodes();
+        createCastingDirection();
+        createSplashScreenNodes();
+        addNodesToStackPane();
+        createStartGameLoop();       
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        //launch(args);
-        ShipInfo fighter = new ShipInfo(1, Team.A, ShipType.FIGHTER, new MapLocation(0,0),ShipType.FIGHTER.maxHealth,1,1);
-        System.out.println(fighter.type);
+        launch(args);
     }
     
+    private void createSceneEventHandling() {
+        
+    }
+    
+    private void loadImageAssets() {
+    
+    }
+    
+    private void createGameActors() {
+        testFighter = new Unit(UnitType.FIGHTER, 1, 0, 0, Team.A);
+    }
+    
+    private void addGameActorNodes() {
+        root.getChildren().add(testFighter.getSpriteFrame());
+    }
+    
+    private void createCastingDirection() {
+        castDirector = new CastingDirector();
+        castDirector.addCurrentCast(testFighter);
+    }
+    
+    private void createSplashScreenNodes() {
+        
+    }
+    
+    private void addNodesToStackPane() {
+
+    }
+    
+    private void createStartGameLoop() {
+        gameWorld = new GameWorld();
+        gamePlayLoop = new GamePlayLoop();
+        gamePlayLoop.start(); 
+    }
+
 }

@@ -19,65 +19,77 @@
  */
 package common;
 
+import javafx.scene.image.Image;
+
 /**
  *
  * @author Dylan Russell
  * 
  * Contains the attributes of various EnvironmentType objects.
  */
-public enum EnvironmentType {
+public strictfp enum EnvironmentType {
     
     /**
      * A small meteor, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
      */
-    SMALL_METEOR    (1000,  10,     1,      5000,   (Math.PI)/6),
+    SMALL_METEOR    (1000,  10,     1,      5000,   (Math.PI)/6,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A large meteor, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
      */
-    LARGE_METEOR    (3000,  20,     1,      12000,  (Math.PI)/9),
+    LARGE_METEOR    (3000,  20,     1,      12000,  (Math.PI)/9,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A small asteroid, capable of being harvested by a HARVESTER.
      */
-    SMALL_ASTEROID  (700,   3,      0,      500,    (Math.PI)/6),
+    SMALL_ASTEROID  (700,   3,      0,      500,    (Math.PI)/6,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A large asteroid, capable of being harvested by a HARVESTER.
      */
-    LARGE_ASTEROID  (1500,  6,      0,      1000,   (Math.PI)/9),
+    LARGE_ASTEROID  (1500,  6,      0,      1000,   (Math.PI)/9,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A small planet, capable of hosting a SMALL_DOCK, LARGE_DOCK, or CAPITAL_DOCK. Maximum capacity of 2.
      */
-    SMALL_PLANET    (10000, 30,     2,      0,      (Math.PI)/9),
+    SMALL_PLANET    (10000, 30,     2,      0,      (Math.PI)/9,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A large planet, capable of hosting a SMALL_DOCK, LARGE_DOCK, or CAPITAL_DOCK. Maximum capacity of 2.
      */
-    LARGE_PLANET    (30000, 50,     4,      0,      (Math.PI)/12);
+    LARGE_PLANET    (30000, 50,     4,      0,      (Math.PI)/12,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
+                    new Image("/TestImage.png", 50, 50, true, false, true));
     
     /**
      * The maximum (not current) health of a given EnvironmentType.
      */
-    public final int maxHealth;
+    private final int maxHealth;
     /**
      * The body radius of a given EnvironmentType.
      */
-    public final float bodyRadius;
+    private final int bodyRadius;
     /**
      * The maximum (not current) number of StructureTypes a given EnvironmentType can host.
      */
-    public final int structureCap;
+    private final int structureCap;
     /**
      * The maximum (not current) number of minerals available to be harvested or mined on a given EnvironmentType.
      */
-    public final int mineralMax;
+    private final int mineralMax;
     /**
      * The rotational velocity of a given EnvironmentType.
      */
-    public final double rotationV;
+    private final double rotationV;
+    /**
+     * Contains the sprite data for a given WeaponType.
+     */
+    private final Image spriteImage;
     
     /**
      * Returns true if a given EnvironmentType has minerals to be mined or harvested. 
@@ -94,12 +106,14 @@ public enum EnvironmentType {
         return structureCap > 0;
     }
 
-    private EnvironmentType(int maxHealth, float bodyRadius, int structureCap, int mineralMax, double rotationV) {
+    private EnvironmentType(int maxHealth, int bodyRadius, int structureCap, 
+            int mineralMax, double rotationV, Image spriteImage) {
         this.maxHealth      = maxHealth;
         this.bodyRadius     = bodyRadius;
         this.structureCap   = structureCap;
         this.mineralMax     = mineralMax;
         this.rotationV      = rotationV;
+        this.spriteImage    = spriteImage;
     }
     
     /**
@@ -113,7 +127,7 @@ public enum EnvironmentType {
      * Returns the body radius of a given EnvironmentType.
      * @return the body radius of a given EnvironmentType.
      */
-    public float getBodyRadius() {
+    public int getBodyRadius() {
         return bodyRadius;
     }
     /**
@@ -137,7 +151,9 @@ public enum EnvironmentType {
     public double getRotationV() {
         return rotationV;
     }
-    
-    
+
+    public Image getSpriteImage() {
+        return spriteImage;
+    }
      
 }

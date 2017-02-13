@@ -72,7 +72,7 @@ public class SpaceAI extends Application {
     }
     
     private void createGameActors() {
-        testFighter = new Unit(UnitType.FIGHTER, 1, 0, 0, Team.A);
+        testFighter = new Unit(this, UnitType.FIGHTER, 1, 0, 0, Team.A);
     }
     
     private void addGameActorNodes() {
@@ -96,6 +96,10 @@ public class SpaceAI extends Application {
         gameWorld = new GameWorld();
         gamePlayLoop = new GamePlayLoop();
         gamePlayLoop.start(); 
+    }
+    
+    public GameWorld getGameWorld() {
+        return gameWorld;
     }
 
 }

@@ -16,6 +16,8 @@
  */
 package common;
 
+import world.GameWorld;
+
 /**
  *
  * @author Dylan Russell
@@ -24,11 +26,136 @@ package common;
 public strictfp class AIController {
     
     Unit unit;
+    GameWorld gameWorld;
     
-    public AIController(Unit unit) {
+    public AIController(Unit unit, GameWorld gameWorld) {
         this.unit = unit;
+        this.gameWorld = gameWorld;
     }
     
+    // *********************************
+    // ******** INTERNAL METHODS *******
+    // *********************************
+    
+    private final void assertOnScreen() {
+        // TODO
+    }
+    
+    // *********************************
+    // ****** GLOBAL QUERY METHODS *****
+    // *********************************
+    
+    public final int getGameRound() {
+        return gameWorld.getGameRound();
+    }
+    public final int getMineralCount() {
+        return 0; // TODO
+    }
+    public final int getUnitCount() {
+        return 0; // TODO
+    }
+    public final int getUnitCount(UnitType type) {
+        return 0; // TODO
+    }
+    public final Location getInitialHomeStationLocation(Team t) {
+        return new Location(0,0); // TODO
+    }
+    
+    // *********************************
+    // ****** UNIT QUERY METHODS *******
+    // *********************************
+    
+    public final int getID() {
+        return unit.getID();
+    }
+    public final Team getTeam() {
+        return unit.getTeam();
+    }
+    public final UnitType getType() {
+        return unit.getType();
+    }
+    public final int getBodyRadius() {
+        return unit.getRadius();
+    }
+    public final Location getCurrentLocation() {
+        double x = unit.getX();
+        double y = unit.getY();
+        return new Location(x,y);
+    }
+    public final int getHealth() {
+        return unit.getHealth();
+    }
+    public final int getFuel() {
+        return unit.getFuel();
+    }
+    public final WeaponType[] getArsenal() {
+        return unit.getType().getArsenal();
+    }
+    public final UnitType[] getSpawnSources() {
+        return unit.getType().getSpawnSources();
+    }
+    public final UnitType[] getSpawnUnits() {
+        return unit.getType().getSpawnUnits();
+    }
+    public int getSensorRadius() {
+        return unit.getType().getSensorRadius();
+    }
+    public int getIncomingDetectionRadius() {
+        return unit.getType().getIncomingDetectionRadius();
+    }
+    public double getFlightRadius() {
+        return unit.getType().getFlightRadius();
+    }
+    public int getFuelBurnRate() {
+        return unit.getType().getFuelBurnRate();
+    }
+    public int getRefuelRadius() {
+        return unit.getType().getRefuelRadius();
+    }
+    public int getRefuelRate() {
+        return unit.getType().getRefuelRate();
+    }
+    public int getMiningRate() {
+        return unit.getType().getMiningRate();
+    }
+    
+    // *************************************
+    // ****** GENERAL SENSOR METHODS *******
+    // *************************************
+    
+    private void assertCanSenseLocation(Location location) throws Exception {
+        // TODO
+    }
+    private void assertCanSensePartOfCircle(Location center, int radius) {
+        // TODO
+    }
+    private void assertCanSenseAllOfCircle(Location center, int radius) {
+        // TODO
+    }
+    public boolean onTheMap(Location location) {
+        return true;
+        // TODO
+    }
+    public boolean onTheMap(Location location, int radius) {
+        return true;
+        // TODO
+    }
+    public boolean canSenseLocation(Location location) {
+        return getCurrentLocation().distanceTo(location) <= getSensorRadius();
+    }
+    public boolean canSenseIncomingLocation(Location location) {
+        return getCurrentLocation().distanceTo(location) <= getIncomingDetectionRadius();
+    }
+    public boolean canSensePartOfCircle(Location center, double radius) {
+        return getCurrentLocation().distanceTo(center) - radius <= getSensorRadius();
+    }
+    public boolean canSenseAllOfCirlce(Location center, double radius) {
+        return getCurrentLocation().distanceTo(center) + radius <= getSensorRadius();
+    }
+    public boolean isLocationOccupied(Location location) {
+        return true;
+        // TODO
+    }
     public final void move(Location location) {
        System.out.println("\nMoving to " + location.getX() +", "+ location.getY());
        System.out.println("distance to point - " + getCurrentLocation().distanceTo(location));
@@ -49,13 +176,6 @@ public strictfp class AIController {
         Location movePoint = getCurrentLocation().add(unit.getType().getFlightRadius(), direction);
         move(movePoint);   
     }
-    public final UnitType getType() {
-        return unit.getType();
-    }
-    public final Location getCurrentLocation() {
-        double x = unit.getX();
-        double y = unit.getY();
-        
-        return new Location(x,y);
-    }
+
+
 }

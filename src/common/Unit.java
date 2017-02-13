@@ -16,6 +16,7 @@
  */
 package common;
 
+
 /**
  *
  * @author dr4ur
@@ -35,11 +36,12 @@ public final class Unit extends Actor {
      */
     private final AIController ac;
     
-    public Unit(UnitType type, int ID, double x, double y, Team team) {
+    
+    public Unit(SpaceAI spaceAI, UnitType type, int ID, double x, double y, Team team) {
         super(ID, type.getMaxHealth(), type.getBodyRadius(), x, y, team, type.getSpriteImage());
         this.fuel = type.getFuelMax();
         this.type = type;
-        this.ac = new AIController(this);
+        this.ac = new AIController(this, spaceAI.getGameWorld());
     }
 
     @Override

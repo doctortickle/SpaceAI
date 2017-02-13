@@ -211,7 +211,7 @@ public strictfp enum UnitType {
     /**
      * The radius at which a given UnitType can sense enemy UnitTypes.
      */
-    private final int enemySensorRadius;
+    private final int sensorRadius;
     /**
      * The radius at which a given UnitType can detect incoming WeaponTypes.
      */
@@ -291,7 +291,7 @@ public strictfp enum UnitType {
         this.maxHealth = maxHealth;
         this.mineralCost = mineralCost;
         this.bodyRadius = bodyRadius;
-        this.enemySensorRadius = enemySensorRadius;
+        this.sensorRadius = enemySensorRadius;
         this.incomingDetectionRadius = incomingDetectionRadius;
         this.flightRadius = flightRadius;
         this.fuelMax = fuelMax;
@@ -312,10 +312,10 @@ public strictfp enum UnitType {
         this.maxHealth = maxHealth;
         this.mineralCost = mineralCost;
         this.bodyRadius = bodyRadius;
-        this.enemySensorRadius = 0;
+        this.sensorRadius = 0;
         this.incomingDetectionRadius = 0;
         this.flightRadius = flightRadius;
-        this.fuelMax = Integer.MAX_VALUE;
+        this.fuelMax = 10000;
         this.fuelBurnRate = 0;
         this.refuelRadius = refuelRadius;
         this.refuelRate = refuelRate;
@@ -411,8 +411,8 @@ public strictfp enum UnitType {
         return bodyRadius;
     }
 
-    public int getEnemySensorRadius() {
-        return enemySensorRadius;
+    public int getSensorRadius() {
+        return sensorRadius;
     }
 
     public int getIncomingDetectionRadius() {

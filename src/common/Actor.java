@@ -39,7 +39,7 @@ public abstract class Actor {
         return health;
     }
 
-    public float getRadius() {
+    public int getRadius() {
         return radius;
     }
 

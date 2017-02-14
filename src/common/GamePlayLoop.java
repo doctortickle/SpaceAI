@@ -17,8 +17,8 @@
 package common;
 
 
-import static common.GameConstants.FRAMES_PER_ROUND;
 import javafx.animation.AnimationTimer;
+import static common.GameConstants.FRAMES_PER_ROUND_5;
 
 
 public class GamePlayLoop extends AnimationTimer {
@@ -27,16 +27,18 @@ public class GamePlayLoop extends AnimationTimer {
     SpaceAI spaceAI;
     GameWorld gameWorld;
     CastingDirector castDirector;
+    double gameSpeed;
 
     public GamePlayLoop(SpaceAI spaceAI, GameWorld gameWorld, CastingDirector castDirector) {
         this.spaceAI = spaceAI;
         this.gameWorld = gameWorld;
         this.castDirector = castDirector;
+        this.gameSpeed = gameWorld.getGameSpeed();
     }
     
     @Override
     public void handle(long now) {
-        if(pulse<FRAMES_PER_ROUND) {
+        if(pulse<gameSpeed) {
             pulse++;
             System.out.println(pulse);
         }
@@ -44,12 +46,17 @@ public class GamePlayLoop extends AnimationTimer {
             pulse = 0;
         }
         if(pulse==0) {
+            setGameSpeed();
             gameWorld.update();
             spaceAI.update();
             updateActors();
         }    
     }
     
+    private void setGameSpeed() {
+        gameSpeed = gameWorld.getGameSpeed();
+        System.out.println("Game speed is set at " + 5/gameSpeed + "x normal speed.");
+    }
     private void updateActors() {
         for(Unit unit : castDirector.getCurrentUnits() ) {
             unit.update();

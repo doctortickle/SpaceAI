@@ -41,14 +41,14 @@ public strictfp class AIController {
     }
 
     // *********************************
-    // ****** GLOBAL QUERY METHODS *****
+    // **** GAMEWORLD QUERY METHODS ****
     // *********************************
     public final int getGameRound() {
         return gameWorld.getGameRound();
     }
 
     public final int getMineralCount() {
-        return 0; // TODO
+        return gameWorld.getMineralCount(getTeam());
     }
 
     public final int getUnitCount() {
@@ -59,8 +59,8 @@ public strictfp class AIController {
         return 0; // TODO
     }
 
-    public final Location getInitialHomeStationLocation(Team t) {
-        return new Location(0, 0); // TODO
+    public final Location getInitialHomeStationLocation(Team team) {
+        return gameWorld.getInitialHomeStationLocation(team);
     }
 
     // *********************************
@@ -141,7 +141,7 @@ public strictfp class AIController {
     // *************************************
     // ****** GENERAL SENSOR METHODS *******
     // *************************************
-    private void assertCanSenseLocation(Location location) throws Exception {
+    private void assertCanSenseLocation(Location location) {
         // TODO
     }
 
@@ -206,10 +206,13 @@ public strictfp class AIController {
     }
     
     public final void build(UnitType type, Direction direction) {
-        if(getBuildCooldown() == 0 && Arrays.asList(unit.getType().getSpawnUnits()).contains(type)) {
-            Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-            gameWorld.addUnit(type, location, getTeam());
-            unit.setBuildCooldown(type.getSpawnCooldown());
+        if( getBuildCooldown() == 0 
+            && Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
+            && getMineralCount()-type.getMineralCost() >= 0) {
+                Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+                gameWorld.addUnit(type, location, getTeam());
+                unit.setBuildCooldown(type.getSpawnCooldown());
+                gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
         }
         else {
             System.out.println("Can not build due to cooldown.");

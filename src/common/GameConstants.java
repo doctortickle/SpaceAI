@@ -27,8 +27,28 @@ package common;
  */
 public strictfp interface GameConstants {
     
+    // *********************************
+    // ****** ANIMATION CONSTANTS ******
+    // *********************************
+    
     double PIXEL_TO_COORDINATE = 1/2;
     double COORDINATE_TO_PIXEL = 2/1;
-    int FRAMES_PER_ROUND = 5; 
+    int FRAMES_PER_ROUND_9 = 1;
+    int FRAMES_PER_ROUND_8 = 2;
+    int FRAMES_PER_ROUND_7 = 3;
+    int FRAMES_PER_ROUND_6 = 4;
+    int FRAMES_PER_ROUND_5 = 5;
+    int FRAMES_PER_ROUND_4 = 10; 
+    int FRAMES_PER_ROUND_3 = 15; 
+    int FRAMES_PER_ROUND_2 = 20; 
+    int FRAMES_PER_ROUND_1 = 30;
+    
+    // *********************************
+    // ****** GAMEPLAY CONSTANTS *******
+    // *********************************
+    
+    int STARTING_MINERAL_COUNT = 1000;
+    Location TEAM_A_HOME_STATION = new Location(0,100);
+    Location TEAM_B_HOME_STATION = new Location(0,-100);
     
 }

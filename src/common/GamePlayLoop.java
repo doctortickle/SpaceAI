@@ -18,8 +18,6 @@ package common;
 
 
 import javafx.animation.AnimationTimer;
-import static common.GameConstants.FRAMES_PER_ROUND_5;
-
 
 public class GamePlayLoop extends AnimationTimer {
     
@@ -27,7 +25,7 @@ public class GamePlayLoop extends AnimationTimer {
     SpaceAI spaceAI;
     GameWorld gameWorld;
     CastingDirector castDirector;
-    double gameSpeed;
+    int gameSpeed;
 
     public GamePlayLoop(SpaceAI spaceAI, GameWorld gameWorld, CastingDirector castDirector) {
         this.spaceAI = spaceAI;
@@ -38,19 +36,24 @@ public class GamePlayLoop extends AnimationTimer {
     
     @Override
     public void handle(long now) {
-        if(pulse<gameSpeed) {
+        if(!spaceAI.getPause()) {
+            if(pulse<gameSpeed) {
             pulse++;
             System.out.println(pulse);
+            }
+            else{
+                pulse = 0;
+            }
+            if(pulse==0) {
+                setGameSpeed();
+                gameWorld.update();
+                spaceAI.update();
+                updateActors();
+            }     
         }
-        else{
-            pulse = 0;
+        if(spaceAI.getPause()) {
+            System.out.println("Game Paused");
         }
-        if(pulse==0) {
-            setGameSpeed();
-            gameWorld.update();
-            spaceAI.update();
-            updateActors();
-        }    
     }
     
     private void setGameSpeed() {

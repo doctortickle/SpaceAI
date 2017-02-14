@@ -76,7 +76,7 @@ public class GameWorld {
         castDirector.addToRemovedActors(actor);
     }
     
-    public double getGameSpeed() {
+    public int getGameSpeed() {
         return this.gameSpeed;
     }
     public void setGameSpeed(int gameSpeed) {

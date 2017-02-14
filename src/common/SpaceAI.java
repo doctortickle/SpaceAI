@@ -23,9 +23,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -34,35 +37,39 @@ import javafx.stage.Stage;
  * @author Dylan Russell
  */
 public class SpaceAI extends Application {
- static final double WIDTH = 1080, HEIGHT = 800;
+    static final double WIDTH = 1080, HEIGHT = 800;
     private boolean up, down, left, right, wKey, sKey, aKey, dKey;
     private Scene scene;
-    private StackPane root;
+    private BorderPane borderpane;
+    private StackPane gameScreen;
     private Image splashScreen, instructionLayer, legalLayer, scoresLayer;
     private ImageView splashScreenBackplate, splashScreenTextArea;
     private Button gameButton, helpButton, scoreButton, legalButton;
-    private Label teamAMineralCountLabel, teamBMineralCountLabel;
+    private Label teamAMineralCountLabel, teamBMineralCountLabel, teamAMineralCountName, teamBMineralCountName;
     private Slider speedSlider;
     private int teamAMineralCount, teamBMineralCount;
-    private HBox mineralContainer, sliderContainer;
-    private Insets mineralContainerPadding;  
+    private VBox mineralContainer; 
+    private HBox countContainer, nameContainer, sliderContainer;
+    private Insets mineralContainerPadding,sliderContainerPadding;  
     private GamePlayLoop gamePlayLoop;
     private CastingDirector castDirector;
+    private boolean pause;
     public static GameWorld gameWorld;
     
     @Override
     public void start(Stage primaryStage) throws ActionException {
         primaryStage.setTitle("SpaceAI");
-        root = new StackPane();
-        scene = new Scene(root, WIDTH, HEIGHT, Color.WHITE);
+        borderpane = new BorderPane();
+        gameScreen = new StackPane();
+        scene = new Scene(borderpane, WIDTH, HEIGHT, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.show();
-        //createSceneEventHandling();
+        createSceneEventHandling();
         //loadImageAssets();
         createCastingDirection();
         createGameWorld();
         createGameScreenNodes();
-        addNodesToStackPane();
+        addNodesToBorderPane();
         createStartGameLoop();       
     }
 
@@ -71,7 +78,11 @@ public class SpaceAI extends Application {
     }
     
     private void createSceneEventHandling() {
-        
+        scene.setOnKeyPressed((KeyEvent event) -> {
+            if(event.getCode() == KeyCode.SPACE) {
+                pause = !pause;
+            }
+        });
     }
     private void loadImageAssets() {
     
@@ -83,18 +94,31 @@ public class SpaceAI extends Application {
         gameWorld = new GameWorld(this, castDirector);   
     }
     private void createGameScreenNodes() {
-            mineralContainer = new HBox(50);
-            mineralContainer.setAlignment(Pos.BOTTOM_CENTER);
-            mineralContainerPadding = new Insets(0,0,0,0);
+            mineralContainer = new VBox(5);
+            mineralContainer.setAlignment(Pos.CENTER);
+            mineralContainerPadding = new Insets(20);
             mineralContainer.setPadding(mineralContainerPadding);
+            countContainer = new HBox(150);
+            countContainer.setAlignment(Pos.CENTER);
+            nameContainer = new HBox(50);
+            nameContainer.setAlignment(Pos.CENTER);
+            
             teamAMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.A)));
             teamAMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
             teamBMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.B)));
             teamBMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
-            mineralContainer.getChildren().addAll(teamAMineralCountLabel, teamBMineralCountLabel);
+            teamAMineralCountName = new Label("Team A Mineral Count");
+            teamAMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
+            teamBMineralCountName = new Label("Team B Mineral Count");
+            teamBMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
+            countContainer.getChildren().addAll(teamAMineralCountLabel, teamBMineralCountLabel);
+            nameContainer.getChildren().addAll(teamAMineralCountName, teamBMineralCountName);
+            mineralContainer.getChildren().addAll(countContainer, nameContainer);
             
             sliderContainer = new HBox(50);
-            sliderContainer.setAlignment(Pos.TOP_CENTER);
+            sliderContainer.setAlignment(Pos.CENTER);
+            sliderContainerPadding = new Insets(5);
+            sliderContainer.setPadding(sliderContainerPadding);
             speedSlider = new Slider(1, 9, 5);
             speedSlider.setShowTickMarks(true);
             speedSlider.setShowTickLabels(true);
@@ -102,7 +126,6 @@ public class SpaceAI extends Application {
             speedSlider.setBlockIncrement(1);
             speedSlider.setSnapToTicks(true);
             sliderContainer.getChildren().addAll(speedSlider);
-            
             ChangeListener<Object> updateListener = (obs, oldValue, newValue) -> {
                 int speedValue = (int) speedSlider.getValue();
                 if(speedValue == 1) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_1);}
@@ -117,9 +140,10 @@ public class SpaceAI extends Application {
             };
             speedSlider.valueProperty().addListener(updateListener);
     }
-    private void addNodesToStackPane() {
-        root.getChildren().add(mineralContainer);
-        root.getChildren().add(sliderContainer);
+    private void addNodesToBorderPane() {
+        borderpane.setCenter(gameScreen);
+        borderpane.setBottom(mineralContainer);
+        borderpane.setTop(sliderContainer);
     }
     private void createStartGameLoop() {
         gamePlayLoop = new GamePlayLoop(this, gameWorld, castDirector);
@@ -135,7 +159,7 @@ public class SpaceAI extends Application {
         for(Actor actor : castDirector.getToBeAdded()) {
             actor.getSpriteFrame().setTranslateX(actor.getLocation().getPixelX());
             actor.getSpriteFrame().setTranslateY(actor.getLocation().getPixelY());
-            root.getChildren().add(actor.getSpriteFrame());
+            gameScreen.getChildren().add(actor.getSpriteFrame());
             if(actor instanceof Unit) {
                 castDirector.addCurrentUnit((Unit)actor);
             }
@@ -150,7 +174,7 @@ public class SpaceAI extends Application {
     }
     private void removeGameActorNodes() {
         for(Actor actor : castDirector.getRemovedActors()) {
-            root.getChildren().remove(actor.getSpriteFrame());
+            gameScreen.getChildren().remove(actor.getSpriteFrame());
         }
         castDirector.resetRemovedActors();
     }    
@@ -161,5 +185,8 @@ public class SpaceAI extends Application {
         this.teamBMineralCount = gameWorld.getMineralCount(Team.B);
         teamBMineralCountLabel.setText(Integer.toString(teamBMineralCount));
         System.out.println("Team B mineral count - " + teamBMineralCount);
+    }
+    public boolean getPause() {
+        return pause;
     }
 }

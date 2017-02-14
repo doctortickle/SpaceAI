@@ -93,5 +93,19 @@ public strictfp class Location {
         double y = this.y + dy;
         return new Location(x,y);
     }
-   
+
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Location)) {
+            return false;
+        }
+        return (((Location) obj).x == this.x) && (((Location) obj).y == this.y);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + (int) (Double.doubleToLongBits(this.x) ^ (Double.doubleToLongBits(this.x) >>> 32));
+        hash = 83 * hash + (int) (Double.doubleToLongBits(this.y) ^ (Double.doubleToLongBits(this.y) >>> 32));
+        return hash;
+    }
 }

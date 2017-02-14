@@ -54,8 +54,8 @@ public final class Environment extends Actor{
         return true;
     }
 
-    public Environment(EnvironmentType type, int ID, int x, int y) {
-        super(ID, type.getMaxHealth(), type.getBodyRadius(), x, y, Team.NEUTRAL, type.getSpriteImage());
+    public Environment(EnvironmentType type, int ID, Location location) {
+        super(ID, type.getMaxHealth(), type.getBodyRadius(), location, Team.NEUTRAL, type.getSpriteImage());
         this.type = type;
         this.mineralCount = type.getMineralMax();
         this.structureCount = 0;

@@ -28,11 +28,14 @@ package common;
 public strictfp class Direction {
     
     public final double radians;
+    public static final Direction NORTH = getNorth();
+    public static final Direction SOUTH = getSouth();
+    public static final Direction EAST = getEast();
+    public static final Direction WEST = getWest();
     
     public Direction(double radians) {
         this.radians = reduce(radians);
-    }
-    
+    }   
     public Direction(double dx, double dy) {
         assertValid(dx);
         assertValid(dy);
@@ -42,6 +45,22 @@ public strictfp class Direction {
         this.radians = (double)Math.atan2(dy, dx);
     }
     
+    public double getRadians() {
+        return this.radians;
+    }
+    
+    private static Direction getNorth() {
+        return new Direction(0,1);
+    }
+    private static Direction getSouth() {
+        return new Direction(0,-1);
+    }
+    private static Direction getEast() {
+        return new Direction(1,0);
+    }
+    private static Direction getWest() {
+        return new Direction(-1,0);
+    }
     // Internally used to keep angles in the range (-Math.PI,Math.PI]
     private double reduce(double rads) {
         if(rads <= -(double)Math.PI) {
@@ -53,7 +72,6 @@ public strictfp class Direction {
         }
         return rads;
     }
-
     // Stop NaN or infinity directions from messing things up
     private void assertValid(double num) {
         if(Double.isNaN(num)) {
@@ -62,9 +80,4 @@ public strictfp class Direction {
             throw new RuntimeException("Direction can not take +/- infinity as an argument");
         }
     }
-    
-    public double getRadians() {
-        return this.radians;
-    }
-    
 }

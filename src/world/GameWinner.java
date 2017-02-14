@@ -19,6 +19,7 @@
  */
 package world;
 
+import common.VictoryCondition;
 import common.Team;
 
 /**

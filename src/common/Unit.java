@@ -30,23 +30,36 @@ public final class Unit extends Actor {
     /**
      * The current fuel in this unit's tank.
      */
-    private final int fuel;
+    private int fuel;
+    /**
+     * Tracks the cooldown required to build another unit.
+     */
+    private int buildCooldown;
     /**
      * Defines the AIController for this unit.
      */
     private final AIController ac;
     
     
-    public Unit(SpaceAI spaceAI, UnitType type, int ID, double x, double y, Team team) {
-        super(ID, type.getMaxHealth(), type.getBodyRadius(), x, y, team, type.getSpriteImage());
+    public Unit(SpaceAI spaceAI, UnitType type, int ID, Location location, Team team) {
+        super(ID, type.getMaxHealth(), type.getBodyRadius(), location, team, type.getSpriteImage());
         this.fuel = type.getFuelMax();
         this.type = type;
-        this.ac = new AIController(this, spaceAI.getGameWorld());
+        this.buildCooldown = 0;
+        this.ac = new AIController(this, spaceAI.gameWorld);
     }
 
     @Override
     public void update() {
-        AICommand.run(ac);
+        if(this.getTeam()==Team.A) {
+            AICommandA.run(ac);
+        }
+        if(this.getTeam()==Team.B) {
+            AICommandB.run(ac);
+        }
+        if(buildCooldown > 0) {
+            buildCooldown--;
+        }
     }
 
     public UnitType getType() {
@@ -55,6 +68,14 @@ public final class Unit extends Actor {
 
     public int getFuel() {
         return fuel;
+    }
+    
+    public int getBuildCooldown() {
+        return buildCooldown;
+    }
+    
+    public void setBuildCooldown(int i) {
+        this.buildCooldown = i;
     }
     
     @Override

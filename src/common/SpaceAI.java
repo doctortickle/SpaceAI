@@ -21,7 +21,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import world.GameWorld;
 
 /**
  *
@@ -49,12 +48,13 @@ public class SpaceAI extends Application {
         scene = new Scene(root, WIDTH, HEIGHT, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.show();
-        createSceneEventHandling();
-        loadImageAssets();
-        createGameActors();
-        addGameActorNodes();
+        //createSceneEventHandling();
+        //loadImageAssets();
         createCastingDirection();
-        createSplashScreenNodes();
+        createGameWorld();
+        //createGameActors();
+        //addGameActorNodes();
+        //createSplashScreenNodes();
         addNodesToStackPane();
         createStartGameLoop();       
     }
@@ -66,40 +66,60 @@ public class SpaceAI extends Application {
     private void createSceneEventHandling() {
         
     }
-    
     private void loadImageAssets() {
     
     }
-    
-    private void createGameActors() {
-        testFighter = new Unit(this, UnitType.FIGHTER, 1, 0, 0, Team.A);
-    }
-    
-    private void addGameActorNodes() {
-        root.getChildren().add(testFighter.getSpriteFrame());
-    }
-    
     private void createCastingDirection() {
         castDirector = new CastingDirector();
-        castDirector.addCurrentCast(testFighter);
+        //castDirector.addCurrentUnit(testFighter);
     }
-    
+    private void createGameWorld() {
+        gameWorld = new GameWorld(this, castDirector);   
+    }
+    private void createGameActors() {
+        //testFighter = new Unit(this, UnitType.FIGHTER, 1, new Location(0,0), Team.A);
+    }
     private void createSplashScreenNodes() {
         
     }
-    
     private void addNodesToStackPane() {
 
     }
-    
     private void createStartGameLoop() {
-        gameWorld = new GameWorld();
-        gamePlayLoop = new GamePlayLoop();
+        gamePlayLoop = new GamePlayLoop(this, gameWorld, castDirector);
         gamePlayLoop.start(); 
     }
+
     
-    public GameWorld getGameWorld() {
-        return gameWorld;
+    public void update() {
+        removeGameActorNodes();
+        addGameActorNodes();
+    }
+    
+    private void addGameActorNodes() {
+        for(Actor actor : castDirector.getToBeAdded()) {
+            actor.getSpriteFrame().setTranslateX(actor.getLocation().getPixelX());
+            actor.getSpriteFrame().setTranslateY(actor.getLocation().getPixelY());
+            root.getChildren().add(actor.getSpriteFrame());
+            if(actor instanceof Unit) {
+                castDirector.addCurrentUnit((Unit)actor);
+            }
+            if(actor instanceof Weapon) {
+                castDirector.addCurrentWeapon((Weapon)actor);
+            }
+            if(actor instanceof Environment) {
+                castDirector.addCurrentEnvironment((Environment)actor);
+            }
+        }
+        castDirector.clearToBeAdded();
+        //root.getChildren().add(testFighter.getSpriteFrame());
+    }
+    
+    private void removeGameActorNodes() {
+        for(Actor actor : castDirector.getRemovedActors()) {
+            root.getChildren().remove(actor.getSpriteFrame());
+        }
+        castDirector.resetRemovedActors();
     }
 
 }

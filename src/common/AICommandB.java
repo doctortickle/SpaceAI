@@ -20,15 +20,15 @@ package common;
  *
  * @author Dylan Russell
  */
-public class AICommand {
+public class AICommandB {
     
     static AIController ac;
     
     public static void run(AIController ac) {
         
-        AICommand.ac = ac;
+        AICommandB.ac = ac;
         
-        System.out.println(ac.getType());
+        System.out.println("\n"+ac.getType());
         switch(ac.getType()) {
             case FIGHTER : runFighter(); break;
             case SIEGE : runSiege(); break;
@@ -48,7 +48,7 @@ public class AICommand {
     
     public static void runFighter() {
             ac.getCurrentLocation();
-            ac.move(new Location(50, -37));
+            ac.move(new Location(100, 100));
     }
     
     public static void runSiege() {
@@ -70,7 +70,10 @@ public class AICommand {
            // Refueler code here.
     }
     public static void runHomeStation() {
-           // Home Station code here.
+           System.out.println("runHomeStation");
+           System.out.println(ac.getCurrentLocation().getX() + ", " + ac.getCurrentLocation().getY());
+           ac.build(UnitType.FIGHTER, Direction.NORTH);
+           ac.move(new Location(100,-100));
     }
     public static void runSmallDock() {
            // Small Dock code here.

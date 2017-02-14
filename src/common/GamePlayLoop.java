@@ -23,7 +23,16 @@ import javafx.animation.AnimationTimer;
 
 public class GamePlayLoop extends AnimationTimer {
     
-    int pulse=0;
+    int pulse;
+    SpaceAI spaceAI;
+    GameWorld gameWorld;
+    CastingDirector castDirector;
+
+    public GamePlayLoop(SpaceAI spaceAI, GameWorld gameWorld, CastingDirector castDirector) {
+        this.spaceAI = spaceAI;
+        this.gameWorld = gameWorld;
+        this.castDirector = castDirector;
+    }
     
     @Override
     public void handle(long now) {
@@ -35,9 +44,22 @@ public class GamePlayLoop extends AnimationTimer {
             pulse = 0;
         }
         if(pulse==0) {
-            SpaceAI.gameWorld.update();
-            SpaceAI.testFighter.update();
-            }    
+            gameWorld.update();
+            spaceAI.update();
+            updateActors();
+        }    
+    }
+    
+    private void updateActors() {
+        for(Unit unit : castDirector.getCurrentUnits() ) {
+            unit.update();
+        }
+        for(Weapon weapon : castDirector.getCurrentWeaponss() ) {
+            weapon.update();
+        }
+        for(Environment environment : castDirector.getCurrentEnvironment() ) {
+            environment.update();
+        }
     }
     
     @Override

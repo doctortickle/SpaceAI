@@ -1,0 +1,25 @@
+#root {
+	-fx-background-color: #ffff66;
+}
+
+#top-node {
+	-fx-background-color: #ffff66;
+}
+
+#right-node {
+	-fx-background-color: #ffff66;
+}
+
+#left-node {
+	-fx-background-color: #ffff66;
+}
+
+#bottom-node {
+	-fx-background-color: #ffff66;
+}
+
+#center-node {
+	-fx-background-color: #000000;
+	-fx-border-color: -fx-text-box-border;
+  	-fx-border-width: 2;
+}

@@ -5,17 +5,11 @@
  */
 package common;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.CacheHint;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
@@ -37,10 +31,10 @@ import javafx.stage.Stage;
  * @author Dylan Russell
  */
 public class SpaceAI extends Application {
-    static final double WIDTH = 1080, HEIGHT = 800;
+    static final double WINDOW_WIDTH = 1400, WINDOW_HEIGHT = 800, CENTER_WIDTH = 900, CENTER_HEIGHT = 700;
     private boolean up, down, left, right, wKey, sKey, aKey, dKey;
     private Scene scene;
-    private BorderPane borderpane;
+    private BorderPane root;
     private StackPane gameScreen;
     private Image splashScreen, instructionLayer, legalLayer, scoresLayer;
     private ImageView splashScreenBackplate, splashScreenTextArea;
@@ -48,27 +42,22 @@ public class SpaceAI extends Application {
     private Label teamAMineralCountLabel, teamBMineralCountLabel, teamAMineralCountName, teamBMineralCountName, sliderName;
     private Slider speedSlider;
     private int teamAMineralCount, teamBMineralCount;
-    private VBox mineralContainer, slideAndLabelContainer; 
+    private VBox mineralContainer, slideAndLabelContainer, leftBox, rightBox; 
     private HBox mineralCountContainer, mineralNameContainer, sliderContainer, sliderNameContainer;
-    private Insets mineralContainerPadding,sliderContainerPadding;  
+    private Insets mineralContainerPadding,slideAndLabelContainerPadding;  
     private GamePlayLoop gamePlayLoop;
     private CastingDirector castDirector;
     private boolean pause;
+    private String styleSheet;
     public static GameWorld gameWorld;
     
     @Override
     public void start(Stage primaryStage) throws ActionException {
-        primaryStage.setTitle("SpaceAI");
-        borderpane = new BorderPane();
-        gameScreen = new StackPane();
-        scene = new Scene(borderpane, WIDTH, HEIGHT, Color.WHITE);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        setStage(primaryStage);
+        getCSS();
         createSceneEventHandling();
-        //loadImageAssets();
         createCastingDirection();
         createGameWorld();
-        createGameScreenNodes();
         addNodesToBorderPane();
         createStartGameLoop();       
     }
@@ -77,6 +66,21 @@ public class SpaceAI extends Application {
         launch(args);
     }
     
+    private void setStage(Stage primaryStage) {
+        primaryStage.setTitle("SpaceAI");
+        root = new BorderPane();
+        root.setId("root");
+        scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+        primaryStage.setMinWidth(WINDOW_WIDTH);
+        primaryStage.setMinHeight(WINDOW_HEIGHT+((WINDOW_HEIGHT-CENTER_HEIGHT)/2));
+        primaryStage.setMaxHeight(WINDOW_HEIGHT+((WINDOW_HEIGHT-CENTER_HEIGHT)/2));
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+    private void getCSS() {
+        styleSheet = "/styleSheet.css";
+        scene.getStylesheets().add(styleSheet);
+    }
     private void createSceneEventHandling() {
         scene.setOnKeyPressed((KeyEvent event) -> {
             if(event.getCode() == KeyCode.SPACE) {
@@ -84,77 +88,108 @@ public class SpaceAI extends Application {
             }
         });
     }
-    private void loadImageAssets() {
-    
-    }
     private void createCastingDirection() {
         castDirector = new CastingDirector();
     }
     private void createGameWorld() {
-        gameWorld = new GameWorld(this, castDirector);   
+        gameWorld = new GameWorld(this, castDirector);
     }
-    private void createGameScreenNodes() {
-            mineralContainer = new VBox();
-            mineralContainer.setAlignment(Pos.CENTER);
-            mineralContainerPadding = new Insets(20);
-            mineralContainer.setPadding(mineralContainerPadding);
-            mineralCountContainer = new HBox(150);
-            mineralCountContainer.setAlignment(Pos.CENTER);
-            mineralNameContainer = new HBox(50);
-            mineralNameContainer.setAlignment(Pos.CENTER);
-            
-            teamAMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.A)));
-            teamAMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
-            teamBMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.B)));
-            teamBMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
-            teamAMineralCountName = new Label("Team A Mineral Count");
-            teamAMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
-            teamBMineralCountName = new Label("Team B Mineral Count");
-            teamBMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
-            mineralCountContainer.getChildren().addAll(teamAMineralCountLabel, teamBMineralCountLabel);
-            mineralNameContainer.getChildren().addAll(teamAMineralCountName, teamBMineralCountName);
-            mineralContainer.getChildren().addAll(mineralCountContainer, mineralNameContainer);
-            
-            slideAndLabelContainer = new VBox(5);
-            slideAndLabelContainer.setMaxWidth(10);
-            slideAndLabelContainer.setAlignment(Pos.CENTER);
-            //slideAndLabelContainer.setPadding(mineralContainerPadding);
-            
-            sliderContainer = new HBox();
-            sliderContainer.setAlignment(Pos.CENTER);
-            sliderContainerPadding = new Insets(5);
-            sliderContainer.setPadding(sliderContainerPadding);
-            speedSlider = new Slider(1, 9, 5);
-            speedSlider.setShowTickMarks(true);
-            speedSlider.setShowTickLabels(true);
-            speedSlider.setMajorTickUnit(1);
-            speedSlider.setBlockIncrement(1);
-            speedSlider.setSnapToTicks(true);
-            
-            ChangeListener<Object> updateListener = (obs, oldValue, newValue) -> {
-                int speedValue = (int) speedSlider.getValue();
-                if(speedValue == 1) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_1);}
-                if(speedValue == 2) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_2);}
-                if(speedValue == 3) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_3);}
-                if(speedValue == 4) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_4);}
-                if(speedValue == 5) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_5);}
-                if(speedValue == 6) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_6);}
-                if(speedValue == 7) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_7);}
-                if(speedValue == 8) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_8);}
-                if(speedValue == 9) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_9);}
-            };
-            speedSlider.valueProperty().addListener(updateListener);
-            sliderNameContainer = new HBox();
-            sliderNameContainer.setAlignment(Pos.CENTER);
-            sliderName = new Label("Game Speed Adjustment");
-            sliderName.setMinWidth(Control.USE_PREF_SIZE);
-            slideAndLabelContainer.getChildren().addAll(speedSlider,sliderName);
-            
+    private void createBottomNode() {
+        mineralCountContainer = new HBox(150);
+        mineralCountContainer.setAlignment(Pos.CENTER);
+        teamAMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.A)));
+        teamAMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
+        teamBMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.B)));
+        teamBMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
+        mineralCountContainer.getChildren().addAll(teamAMineralCountLabel, teamBMineralCountLabel);
+        
+        mineralNameContainer = new HBox(50);
+        mineralNameContainer.setAlignment(Pos.CENTER);
+        teamAMineralCountName = new Label("Team A Mineral Count");
+        teamAMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
+        teamBMineralCountName = new Label("Team B Mineral Count");
+        teamBMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
+        mineralNameContainer.getChildren().addAll(teamAMineralCountName, teamBMineralCountName);
+        
+        mineralContainer = new VBox(5);
+        mineralContainerPadding = new Insets(5);
+        mineralContainer.setPadding(mineralContainerPadding);
+        mineralContainer.setMinWidth(WINDOW_WIDTH);
+        mineralContainer.setMinHeight((WINDOW_HEIGHT-CENTER_HEIGHT)/2);
+        mineralContainer.getChildren().addAll(mineralCountContainer, mineralNameContainer);
+        
+        root.setBottom(mineralContainer);
+        BorderPane.setAlignment(mineralContainer, Pos.CENTER);
+        root.getBottom().setId("bottom-node");
+    }
+    private void createTopNode() {
+        sliderContainer = new HBox();
+        sliderContainer.setMaxWidth(CENTER_WIDTH/2);
+        sliderContainer.setAlignment(Pos.CENTER);
+        speedSlider = new Slider(1, 9, 5);
+        speedSlider.setShowTickMarks(true);
+        speedSlider.setShowTickLabels(true);
+        speedSlider.setMajorTickUnit(1);
+        speedSlider.setBlockIncrement(1);
+        speedSlider.setSnapToTicks(true);
+        ChangeListener<Object> updateListener = (obs, oldValue, newValue) -> {
+            int speedValue = (int) speedSlider.getValue();
+            if(speedValue == 1) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_1);}
+            if(speedValue == 2) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_2);}
+            if(speedValue == 3) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_3);}
+            if(speedValue == 4) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_4);}
+            if(speedValue == 5) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_5);}
+            if(speedValue == 6) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_6);}
+            if(speedValue == 7) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_7);}
+            if(speedValue == 8) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_8);}
+            if(speedValue == 9) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_9);}
+        };
+        speedSlider.valueProperty().addListener(updateListener);
+        sliderContainer.getChildren().add(speedSlider);
+
+        sliderName = new Label("Game Speed Adjustment");
+        
+        slideAndLabelContainer = new VBox(5);
+        slideAndLabelContainerPadding = new Insets(5);
+        slideAndLabelContainer.setPadding(slideAndLabelContainerPadding);
+        slideAndLabelContainer.setAlignment(Pos.CENTER);
+        slideAndLabelContainer.setMinWidth(WINDOW_WIDTH);
+        slideAndLabelContainer.setMinHeight((WINDOW_HEIGHT-CENTER_HEIGHT)/2);
+        slideAndLabelContainer.getChildren().addAll(sliderContainer,sliderName);
+        
+        root.setTop(slideAndLabelContainer);
+        BorderPane.setAlignment(slideAndLabelContainer, Pos.CENTER);
+        root.getTop().setId("top-node");
+    }
+    private void createLeftNode() {
+        leftBox = new VBox();
+        leftBox.setMinWidth((WINDOW_WIDTH-CENTER_WIDTH)/2);
+        
+        root.setLeft(leftBox);
+        BorderPane.setAlignment(leftBox, Pos.CENTER);
+        root.getLeft().setId("left-node");
+    }
+    private void createRightNode() {
+        rightBox = new VBox();
+        rightBox.setMinWidth((WINDOW_WIDTH-CENTER_WIDTH)/2);
+        
+        root.setRight(rightBox);
+        BorderPane.setAlignment(rightBox, Pos.CENTER);
+        root.getRight().setId("right-node");
+    }
+    private void createCenterNode() {
+        gameScreen = new StackPane();
+        gameScreen.setMinSize(CENTER_WIDTH, CENTER_HEIGHT);
+        gameScreen.setMaxSize(CENTER_WIDTH, CENTER_HEIGHT);
+        root.setCenter(gameScreen);
+        root.getCenter().setId("center-node");
     }
     private void addNodesToBorderPane() {
-        borderpane.setCenter(gameScreen);
-        borderpane.setBottom(mineralContainer);
-        borderpane.setTop(slideAndLabelContainer);
+        createBottomNode();
+        createTopNode();
+        createLeftNode();
+        createRightNode();
+        createCenterNode();
     }
     private void createStartGameLoop() {
         gamePlayLoop = new GamePlayLoop(this, gameWorld, castDirector);

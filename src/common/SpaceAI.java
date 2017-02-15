@@ -31,7 +31,6 @@ import javafx.stage.Stage;
  * @author Dylan Russell
  */
 public class SpaceAI extends Application {
-    static final double WINDOW_WIDTH = 1400, WINDOW_HEIGHT = 800, CENTER_WIDTH = 900, CENTER_HEIGHT = 700;
     private boolean up, down, left, right, wKey, sKey, aKey, dKey;
     private Scene scene;
     private BorderPane root;
@@ -70,10 +69,10 @@ public class SpaceAI extends Application {
         primaryStage.setTitle("SpaceAI");
         root = new BorderPane();
         root.setId("root");
-        scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-        primaryStage.setMinWidth(WINDOW_WIDTH);
-        primaryStage.setMinHeight(WINDOW_HEIGHT+((WINDOW_HEIGHT-CENTER_HEIGHT)/2));
-        primaryStage.setMaxHeight(WINDOW_HEIGHT+((WINDOW_HEIGHT-CENTER_HEIGHT)/2));
+        scene = new Scene(root, GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT);
+        primaryStage.setMinWidth(GameConstants.WINDOW_WIDTH);
+        primaryStage.setMinHeight(GameConstants.WINDOW_HEIGHT+((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2));
+        primaryStage.setMaxHeight(GameConstants.WINDOW_HEIGHT+((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -114,8 +113,8 @@ public class SpaceAI extends Application {
         mineralContainer = new VBox(5);
         mineralContainerPadding = new Insets(5);
         mineralContainer.setPadding(mineralContainerPadding);
-        mineralContainer.setMinWidth(WINDOW_WIDTH);
-        mineralContainer.setMinHeight((WINDOW_HEIGHT-CENTER_HEIGHT)/2);
+        mineralContainer.setMinWidth(GameConstants.WINDOW_WIDTH);
+        mineralContainer.setMinHeight((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2);
         mineralContainer.getChildren().addAll(mineralCountContainer, mineralNameContainer);
         
         root.setBottom(mineralContainer);
@@ -124,7 +123,7 @@ public class SpaceAI extends Application {
     }
     private void createTopNode() {
         sliderContainer = new HBox();
-        sliderContainer.setMaxWidth(CENTER_WIDTH/2);
+        sliderContainer.setMaxWidth(GameConstants.CENTER_WIDTH/2);
         sliderContainer.setAlignment(Pos.CENTER);
         speedSlider = new Slider(1, 9, 5);
         speedSlider.setShowTickMarks(true);
@@ -153,8 +152,8 @@ public class SpaceAI extends Application {
         slideAndLabelContainerPadding = new Insets(5);
         slideAndLabelContainer.setPadding(slideAndLabelContainerPadding);
         slideAndLabelContainer.setAlignment(Pos.CENTER);
-        slideAndLabelContainer.setMinWidth(WINDOW_WIDTH);
-        slideAndLabelContainer.setMinHeight((WINDOW_HEIGHT-CENTER_HEIGHT)/2);
+        slideAndLabelContainer.setMinWidth(GameConstants.WINDOW_WIDTH);
+        slideAndLabelContainer.setMinHeight((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2);
         slideAndLabelContainer.getChildren().addAll(sliderContainer,sliderName);
         
         root.setTop(slideAndLabelContainer);
@@ -163,7 +162,7 @@ public class SpaceAI extends Application {
     }
     private void createLeftNode() {
         leftBox = new VBox();
-        leftBox.setMinWidth((WINDOW_WIDTH-CENTER_WIDTH)/2);
+        leftBox.setMinWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
         
         root.setLeft(leftBox);
         BorderPane.setAlignment(leftBox, Pos.CENTER);
@@ -171,7 +170,7 @@ public class SpaceAI extends Application {
     }
     private void createRightNode() {
         rightBox = new VBox();
-        rightBox.setMinWidth((WINDOW_WIDTH-CENTER_WIDTH)/2);
+        rightBox.setMinWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
         
         root.setRight(rightBox);
         BorderPane.setAlignment(rightBox, Pos.CENTER);
@@ -179,8 +178,8 @@ public class SpaceAI extends Application {
     }
     private void createCenterNode() {
         gameScreen = new StackPane();
-        gameScreen.setMinSize(CENTER_WIDTH, CENTER_HEIGHT);
-        gameScreen.setMaxSize(CENTER_WIDTH, CENTER_HEIGHT);
+        gameScreen.setMinSize(GameConstants.CENTER_WIDTH, GameConstants.CENTER_HEIGHT);
+        gameScreen.setMaxSize(GameConstants.CENTER_WIDTH, GameConstants.CENTER_HEIGHT);
         root.setCenter(gameScreen);
         root.getCenter().setId("center-node");
     }

@@ -31,24 +31,26 @@ public strictfp interface GameConstants {
     // ****** ANIMATION CONSTANTS ******
     // *********************************
     
-    double PIXEL_TO_COORDINATE = 1/2;
-    double COORDINATE_TO_PIXEL = 2/1;
-    int FRAMES_PER_ROUND_9 = 1;
-    int FRAMES_PER_ROUND_8 = 2;
-    int FRAMES_PER_ROUND_7 = 3;
-    int FRAMES_PER_ROUND_6 = 4;
-    int FRAMES_PER_ROUND_5 = 5;
-    int FRAMES_PER_ROUND_4 = 10; 
-    int FRAMES_PER_ROUND_3 = 15; 
-    int FRAMES_PER_ROUND_2 = 20; 
-    int FRAMES_PER_ROUND_1 = 30;
+    final double PIXEL_TO_COORDINATE = 1/2;
+    final double COORDINATE_TO_PIXEL = 2/1;
+    final int FRAMES_PER_ROUND_9 = 1;
+    final int FRAMES_PER_ROUND_8 = 2;
+    final int FRAMES_PER_ROUND_7 = 3;
+    final int FRAMES_PER_ROUND_6 = 4;
+    final int FRAMES_PER_ROUND_5 = 5;
+    final int FRAMES_PER_ROUND_4 = 10; 
+    final int FRAMES_PER_ROUND_3 = 15; 
+    final int FRAMES_PER_ROUND_2 = 20; 
+    final int FRAMES_PER_ROUND_1 = 30;
+    final double    WINDOW_WIDTH = 1400, WINDOW_HEIGHT = 800, 
+                    CENTER_WIDTH = 900, CENTER_HEIGHT = 700;
     
     // *********************************
     // ****** GAMEPLAY CONSTANTS *******
     // *********************************
     
-    int STARTING_MINERAL_COUNT = 1000;
-    Location TEAM_A_HOME_STATION = new Location(0,100);
-    Location TEAM_B_HOME_STATION = new Location(0,-100);
+    final int STARTING_MINERAL_COUNT = 1000;
+    final Location TEAM_A_HOME_STATION = new Location(0,100);
+    final Location TEAM_B_HOME_STATION = new Location(0,-100);
     
 }

@@ -86,42 +86,31 @@ public class GameWorld {
         return gameRound;
     }
     public int getMineralCount(Team team) {
-        if(team == Team.A) {
-            return teamAMineralCount;
-        }
-        if(team == Team.B) {
-            return teamBMineralCount;
-        }
-        else {
-            System.out.println("ERROR");
-            return 0;
+        switch(team) {
+            case A : {return teamAMineralCount;}
+            case B : {return teamBMineralCount;}
+            default : {System.out.println("ERROR IN GET MINERAL COUNT"); return 0;}
         }
     }
     public void decreaseMineralCount(int i, Team team) {
-        if(team == Team.A) {
-            this.teamAMineralCount -= i;
-        }
-        if(team == Team.B) {
-            this.teamBMineralCount -= i;
+        switch(team) {
+            case A : {this.teamAMineralCount -= i;}
+            case B : {this.teamBMineralCount -= i;}
+            default : {System.out.println("ERROR IN DECREASE MINERAL COUNT");}
         }
     }
     public void increaseMineralCount(int i, Team team) {
-        if(team == Team.A) {
-            this.teamAMineralCount += i;
-        }
-        if(team == Team.B) {
-            this.teamBMineralCount += i;
+        switch(team) {
+            case A : {this.teamAMineralCount += i;}
+            case B : {this.teamBMineralCount += i;}
+            default : {System.out.println("ERROR IN INCREASE MINERAL COUNT");}
         }
     }
     public Location getInitialHomeStationLocation(Team team) {
-        if(team == Team.A) {
-            return teamAHomeStation;
-        }
-        if(team == Team.B) {
-            return teamBHomeStation;
-        }
-        else {
-            return new Location(0,0);
+        switch(team) {
+            case A : {return teamAHomeStation;}
+            case B : {return teamAHomeStation;}
+            default : {System.out.println("ERROR IN INITIAL HOME STATION LOCATION"); return new Location(0,0); }
         }
     }
 }

@@ -28,6 +28,7 @@ public strictfp class AIController {
     Unit unit;
     GameWorld gameWorld;
 
+
     public AIController(Unit unit, GameWorld gameWorld) {
         this.unit = unit;
         this.gameWorld = gameWorld;
@@ -36,8 +37,20 @@ public strictfp class AIController {
     // *********************************
     // ******** INTERNAL METHODS *******
     // *********************************
-    private final void assertOnScreen() {
+    private void assertOnScreen() {
         // TODO
+    }
+    private boolean checkBoundaries(Location location) {  
+        final double rightBoundary = GameConstants.CENTER_WIDTH/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL);
+        final double leftBoundary = -(GameConstants.CENTER_WIDTH/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL));
+        final double topBoundary = GameConstants.CENTER_HEIGHT/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL);
+        final double bottomBoundary = -(GameConstants.CENTER_HEIGHT/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL));
+       
+        if(location.getPixelX() >= rightBoundary) { return false; }
+        else if(location.getPixelX() <= leftBoundary) { return false; }
+        else if(location.getPixelY() >= bottomBoundary) { return false; }
+        else if(location.getPixelY() <= topBoundary) { return false; }
+        return true;
     }
 
     // *********************************
@@ -189,10 +202,12 @@ public strictfp class AIController {
         System.out.println("distance to point - " + getCurrentLocation().distanceTo(location));
         if (getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius()) {
             System.out.println("In A");
-            unit.getSpriteFrame().setTranslateX(location.getPixelX());
-            unit.getSpriteFrame().setTranslateY(location.getPixelY());
-            unit.setX(location.getX());
-            unit.setY(location.getY());
+            if(checkBoundaries(location)) {
+                unit.getSpriteFrame().setTranslateX(location.getPixelX());
+                unit.getSpriteFrame().setTranslateY(location.getPixelY());
+                unit.setX(location.getX());
+                unit.setY(location.getY());
+            }
         } else {
             System.out.println("In B");
             Direction moveDirection = getCurrentLocation().directionTo(location);

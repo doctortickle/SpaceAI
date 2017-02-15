@@ -45,11 +45,11 @@ public class SpaceAI extends Application {
     private Image splashScreen, instructionLayer, legalLayer, scoresLayer;
     private ImageView splashScreenBackplate, splashScreenTextArea;
     private Button gameButton, helpButton, scoreButton, legalButton;
-    private Label teamAMineralCountLabel, teamBMineralCountLabel, teamAMineralCountName, teamBMineralCountName;
+    private Label teamAMineralCountLabel, teamBMineralCountLabel, teamAMineralCountName, teamBMineralCountName, sliderName;
     private Slider speedSlider;
     private int teamAMineralCount, teamBMineralCount;
-    private VBox mineralContainer; 
-    private HBox countContainer, nameContainer, sliderContainer;
+    private VBox mineralContainer, slideAndLabelContainer; 
+    private HBox mineralCountContainer, mineralNameContainer, sliderContainer, sliderNameContainer;
     private Insets mineralContainerPadding,sliderContainerPadding;  
     private GamePlayLoop gamePlayLoop;
     private CastingDirector castDirector;
@@ -94,14 +94,14 @@ public class SpaceAI extends Application {
         gameWorld = new GameWorld(this, castDirector);   
     }
     private void createGameScreenNodes() {
-            mineralContainer = new VBox(5);
+            mineralContainer = new VBox();
             mineralContainer.setAlignment(Pos.CENTER);
             mineralContainerPadding = new Insets(20);
             mineralContainer.setPadding(mineralContainerPadding);
-            countContainer = new HBox(150);
-            countContainer.setAlignment(Pos.CENTER);
-            nameContainer = new HBox(50);
-            nameContainer.setAlignment(Pos.CENTER);
+            mineralCountContainer = new HBox(150);
+            mineralCountContainer.setAlignment(Pos.CENTER);
+            mineralNameContainer = new HBox(50);
+            mineralNameContainer.setAlignment(Pos.CENTER);
             
             teamAMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.A)));
             teamAMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
@@ -111,11 +111,16 @@ public class SpaceAI extends Application {
             teamAMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
             teamBMineralCountName = new Label("Team B Mineral Count");
             teamBMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
-            countContainer.getChildren().addAll(teamAMineralCountLabel, teamBMineralCountLabel);
-            nameContainer.getChildren().addAll(teamAMineralCountName, teamBMineralCountName);
-            mineralContainer.getChildren().addAll(countContainer, nameContainer);
+            mineralCountContainer.getChildren().addAll(teamAMineralCountLabel, teamBMineralCountLabel);
+            mineralNameContainer.getChildren().addAll(teamAMineralCountName, teamBMineralCountName);
+            mineralContainer.getChildren().addAll(mineralCountContainer, mineralNameContainer);
             
-            sliderContainer = new HBox(50);
+            slideAndLabelContainer = new VBox(5);
+            slideAndLabelContainer.setMaxWidth(10);
+            slideAndLabelContainer.setAlignment(Pos.CENTER);
+            //slideAndLabelContainer.setPadding(mineralContainerPadding);
+            
+            sliderContainer = new HBox();
             sliderContainer.setAlignment(Pos.CENTER);
             sliderContainerPadding = new Insets(5);
             sliderContainer.setPadding(sliderContainerPadding);
@@ -125,7 +130,7 @@ public class SpaceAI extends Application {
             speedSlider.setMajorTickUnit(1);
             speedSlider.setBlockIncrement(1);
             speedSlider.setSnapToTicks(true);
-            sliderContainer.getChildren().addAll(speedSlider);
+            
             ChangeListener<Object> updateListener = (obs, oldValue, newValue) -> {
                 int speedValue = (int) speedSlider.getValue();
                 if(speedValue == 1) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_1);}
@@ -139,11 +144,17 @@ public class SpaceAI extends Application {
                 if(speedValue == 9) {gameWorld.setGameSpeed(GameConstants.FRAMES_PER_ROUND_9);}
             };
             speedSlider.valueProperty().addListener(updateListener);
+            sliderNameContainer = new HBox();
+            sliderNameContainer.setAlignment(Pos.CENTER);
+            sliderName = new Label("Game Speed Adjustment");
+            sliderName.setMinWidth(Control.USE_PREF_SIZE);
+            slideAndLabelContainer.getChildren().addAll(speedSlider,sliderName);
+            
     }
     private void addNodesToBorderPane() {
         borderpane.setCenter(gameScreen);
         borderpane.setBottom(mineralContainer);
-        borderpane.setTop(sliderContainer);
+        borderpane.setTop(slideAndLabelContainer);
     }
     private void createStartGameLoop() {
         gamePlayLoop = new GamePlayLoop(this, gameWorld, castDirector);

@@ -48,7 +48,7 @@ public class AICommandB {
     
     public static void runFighter() {
             ac.getCurrentLocation();
-            ac.move(new Location(-700, 100));
+            ac.move(new Location(0, -500));
     }
     
     public static void runSiege() {

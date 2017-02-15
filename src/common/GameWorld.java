@@ -94,15 +94,15 @@ public class GameWorld {
     }
     public void decreaseMineralCount(int i, Team team) {
         switch(team) {
-            case A : {this.teamAMineralCount -= i;}
-            case B : {this.teamBMineralCount -= i;}
+            case A : {this.teamAMineralCount -= i; break;}
+            case B : {this.teamBMineralCount -= i; break;}
             default : {System.out.println("ERROR IN DECREASE MINERAL COUNT");}
         }
     }
     public void increaseMineralCount(int i, Team team) {
         switch(team) {
-            case A : {this.teamAMineralCount += i;}
-            case B : {this.teamBMineralCount += i;}
+            case A : {this.teamAMineralCount += i; break;}
+            case B : {this.teamBMineralCount += i; break;}
             default : {System.out.println("ERROR IN INCREASE MINERAL COUNT");}
         }
     }

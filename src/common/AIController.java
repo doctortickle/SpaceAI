@@ -49,6 +49,7 @@ public strictfp class AIController {
         if(location.getPixelX() <= leftBoundary) { unit.getSpriteFrame().setTranslateX(leftBoundary); return false; }
         if(location.getPixelY() <= topBoundary) { unit.getSpriteFrame().setTranslateY(topBoundary); return false; }
         if(location.getPixelY() >= bottomBoundary) { unit.getSpriteFrame().setTranslateY(bottomBoundary); return false; }
+        //Still need to update location of unit.
         return true;   
     }
 

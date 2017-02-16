@@ -49,6 +49,7 @@ public class AICommandA {
     public static void runFighter() {
             ac.getCurrentLocation();
             ac.move(new Location(0, 500));
+            System.out.println(ac.getCurrentLocation().getPixelY());
     }
     
     public static void runSiege() {

@@ -40,54 +40,63 @@ public strictfp class Location {
         this.pixelX = coordinateToPixel(x);
         this.pixelY = -coordinateToPixel(y);
     }
+    public Location(Unit unit) {
+        this.x = unit.getLocation().getX();
+        this.y = unit.getLocation().getY();
+        this.pixelX = coordinateToPixel(x);
+        this.pixelY = -coordinateToPixel(y);
+    }
+    public Location(Weapon weapon) {
+        this.x = weapon.getLocation().getX();
+        this.y = weapon.getLocation().getY();
+        this.pixelX = coordinateToPixel(x);
+        this.pixelY = -coordinateToPixel(y);
+    }
+    public Location(Environment environment) {
+        this.x = environment.getLocation().getX();
+        this.y = environment.getLocation().getY();
+        this.pixelX = coordinateToPixel(x);
+        this.pixelY = -coordinateToPixel(y);
+    }
     
     static double coordinateToPixel(double i) {
         return i*COORDINATE_TO_PIXEL;      
     }
-    
     static double pixelToCoordinate(double i) {
         if(i==0) {
             return 0;
         }
         return i*PIXEL_TO_COORDINATE;      
     }
-
     public double getX() {
         return x;
     }
-
     public double getY() {
         return y;
     }
-    
     public void setX(double x) {
         this.x = x == Float.NaN ? 0 : x;
         this.pixelX = coordinateToPixel(x);
-    }
-    
+    } 
     public void setY(double y) {
         this.y = y == Float.NaN ? 0 : y;
         this.pixelY = -coordinateToPixel(y);
     }
-
     public double getPixelX() {
         return pixelX;
     }
-
     public double getPixelY() {
         return pixelY;
     }
-    
     public void setPixelX(double x) {
         this.pixelX = x;
         this.x = pixelToCoordinate(x) == Float.NaN ? 0 : pixelToCoordinate(x);
     }
-    
     public void setPixelY(double y) {
         this.pixelY = y;
         this.y = -pixelToCoordinate(y) == Float.NaN ? 0 : -pixelToCoordinate(y);
     }
-    
+   
     public final double distanceTo(Location location) {
         double dx = this.getX() - location.getX();
         double dy = this.getY() - location.getY();
@@ -95,32 +104,25 @@ public strictfp class Location {
         distance = (double)Math.round(distance * 1000d) / 1000d;
         return distance;
     }
-    
     public final Direction directionTo(Location location) {
         double dx = location.getX() - this.getX();
         double dy = location.getY() - this.getY();
-        System.out.println(new Direction(dx,dy).getRadians());
         return new Direction(dx, dy);
     }
-    
     public final Location add(float distance, Direction direction) {
-        
         double dx = Math.cos(direction.getRadians()) * distance;
-        System.out.println("dx = " + dx);
         double dy = Math.sin(direction.getRadians()) * distance;
-        System.out.println("dy = " + dy);
         double x = this.x + dx;
         double y = this.y + dy;
         return new Location(x,y);
     }
-
+    
     public boolean equals(Object obj) {
         if (!(obj instanceof Location)) {
             return false;
         }
         return (((Location) obj).x == this.x) && (((Location) obj).y == this.y);
     }
-
     @Override
     public int hashCode() {
         int hash = 7;

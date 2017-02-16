@@ -117,6 +117,7 @@ public strictfp class Location {
         return new Location(x,y);
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Location)) {
             return false;

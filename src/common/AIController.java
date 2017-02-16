@@ -45,12 +45,11 @@ public strictfp class AIController {
         final double leftBoundary = -(GameConstants.CENTER_WIDTH/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL));
         final double bottomBoundary = GameConstants.CENTER_HEIGHT/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL);
         final double topBoundary = -(GameConstants.CENTER_HEIGHT/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL));
-        
-        if(location.getPixelX() >= rightBoundary) {   }
-        if(location.getPixelX() <= leftBoundary) {  }
-        if(location.getPixelY() <= topBoundary) { return false;  }
-        if(location.getPixelY() >= bottomBoundary) { return false; }
-        return true;
+        if(location.getPixelX() >= rightBoundary) { unit.getSpriteFrame().setTranslateX(rightBoundary); return false;  }
+        if(location.getPixelX() <= leftBoundary) { unit.getSpriteFrame().setTranslateX(leftBoundary); return false; }
+        if(location.getPixelY() <= topBoundary) { unit.getSpriteFrame().setTranslateY(topBoundary); return false; }
+        if(location.getPixelY() >= bottomBoundary) { unit.getSpriteFrame().setTranslateY(bottomBoundary); return false; }
+        return true;   
     }
 
     // *********************************
@@ -212,14 +211,12 @@ public strictfp class AIController {
             move(moveDirection);
         }
     }
-
     public final void move(Direction direction) {
         Location movePoint = getCurrentLocation().add(unit.getType().getFlightRadius(), direction);
         if(checkBoundaries(movePoint)) {
-            move(movePoint);
-        }        
+            move(movePoint);    
+        }
     }
-    
     public final void build(UnitType type, Direction direction) {
         if( getBuildCooldown() == 0 
             && Arrays.asList(unit.getType().getSpawnUnits()).contains(type)

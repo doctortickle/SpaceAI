@@ -45,10 +45,10 @@ public strictfp class AIController {
         final double leftBoundary = -(GameConstants.CENTER_WIDTH/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL));
         final double bottomBoundary = GameConstants.CENTER_HEIGHT/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL);
         final double topBoundary = -(GameConstants.CENTER_HEIGHT/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL));
-       
-        if(location.getPixelX() >= rightBoundary) { return false; }
-        if(location.getPixelX() <= leftBoundary) { return false; }
-        if(location.getPixelY() <= topBoundary) { return false; }
+        
+        if(location.getPixelX() >= rightBoundary) {   }
+        if(location.getPixelX() <= leftBoundary) {  }
+        if(location.getPixelY() <= topBoundary) { return false;  }
         if(location.getPixelY() >= bottomBoundary) { return false; }
         return true;
     }
@@ -217,10 +217,7 @@ public strictfp class AIController {
         Location movePoint = getCurrentLocation().add(unit.getType().getFlightRadius(), direction);
         if(checkBoundaries(movePoint)) {
             move(movePoint);
-        }
-        else {
-            System.out.println("Location is not on the map.");
-        }
+        }        
     }
     
     public final void build(UnitType type, Direction direction) {

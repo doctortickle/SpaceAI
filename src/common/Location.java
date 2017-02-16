@@ -59,10 +59,10 @@ public strictfp class Location {
         this.pixelY = -coordinateToPixel(y);
     }
     
-    static double coordinateToPixel(double i) {
+    private double coordinateToPixel(double i) {
         return i*COORDINATE_TO_PIXEL;      
     }
-    static double pixelToCoordinate(double i) {
+    private double pixelToCoordinate(double i) {
         if(i==0) {
             return 0;
         }

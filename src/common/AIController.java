@@ -40,15 +40,16 @@ public strictfp class AIController {
     private void assertOnScreen() {
         // TODO
     }
+    private void updateSpriteAndLocation(Location location) {
+        unit.getSpriteFrame().setTranslateX(location.getPixelX());
+        unit.getSpriteFrame().setTranslateY(location.getPixelY());
+        unit.updateLocation(location.getX(), location.getY());
+    }
     private boolean checkBoundaries(Location location) {  
         final double rightBoundary = GameConstants.CENTER_WIDTH/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL);
         final double leftBoundary = -(GameConstants.CENTER_WIDTH/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL));
         final double bottomBoundary = GameConstants.CENTER_HEIGHT/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL);
         final double topBoundary = -(GameConstants.CENTER_HEIGHT/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL));
-        if(location.getPixelX() >= rightBoundary) { unit.getSpriteFrame().setTranslateX(rightBoundary); return false;  }
-        if(location.getPixelX() <= leftBoundary) { unit.getSpriteFrame().setTranslateX(leftBoundary); return false; }
-        if(location.getPixelY() <= topBoundary) { unit.getSpriteFrame().setTranslateY(topBoundary); return false; }
-        if(location.getPixelY() >= bottomBoundary) { unit.getSpriteFrame().setTranslateY(bottomBoundary); return false; }
         //Still need to update location of unit.
         return true;   
     }
@@ -201,13 +202,8 @@ public strictfp class AIController {
         System.out.println("\nMoving to " + location.getX() + ", " + location.getY());
         System.out.println("distance to point - " + getCurrentLocation().distanceTo(location));
         if (getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius() && checkBoundaries(location)) {
-            System.out.println("In A");
-            unit.getSpriteFrame().setTranslateX(location.getPixelX());
-            unit.getSpriteFrame().setTranslateY(location.getPixelY());
-            unit.setX(location.getX());
-            unit.setY(location.getY());
+            updateSpriteAndLocation(location);
         } else {
-            System.out.println("In B");
             Direction moveDirection = getCurrentLocation().directionTo(location);
             move(moveDirection);
         }

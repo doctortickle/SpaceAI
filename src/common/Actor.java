@@ -53,12 +53,17 @@ public abstract class Actor {
     public Location getLocation() {
         return location;
     }
+    
+    void updateLocation(double x, double y) {
+        setX(x);
+        setY(y);
+    }
 
-    void setX(double x) {
+    private void setX(double x) {
         this.location = new Location(x, this.location.getY());
     }
 
-    void setY(double y) {
+    private void setY(double y) {
         this.location = new Location(this.location.getX(), y);
     }
     

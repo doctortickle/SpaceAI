@@ -205,10 +205,7 @@ public strictfp class AIController {
     }
 
     public final void move(Location location) {
-        System.out.println("\nMoving to " + location.getX() + ", " + location.getY());
-        System.out.println("distance to point - " + getCurrentLocation().distanceTo(location));
         if (getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius() && checkBoundaries(location)) {
-            System.out.println("here");
             updateSpriteAndLocation(location);
         } else {
             Direction moveDirection = getCurrentLocation().directionTo(location);

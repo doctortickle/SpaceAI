@@ -42,7 +42,7 @@ public strictfp class Direction {
         if (dx == 0 && dy == 0) {
             dy = 1;
         }
-        this.radians = (double)Math.atan2(dy, dx);
+        this.radians = reduce((double)Math.atan2(dy, dx));
     }
     
     public double getRadians() {

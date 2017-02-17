@@ -27,7 +27,7 @@ package common;
  */
 public strictfp class Direction {
     
-    public final double radians;
+    private final double radians;
     public static final Direction NORTH = getNorth();
     public static final Direction SOUTH = getSouth();
     public static final Direction EAST = getEast();

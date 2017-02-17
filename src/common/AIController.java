@@ -39,7 +39,7 @@ public strictfp class AIController {
     // *********************************
     // ******** INTERNAL METHODS *******
     // *********************************
-    private void assertOnScreen() {
+    private void assertOnScreen(Location location) {
         // TODO
     }
     private void updateSpriteAndLocation(Location location) {
@@ -48,12 +48,16 @@ public strictfp class AIController {
         unit.updateLocation(location.getX(), location.getY());
     }
     private boolean checkBoundaries(Location location) {  
-        final double rightBoundary = GameConstants.CENTER_WIDTH/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL);
-        final double leftBoundary = -(GameConstants.CENTER_WIDTH/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL));
-        final double bottomBoundary = GameConstants.CENTER_HEIGHT/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL);
-        final double topBoundary = -(GameConstants.CENTER_HEIGHT/2 - (unit.getRadius()*GameConstants.COORDINATE_TO_PIXEL));
-        //Still need to update location of unit.
-        return true;   
+        final double leftBoundary = -(GameConstants.CENTER_WIDTH/2d)*GameConstants.PIXEL_TO_COORDINATE - unit.getRadius();
+        final double rightBoundary = (GameConstants.CENTER_WIDTH/2d)*GameConstants.PIXEL_TO_COORDINATE - unit.getRadius();
+        final double topBoundary = (GameConstants.CENTER_HEIGHT/2d)*GameConstants.PIXEL_TO_COORDINATE - unit.getRadius();
+        final double bottomBoundary = -((GameConstants.CENTER_HEIGHT/2d)*GameConstants.PIXEL_TO_COORDINATE - unit.getRadius());
+
+        if(location.getY() >= topBoundary) { return false; }
+        if(location.getY() <= bottomBoundary) { return false; }
+        if(location.getX() >= rightBoundary) { return false; }
+        if(location.getX() <= leftBoundary) { return false; }
+        return true;
     }
 
     // *********************************
@@ -204,6 +208,7 @@ public strictfp class AIController {
         System.out.println("\nMoving to " + location.getX() + ", " + location.getY());
         System.out.println("distance to point - " + getCurrentLocation().distanceTo(location));
         if (getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius() && checkBoundaries(location)) {
+            System.out.println("here");
             updateSpriteAndLocation(location);
         } else {
             Direction moveDirection = getCurrentLocation().directionTo(location);
@@ -213,7 +218,7 @@ public strictfp class AIController {
     public final void move(Direction direction) {
         Location movePoint = getCurrentLocation().add(unit.getType().getFlightRadius(), direction);
         if(checkBoundaries(movePoint)) {
-            move(movePoint);    
+            move(movePoint);   
         }
     }
     public final void build(UnitType type, Direction direction) {

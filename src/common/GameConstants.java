@@ -31,8 +31,8 @@ public strictfp interface GameConstants {
     // ****** ANIMATION CONSTANTS ******
     // *********************************
     
-    final double PIXEL_TO_COORDINATE = 1/2;
-    final double COORDINATE_TO_PIXEL = 2/1;
+    final double PIXEL_TO_COORDINATE = 1d/2d;
+    final double COORDINATE_TO_PIXEL = 2d/1d;
     final int FRAMES_PER_ROUND_9 = 1;
     final int FRAMES_PER_ROUND_8 = 2;
     final int FRAMES_PER_ROUND_7 = 3;

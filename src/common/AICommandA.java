@@ -74,7 +74,6 @@ public class AICommandA {
            System.out.println("runHomeStation");
            System.out.println(ac.getCurrentLocation().getX() + ", " + ac.getCurrentLocation().getY());
            ac.build(UnitType.FIGHTER, Direction.SOUTH);
-           ac.move(new Location(-100,100));
     }
     public static void runSmallDock() {
            // Small Dock code here.

@@ -112,9 +112,9 @@ public strictfp class Location {
     public final Location add(float distance, Direction direction) {
         double dx = Math.cos(direction.getRadians()) * distance;
         double dy = Math.sin(direction.getRadians()) * distance;
-        double x = this.x + dx;
-        double y = this.y + dy;
-        return new Location(x,y);
+        double xn = this.x + dx;
+        double yn = this.y + dy;
+        return new Location(xn,yn);
     }
     
     @Override

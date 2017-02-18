@@ -50,10 +50,10 @@ public strictfp interface GameConstants {
     // *********************************
     
     final double MAX_OBJECT_RADIUS = EnvironmentType.LARGE_PLANET.getBodyRadius();
-    final double MIN_X_COORDINATE = -((CENTER_WIDTH/2)*PIXEL_TO_COORDINATE);
-    final double MAX_X_COORDINATE = ((CENTER_WIDTH/2)*PIXEL_TO_COORDINATE);
-    final double MIN_Y_COORDINATE = -((CENTER_HEIGHT/2)*PIXEL_TO_COORDINATE);
-    final double MAX_Y_COORDINATE = ((CENTER_HEIGHT/2)*PIXEL_TO_COORDINATE);
+    final double MIN_X_COORDINATE = -((CENTER_WIDTH/2d)*PIXEL_TO_COORDINATE);
+    final double MAX_X_COORDINATE = ((CENTER_WIDTH/2d)*PIXEL_TO_COORDINATE);
+    final double MIN_Y_COORDINATE = -((CENTER_HEIGHT/2d)*PIXEL_TO_COORDINATE);
+    final double MAX_Y_COORDINATE = ((CENTER_HEIGHT/2d)*PIXEL_TO_COORDINATE);
     
     // *********************************
     // ****** GAMEPLAY CONSTANTS *******

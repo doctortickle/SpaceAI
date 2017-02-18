@@ -36,6 +36,10 @@ public final class Unit extends Actor {
      */
     private int buildCooldown;
     /**
+     * Tracks if a unit has moved this turn.
+     */
+    private boolean hasMoved;
+    /**
      * Defines the AIController for this unit.
      */
     private final AIController ac;
@@ -46,6 +50,7 @@ public final class Unit extends Actor {
         this.fuel = type.getFuelMax();
         this.type = type;
         this.buildCooldown = 0;
+        this.hasMoved = false;
         this.ac = new AIController(this, spaceAI.gameWorld);
     }
 
@@ -65,18 +70,16 @@ public final class Unit extends Actor {
     public UnitType getType() {
         return type;
     }
-
     public int getFuel() {
         return fuel;
     }
-    
     public int getBuildCooldown() {
         return buildCooldown;
     }
-    
     public void setBuildCooldown(int i) {
         this.buildCooldown = i;
     }
+    
     
     @Override
     public boolean isCommandable() {

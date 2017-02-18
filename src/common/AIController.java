@@ -27,20 +27,32 @@ import java.util.Arrays;
  */
 public strictfp class AIController {
 
-    Unit unit;
-    GameWorld gameWorld;
+    private Unit unit;
+    private GameWorld gameWorld;
+    private final double leftBoundary;
+    private final double rightBoundary;
+    private final double bottomBoundary;
+    private final double topBoundary;
 
 
     public AIController(Unit unit, GameWorld gameWorld) {
         this.unit = unit;
         this.gameWorld = gameWorld;
+        this.leftBoundary = GameConstants.MIN_X_COORDINATE;
+        this.rightBoundary = GameConstants.MAX_X_COORDINATE;
+        this.bottomBoundary = GameConstants.MIN_Y_COORDINATE;
+        this.topBoundary = GameConstants.MAX_Y_COORDINATE;
     }
 
     // *********************************
     // ******** INTERNAL METHODS *******
     // *********************************
-    private void assertOnScreen(Location location) {
-        // TODO
+    private boolean assertOnScreen(Location location) {
+        if(location.getY() >= topBoundary - unit.getRadius()) { return false; }
+        if(location.getY() <= bottomBoundary + unit.getRadius()) { return false; }
+        if(location.getX() >= rightBoundary - unit.getRadius()) { return false; }
+        if(location.getX() <= leftBoundary + unit.getRadius()) { return false; }
+        return false;
     }
     private void updateSpriteAndLocation(Location location) {
         unit.getSpriteFrame().setTranslateX(location.getPixelX());
@@ -48,15 +60,10 @@ public strictfp class AIController {
         unit.updateLocation(location.getX(), location.getY());
     }
     private boolean checkBoundaries(Location location) {  
-        final double leftBoundary = -(GameConstants.CENTER_WIDTH/2d)*GameConstants.PIXEL_TO_COORDINATE - unit.getRadius();
-        final double rightBoundary = (GameConstants.CENTER_WIDTH/2d)*GameConstants.PIXEL_TO_COORDINATE - unit.getRadius();
-        final double topBoundary = (GameConstants.CENTER_HEIGHT/2d)*GameConstants.PIXEL_TO_COORDINATE - unit.getRadius();
-        final double bottomBoundary = -((GameConstants.CENTER_HEIGHT/2d)*GameConstants.PIXEL_TO_COORDINATE - unit.getRadius());
-
-        if(location.getY() >= topBoundary) { return false; }
-        if(location.getY() <= bottomBoundary) { return false; }
-        if(location.getX() >= rightBoundary) { return false; }
-        if(location.getX() <= leftBoundary) { return false; }
+        if(location.getY() >= topBoundary - unit.getRadius()) { return false; }
+        if(location.getY() <= bottomBoundary + unit.getRadius()) { return false; }
+        if(location.getX() >= rightBoundary - unit.getRadius()) { return false; }
+        if(location.getX() <= leftBoundary + unit.getRadius()) { return false; }
         return true;
     }
 
@@ -161,47 +168,53 @@ public strictfp class AIController {
     // *************************************
     // ****** GENERAL SENSOR METHODS *******
     // *************************************
+    
     private void assertCanSenseLocation(Location location) {
         // TODO
     }
-
     private void assertCanSensePartOfCircle(Location center, int radius) {
         // TODO
     }
-
     private void assertCanSenseAllOfCircle(Location center, int radius) {
         // TODO
     }
-
     public boolean onTheMap(Location location) {
-        return true;
-        // TODO
+        return assertOnScreen(location);
     }
-
     public boolean onTheMap(Location location, int radius) {
-        return true;
-        // TODO
+        Location check1 = location.add(radius,Direction.NORTH);
+        Location check2 = location.add(radius,Direction.EAST);
+        Location check3 = location.add(radius,Direction.SOUTH);
+        Location check4 = location.add(radius,Direction.WEST);
+        return assertOnScreen(check1) && assertOnScreen(check2) && assertOnScreen(check3) && assertOnScreen(check4);
     }
-
     public boolean canSenseLocation(Location location) {
         return getCurrentLocation().distanceTo(location) <= getSensorRadius();
     }
-
     public boolean canSenseIncomingLocation(Location location) {
         return getCurrentLocation().distanceTo(location) <= getIncomingDetectionRadius();
     }
-
     public boolean canSensePartOfCircle(Location center, double radius) {
         return getCurrentLocation().distanceTo(center) - radius <= getSensorRadius();
     }
-
     public boolean canSenseAllOfCirlce(Location center, double radius) {
         return getCurrentLocation().distanceTo(center) + radius <= getSensorRadius();
     }
-
     public boolean isLocationOccupied(Location location) {
         return true;
         // TODO
+    }
+    public boolean isCircleOccupied(Location center, double radius) {
+        return true;
+        // TODO
+    }
+    
+    // ***********************************
+    // ****** READINESS METHODS **********
+    // ***********************************
+    
+    public boolean isReadyToBuild() {
+        return unit.getBuildCooldown() == 0;
     }
 
     public final void move(Location location) {
@@ -219,7 +232,7 @@ public strictfp class AIController {
         }
     }
     public final void build(UnitType type, Direction direction) {
-        if( getBuildCooldown() == 0 
+        if( isReadyToBuild() 
             && Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
             && getMineralCount()-type.getMineralCost() >= 0) {
                 Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);

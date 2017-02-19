@@ -35,7 +35,7 @@ public class CastingDirector {
     private final List<Environment> CURRENT_ENVIRONMENT;
     private final List<Actor> COLLIDE_CHECKLIST;
     private final Set<Actor> REMOVED_ACTORS;
-    private final TreeMap<Location,Integer> OBJECT_LOCATIONS;
+    private final TreeMap<Integer,Double[]> OBJECT_LOCATIONS;
 
     public CastingDirector() {
         this.REMOVED_ACTORS = new HashSet<>();
@@ -131,27 +131,5 @@ public class CastingDirector {
             CURRENT_ENVIRONMENT.remove((Environment)actor);
         });
         REMOVED_ACTORS.clear();
-    }
-    private void buildObjectLocations() {
-        getCurrentUnits().forEach((unit) -> {
-            OBJECT_LOCATIONS.put(unit.getLocation(),unit.getType().getBodyRadius());
-        });
-        getCurrentEnvironment().forEach((environment) -> {
-            OBJECT_LOCATIONS.put(environment.getLocation(), environment.getType().getBodyRadius());
-        });
-    }
-    private void clearObjectLocations() {
-        OBJECT_LOCATIONS.clear();
-    }
-    public TreeMap getObjectLocations() {
-        if(OBJECT_LOCATIONS.isEmpty()) {
-            buildObjectLocations();
-        }
-        return OBJECT_LOCATIONS;
-    }
-    public void resetObjectLocations() {
-        if(OBJECT_LOCATIONS.size() > 0 ) {
-            clearObjectLocations();
-        }
     }
 }

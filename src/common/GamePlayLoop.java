@@ -49,6 +49,7 @@ public class GamePlayLoop extends AnimationTimer {
                 gameWorld.update();
                 spaceAI.update();
                 updateActors();
+                endRound();
             }     
         }
         if(spaceAI.getPause()) {
@@ -70,6 +71,8 @@ public class GamePlayLoop extends AnimationTimer {
         for(Environment environment : castDirector.getCurrentEnvironment() ) {
             environment.update();
         }
+    }
+    private void endRound() {
     }
     
     @Override

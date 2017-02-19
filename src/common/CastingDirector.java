@@ -35,7 +35,6 @@ public class CastingDirector {
     private final List<Environment> CURRENT_ENVIRONMENT;
     private final List<Actor> COLLIDE_CHECKLIST;
     private final Set<Actor> REMOVED_ACTORS;
-    private final TreeMap<Integer,Double[]> OBJECT_LOCATIONS;
 
     public CastingDirector() {
         this.REMOVED_ACTORS = new HashSet<>();
@@ -44,7 +43,6 @@ public class CastingDirector {
         this.CURRENT_ENVIRONMENT = new ArrayList<>();
         this.COLLIDE_CHECKLIST = new ArrayList<>();
         this.TO_BE_ADDED = new ArrayList<>();
-        this.OBJECT_LOCATIONS = new TreeMap<>();
     }
     public List<Actor> getToBeAdded() {
         return TO_BE_ADDED;

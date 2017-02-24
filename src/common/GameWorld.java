@@ -16,6 +16,10 @@
  */
 package common;
 
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Dylan Russell
@@ -31,11 +35,13 @@ public class GameWorld {
     private int teamAMineralCount, teamBMineralCount;
     private Location teamAHomeStation, teamBHomeStation;
     private int gameSpeed;
+    private QuadTree quad;
 
     public GameWorld(SpaceAI spaceAI, CastingDirector castDirector) {
         this.spaceAI = spaceAI;
         this.castDirector = castDirector;
         this.gameSpeed = GameConstants.FRAMES_PER_ROUND_5;
+        this.quad = new QuadTree(0,GameConstants.CENTER_WIDTH, GameConstants.CENTER_HEIGHT, GameConstants.TOP_LEFT_X_PIXEL, GameConstants.TOP_LEFT_Y_PIXEL);
     }
 
     public void update() {
@@ -44,7 +50,8 @@ public class GameWorld {
             initializeStartingUnits();
             initializeStartingMineralCounts();
         }
-        System.out.print("Game Round : " + gameRound);
+        System.out.println("Game Round : " + gameRound);
+        updateQuadTree();
     }
 
     private void initializeStartingUnits() {
@@ -58,6 +65,24 @@ public class GameWorld {
     }
     private synchronized int getUniqueID() {
         return uniqueID++;
+    }
+    private void updateQuadTree() {
+        quad.clear();
+        List<Actor> allActors = new ArrayList<>();
+        allActors.addAll(castDirector.getCurrentUnits());
+        allActors.addAll(castDirector.getCurrentEnvironment());
+        for (int i = 0; i < allActors.size(); i++) {
+            quad.insert(allActors.get(i));
+        }      
+        List<Actor> returnActors = new ArrayList();
+        for (int i = 0; i < allActors.size(); i++) {
+            returnActors.clear();
+            returnActors = quad.retrieve(returnActors, allActors.get(i));
+            System.out.println("\nUnit " + allActors.get(i).getID() + " can collide with : ");
+            for (int x = 0; x < returnActors.size(); x++) {
+                System.out.print(returnActors.get(x).getID() + ", ");
+            }
+        }
     }
     
     public void addUnit(UnitType type, Location location, Team team){
@@ -112,5 +137,8 @@ public class GameWorld {
             case B : {return teamAHomeStation;}
             default : {System.out.println("ERROR IN INITIAL HOME STATION LOCATION"); return new Location(0,0); }
         }
+    }
+    public boolean checkIfLocationIsEmpty(Location location) {
+        return true;
     }
 }

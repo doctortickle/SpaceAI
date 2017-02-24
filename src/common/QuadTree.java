@@ -25,22 +25,35 @@ import java.util.List;
  * @author Dyaln Russell
  */
 public class QuadTree {
+
     private int MAX_OBJECTS = 10;
     private int MAX_LEVELS = 5;
- 
     private int level;
-    private List<Actor> objects;
-    private Rectangle bounds;
+    private List actors;
+    private double width, height, x, y;
     private QuadTree[] nodes;
-
-    public QuadTree(int pLevel, Rectangle pBounds) {
-     this.level = pLevel;
-     this.objects = new ArrayList();
-     this.bounds = pBounds;
-     this.nodes = new QuadTree[4];
+    
+    public double getX() {
+        return this.x;
     }
+    public double getY() {
+        return this.y;
+    }
+    public QuadTree[] getNodes() {
+        return this.nodes;
+    }
+    public QuadTree(int level, double width, double height, double x, double y) {
+        this.level = level;
+        this.actors = new ArrayList();
+        this.width = width;
+        this.height = height;
+        this.x = x; //Top left x
+        this.y = y; //Top left y
+        nodes = new QuadTree[4];
+     }
     public void clear() {
-        objects.clear();
+        actors.clear();
+
         for (int i = 0; i < nodes.length; i++) {
             if (nodes[i] != null) {
                 nodes[i].clear();
@@ -49,75 +62,62 @@ public class QuadTree {
         }
     }
     private void split() {
-        int subWidth = (int)(bounds.getWidth() / 2);
-        int subHeight = (int)(bounds.getHeight() / 2);
-        int x = (int)bounds.getX();
-        int y = (int)bounds.getY();
-   
-        nodes[0] = new QuadTree(level+1, new Rectangle(x + subWidth, y, subWidth, subHeight));
-        nodes[1] = new QuadTree(level+1, new Rectangle(x, y, subWidth, subHeight));
-        nodes[2] = new QuadTree(level+1, new Rectangle(x, y + subHeight, subWidth, subHeight));
-        nodes[3] = new QuadTree(level+1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
+        double subWidth = width / 2;
+        double subHeight = height / 2;
+ 
+        nodes[0] = new QuadTree(level+1, subWidth, subHeight, x + subWidth, y);
+        nodes[1] = new QuadTree(level+1, subWidth, subHeight, x + subWidth, y + subHeight);
+        nodes[2] = new QuadTree(level+1, subWidth, subHeight, x, y + subHeight);
+        nodes[3] = new QuadTree(level+1, subWidth, subHeight, x, y);
     }
-    /*
-    * Determine which node the object belongs to. -1 means
-    * object cannot completely fit within a child node and is part
-    * of the parent node
-    */
     private int getIndex(Actor actor) {
         int index = -1;
-        double verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2);
-        double horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2);
+        double xMidpoint = x + (width / 2);
+        double yMidpoint = y + (height / 2);
         // Object can completely fit within the top quadrants
-        boolean topQuadrant = (actor.getLocation().getPixelY() < horizontalMidpoint && actor.getLocation().getPixelY() + actor.getRadius() < horizontalMidpoint);
+        boolean topQuadrant = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + actor.getRadius() < yMidpoint);
         // Object can completely fit within the bottom quadrants
-        boolean bottomQuadrant = (actor.getLocation().getPixelY() > horizontalMidpoint);
-
+        boolean bottomQuadrant = (actor.getLocation().getPixelY() > yMidpoint && actor.getLocation().getPixelY() - actor.getRadius() > yMidpoint);
         // Object can completely fit within the left quadrants
-        if (actor.getLocation().getPixelX() < verticalMidpoint && actor.getLocation().getPixelX() + actor.getRadius() < verticalMidpoint) {
+        if (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + actor.getRadius() < xMidpoint) {
             if (topQuadrant) {
-              index = 1;
+                index = 3;
             }
             else if (bottomQuadrant) {
-              index = 2;
+                index = 2;
             }
         }
-        // Object can completely fit within the right quadrants
-        else if (actor.getLocation().getPixelX() > verticalMidpoint) {
+         // Object can completely fit within the right quadrants
+        else if (actor.getLocation().getPixelX() > xMidpoint && actor.getLocation().getPixelX() - actor.getRadius() > xMidpoint) {
             if (topQuadrant) {
                 index = 0;
             }
             else if (bottomQuadrant) {
-                index = 3;
+                index = 1;
             }
         }
         return index;
     }
-   /*
-    * Insert the object into the quadtree. If the node
-    * exceeds the capacity, it will split and add all
-    * objects to their corresponding nodes.
-    */
     public void insert(Actor actor) {
-        if (nodes[0] != null) {
+        if(nodes[0] != null) {
             int index = getIndex(actor);
-
             if (index != -1) {
-              nodes[index].insert(actor);
-
-              return;
+                nodes[index].insert(actor);
+                return;
             }
-       }
-       objects.add(actor);
-       if (objects.size() > MAX_OBJECTS && level < MAX_LEVELS) {
+        }
+        actors.add(actor);
+        if(actors.size() > MAX_OBJECTS && level < MAX_LEVELS) {
             if (nodes[0] == null) { 
                 split(); 
             }
             int i = 0;
-            while (i < objects.size()) {
-                int index = getIndex(objects.get(i));
+            while (i < actors.size()) {
+                int index = getIndex((Actor) actors.get(i));
+                System.out.println("Index = " + index);
                 if (index != -1) {
-                    nodes[index].insert(objects.remove(i));
+                    nodes[index].insert((Actor) actors.get(i));
+                    actors.remove(i);
                 }
                 else {
                     i++;
@@ -125,15 +125,36 @@ public class QuadTree {
             }
         }
     }
-   /*
-    * Return all objects that could collide with the given object
-    */
-    public List retrieve(List returnObjects, Actor actor) {
+    public List retrieve(List returnActors, Actor actor) {
         int index = getIndex(actor);
         if (index != -1 && nodes[0] != null) {
-            nodes[index].retrieve(returnObjects, actor);
+            nodes[index].retrieve(returnActors,actor);
         }
-        returnObjects.addAll(objects);
-        return returnObjects;
+        if (index == -1 && nodes[0] != null) {
+            double xMidpoint = x + (width / 2);
+            double yMidpoint = y + (height / 2);
+            boolean topHalf = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + actor.getRadius() < yMidpoint);
+            boolean bottomHalf = (actor.getLocation().getPixelY() > yMidpoint && actor.getLocation().getPixelY() - actor.getRadius() > yMidpoint);
+            boolean rightHalf = (actor.getLocation().getPixelX() > xMidpoint && actor.getLocation().getPixelX() - actor.getRadius() > xMidpoint);
+            boolean leftHalf = (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + actor.getRadius() < xMidpoint);
+            if(topHalf) {
+                nodes[0].retrieve(returnActors, actor); 
+                returnActors.addAll(nodes[3].retrieve(returnActors, actor));
+            }
+            if(bottomHalf) {
+                nodes[1].retrieve(returnActors, actor); 
+                returnActors.addAll(nodes[2].retrieve(returnActors, actor));
+            }
+            if(rightHalf) {
+                nodes[0].retrieve(returnActors, actor); 
+                returnActors.addAll(nodes[1].retrieve(returnActors, actor));
+            }
+            if(leftHalf) {
+                nodes[2].retrieve(returnActors, actor); 
+                returnActors.addAll(nodes[3].retrieve(returnActors, actor));
+            }
+        }
+        returnActors.addAll(actors);
+        return returnActors;
     }
 }

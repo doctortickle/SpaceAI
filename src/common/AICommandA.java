@@ -28,7 +28,7 @@ public class AICommandA {
         
         AICommandA.ac = ac;
         
-        System.out.println("\n"+ac.getType());
+        System.out.println("\n"+ ac.getType() + " " + ac.getTeam() + ac.getID());
         switch(ac.getType()) {
             case FIGHTER : runFighter(); break;
             case SIEGE : runSiege(); break;
@@ -48,8 +48,7 @@ public class AICommandA {
     
     public static void runFighter() {
             ac.getCurrentLocation();
-            ac.move(new Location(0, 500));
-            System.out.println(ac.getCurrentLocation().getPixelY());
+            ac.move(new Location(100, 100));
     }
     
     public static void runSiege() {
@@ -71,8 +70,6 @@ public class AICommandA {
            // Refueler code here.
     }
     public static void runHomeStation() {
-           System.out.println("runHomeStation");
-           System.out.println(ac.getCurrentLocation().getX() + ", " + ac.getCurrentLocation().getY());
            ac.build(UnitType.FIGHTER, Direction.SOUTH);
     }
     public static void runSmallDock() {

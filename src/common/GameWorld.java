@@ -116,7 +116,7 @@ public class GameWorld {
     public int getGameRound() {
         return gameRound;
     }
-    public QuadTree getQuad() {
+    public QuadTree getUpdatedQuad() {
         updateQuadTree();
         return quad;
     }

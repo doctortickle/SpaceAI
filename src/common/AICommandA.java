@@ -72,7 +72,7 @@ public class AICommandA {
            // Refueler code here.
     }
     public static void runHomeStation() {
-           ac.build(UnitType.FIGHTER, Direction.SOUTH);
+           ac.build(UnitType.FIGHTER, Direction.EAST);
     }
     public static void runSmallDock() {
            // Small Dock code here.

@@ -60,6 +60,7 @@ public strictfp class AIController {
         unit.updateLocation(location.getX(), location.getY());
         if(checkForCollision()) {
             unit.updateLocation(oldLocation.getX(), oldLocation.getY());
+            gameWorld.getQuad();
         }
         else {
             unit.getSpriteFrame().setTranslateX(location.getPixelX());
@@ -69,7 +70,6 @@ public strictfp class AIController {
     }
     private boolean checkForCollision() {
         QuadTree quad = gameWorld.getQuad();
-        quad.insert(unit);
         List<Actor> returnActors = new ArrayList();
         returnActors.clear();
         returnActors = quad.retrieve(returnActors, unit);

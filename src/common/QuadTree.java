@@ -38,9 +38,6 @@ public class QuadTree {
     public double getY() {
         return this.y;
     }
-    public QuadTree[] getNodes() {
-        return this.nodes;
-    }
     public QuadTree(int level, double width, double height, double x, double y) {
         this.level = level;
         this.actors = new ArrayList();
@@ -126,9 +123,9 @@ public class QuadTree {
     public List retrieve(List returnActors, Actor actor) {
         int index = getIndex(actor);
         if (index != -1 && nodes[0] != null) {
-            nodes[index].retrieve(returnActors,actor);
+            nodes[index].retrieve(returnActors, actor);
         }
-        if (index == -1 && nodes[0] != null) {
+        else if (index == -1 && nodes[0] != null) {
             double xMidpoint = x + (width / 2);
             double yMidpoint = y + (height / 2);
             boolean topHalf = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) < yMidpoint);
@@ -137,25 +134,25 @@ public class QuadTree {
             boolean leftHalf = (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) < xMidpoint);
             if(topHalf) {
                 nodes[0].retrieve(returnActors, actor); 
-                returnActors.addAll(nodes[3].retrieve(returnActors, actor));
+                nodes[3].retrieve(returnActors, actor);
             }
             else if(bottomHalf) {
                 nodes[1].retrieve(returnActors, actor); 
-                returnActors.addAll(nodes[2].retrieve(returnActors, actor));
+                nodes[2].retrieve(returnActors, actor);
             }
             else if(rightHalf) {
                 nodes[0].retrieve(returnActors, actor); 
-                returnActors.addAll(nodes[1].retrieve(returnActors, actor));
+                nodes[1].retrieve(returnActors, actor);
             }
             else if(leftHalf) {
                 nodes[2].retrieve(returnActors, actor); 
-                returnActors.addAll(nodes[3].retrieve(returnActors, actor));
+                nodes[3].retrieve(returnActors, actor);
             }
             else {
                 nodes[0].retrieve(returnActors, actor); 
-                returnActors.addAll(nodes[1].retrieve(returnActors, actor));
-                returnActors.addAll(nodes[2].retrieve(returnActors, actor));
-                returnActors.addAll(nodes[3].retrieve(returnActors, actor));
+                nodes[1].retrieve(returnActors, actor);
+                nodes[2].retrieve(returnActors, actor);
+                nodes[3].retrieve(returnActors, actor);
             }
         }
         returnActors.addAll(actors);

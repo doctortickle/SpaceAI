@@ -5,6 +5,7 @@
  */
 package common;
 
+import java.util.Objects;
 import javafx.scene.CacheHint;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
@@ -98,4 +99,49 @@ public abstract class Actor {
         spriteFrame.setCache(true);
         spriteFrame.setCacheHint(CacheHint.SPEED);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + this.ID;
+        hash = 23 * hash + this.health;
+        hash = 23 * hash + this.radius;
+        hash = 23 * hash + Objects.hashCode(this.location);
+        hash = 23 * hash + Objects.hashCode(this.team);
+        hash = 23 * hash + Objects.hashCode(this.spriteFrame);
+        return hash;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Actor other = (Actor) obj;
+        if (this.ID != other.ID) {
+            return false;
+        }
+        if (this.health != other.health) {
+            return false;
+        }
+        if (this.radius != other.radius) {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location)) {
+            return false;
+        }
+        if (this.team != other.team) {
+            return false;
+        }
+        if (!Objects.equals(this.spriteFrame, other.spriteFrame)) {
+            return false;
+        }
+        return true;
+    }
+
 }

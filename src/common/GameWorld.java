@@ -35,12 +35,14 @@ public class GameWorld {
     private Location teamAHomeStation, teamBHomeStation;
     private int gameSpeed;
     private QuadTree quad;
+    private List<Actor> allActors;
 
     public GameWorld(SpaceAI spaceAI, CastingDirector castDirector) {
         this.spaceAI = spaceAI;
         this.castDirector = castDirector;
         this.gameSpeed = GameConstants.FRAMES_PER_ROUND_5;
         this.quad = new QuadTree(0,GameConstants.CENTER_WIDTH, GameConstants.CENTER_HEIGHT, GameConstants.TOP_LEFT_X_PIXEL, GameConstants.TOP_LEFT_Y_PIXEL);
+        this.allActors = new ArrayList<Actor>();
     }
 
     public void update() {
@@ -51,6 +53,7 @@ public class GameWorld {
         }
         System.out.println("Game Round : " + gameRound);
         updateQuadTree();
+        checkQuadTree();
     }
 
     private void initializeStartingUnits() {
@@ -67,13 +70,16 @@ public class GameWorld {
     }
     private void updateQuadTree() {
         quad.clear();
-        List<Actor> allActors = new ArrayList<>();
+        allActors.clear();
         allActors.addAll(castDirector.getCurrentUnits());
         allActors.addAll(castDirector.getCurrentEnvironment());
         allActors.addAll(castDirector.getCurrentWeapons());
         for (int i = 0; i < allActors.size(); i++) {
             quad.insert(allActors.get(i));
         }      
+
+    }
+    private void checkQuadTree() {
         List<Actor> returnActors = new ArrayList();
         for (int i = 0; i < allActors.size(); i++) {
             returnActors.clear();
@@ -85,7 +91,6 @@ public class GameWorld {
             }
         }
     }
-    
     public void addUnit(UnitType type, Location location, Team team){
         Unit unit = new Unit(spaceAI, type, getUniqueID(), location, team);
         castDirector.addToBeAdded(unit);
@@ -112,6 +117,7 @@ public class GameWorld {
         return gameRound;
     }
     public QuadTree getQuad() {
+        updateQuadTree();
         return quad;
     }
     public int getMineralCount(Team team) {

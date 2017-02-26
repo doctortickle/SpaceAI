@@ -19,6 +19,8 @@
  */
 package common;
 
+import java.util.Random;
+
 /**
  *
  * @author Dylan Russell
@@ -60,6 +62,13 @@ public strictfp class Direction {
     }
     private static Direction getWest() {
         return new Direction(-1,0);
+    }
+    public static Direction getRandom() {
+        int start = -1;
+        int end = 1;
+        double x = start + (new Random().nextDouble() * (end - start));
+        double y = start + (new Random().nextDouble() * (end - start));
+        return new Direction(x,y);
     }
     // Internally used to keep angles in the range (-Math.PI,Math.PI]
     private double reduce(double rads) {

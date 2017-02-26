@@ -51,14 +51,7 @@ public class AICommandB {
     
     public static void runFighter() {
             ac.getCurrentLocation();
-            Random rand = new Random();
-            int number = rand.nextInt(4)+1;
-            switch(number) {
-                case 4 : ac.move(Direction.NORTH);
-                case 3 : ac.move(Direction.EAST);
-                case 2 : ac.move(Direction.SOUTH);
-                case 1 : ac.move(Direction.WEST);
-            }
+            ac.move(Direction.getRandom());
     }
     
     public static void runSiege() {

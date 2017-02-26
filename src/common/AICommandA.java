@@ -16,6 +16,8 @@
  */
 package common;
 
+import java.util.Random;
+
 /**
  *
  * @author Dylan Russell
@@ -48,7 +50,14 @@ public class AICommandA {
     
     public static void runFighter() {
             ac.getCurrentLocation();
-            ac.move(new Location(100, 100));
+            Random rand = new Random();
+            int number = rand.nextInt(4)+1;
+            switch(number) {
+                case 1 : ac.move(Direction.NORTH);
+                case 2 : ac.move(Direction.EAST);
+                case 3 : ac.move(Direction.SOUTH);
+                case 4 : ac.move(Direction.WEST);
+            }
     }
     
     public static void runSiege() {

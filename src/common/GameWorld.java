@@ -16,7 +16,6 @@
  */
 package common;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +70,7 @@ public class GameWorld {
         List<Actor> allActors = new ArrayList<>();
         allActors.addAll(castDirector.getCurrentUnits());
         allActors.addAll(castDirector.getCurrentEnvironment());
+        allActors.addAll(castDirector.getCurrentWeapons());
         for (int i = 0; i < allActors.size(); i++) {
             quad.insert(allActors.get(i));
         }      
@@ -81,6 +81,7 @@ public class GameWorld {
             System.out.println("\nUnit " + allActors.get(i).getID() + " can collide with : ");
             for (int x = 0; x < returnActors.size(); x++) {
                 System.out.print(returnActors.get(x).getID() + ", ");
+                //Collision algorithm here.
             }
         }
     }
@@ -109,6 +110,9 @@ public class GameWorld {
     }
     public int getGameRound() {
         return gameRound;
+    }
+    public QuadTree getQuad() {
+        return quad;
     }
     public int getMineralCount(Team team) {
         switch(team) {

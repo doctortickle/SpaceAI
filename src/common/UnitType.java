@@ -28,55 +28,55 @@ public strictfp enum UnitType {
                 5,      // spawnCooldown
                 10,     // maxHealth
                 50,     // mineralCost
-                1,      // bodyRadius
+                5,      // bodyRadius
                 10,     // enemySensoryRadius
                 15,     // incomingDetectionRadius
                 5,      // flightRadius
                 1000,   // fuelMax
                 1,      // fuelBurnRate
-                new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                new Image("/FIGHTER.png", 20, 20, true, false, true)  // spriteImage
     ),
     SIEGE(   new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.PLANET_BOMBARDMENT},  // arsenal
                 10,     // spawnCooldown
                 50,     // maxHealth
                 300,    // mineralCost
-                2,      // bodyRadius
+                8,      // bodyRadius
                 10,     // enemySensoryRadius
                 10,     // incomingDetectionRadius
                 3,      // flightRadius
                 1000,   // fuelMax
                 3,      // fuelBurnRate
-                new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                new Image("/SIEGE.png", 32, 32, true, false, true)  // spriteImage
     ),
     DESTROYER(  new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.MINE},  // arsenal
                 10,     // spawnCooldown
                 100,    // maxHealth
                 300,    // mineralCost
-                3,      // bodyRadius
+                10,      // bodyRadius
                 15,     // enemySensoryRadius
                 20,     // incomingDetectionRadius
                 3,      // flightRadius
                 1000,   // fuelMax
                 3,      // fuelBurnRate
-                new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                new Image("/DESTROYER.png", 40, 40, true, false, true)  // spriteImage
     ),
     CAPITAL(    new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.LARGE_BOMB, WeaponType.MINE, WeaponType.PLANET_BOMBARDMENT},  // arsenal
                 50,     // spawnCooldown
                 500,    // maxHealth
                 1000,   // mineralCost
-                5,      // bodyRadius
+                20,      // bodyRadius
                 20,     // enemySensoryRadius
                 25,     // incomingDetectionRadius
                 1,      // flightRadius
                 2000,   // fuelMax
                 5,      // fuelBurnRate
-                new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                new Image("/CAPITAL.png", 80, 80, true, false, true)  // spriteImage
     ),
     HARVESTER(  null,   // arsenal
                 5,      // spawnCooldown
                 10,     // maxHealth
                 50,     // mineralCost
-                1,      // bodyRadius
+                5,      // bodyRadius
                 10,     // enemySensoryRadius
                 20,     // incomingDetectionRadius
                 5,      // flightRadius
@@ -88,7 +88,7 @@ public strictfp enum UnitType {
                 5,      // spawnCooldown
                 10,     // maxHealth
                 50,     // mineralCost
-                1,      // bodyRadius
+                5,      // bodyRadius
                 10,     // enemySensoryRadius
                 15,     // incomingDetectionRadius
                 5,      // flightRadius
@@ -100,7 +100,7 @@ public strictfp enum UnitType {
                 5,      // spawnCooldown
                 10,     // maxHealth
                 50,     // mineralCost
-                1,      // bodyRadius
+                5,      // bodyRadius
                 10,     // enemySensoryRadius
                 15,     // incomingDetectionRadius
                 5,      // flightRadius
@@ -118,7 +118,7 @@ public strictfp enum UnitType {
                     10,     // refuelRadius
                     10,     // refuelRate
                     10,     // miningRate
-                    new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                    new Image("/HOME_STATION.png", 40, 40, true, false, true)  // spriteImage
     ),
     SMALL_DOCK(     new EnvironmentType[] {EnvironmentType.SMALL_PLANET, EnvironmentType.LARGE_PLANET},   // spawnLocations
                     100,    // spawnCooldown

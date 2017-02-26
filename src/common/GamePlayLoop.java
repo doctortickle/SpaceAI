@@ -45,11 +45,10 @@ public class GamePlayLoop extends AnimationTimer {
                 pulse = 0;
             }
             if(pulse==0) {
-                setGameSpeed();
-                gameWorld.update();
-                spaceAI.update();
-                updateActors();
-                endRound();
+                setGameSpeed(); //Checks the current game speed and changes var. 
+                gameWorld.update(); //Round number, quad tree, Home Station/Mineral initialization
+                spaceAI.update(); //Adds nodes, adds pixels
+                updateActors(); // Runs the space AI Controller
             }     
         }
         if(spaceAI.getPause()) {
@@ -65,14 +64,12 @@ public class GamePlayLoop extends AnimationTimer {
         for(Unit unit : castDirector.getCurrentUnits() ) {
             unit.update();
         }
-        for(Weapon weapon : castDirector.getCurrentWeaponss() ) {
+        for(Weapon weapon : castDirector.getCurrentWeapons() ) {
             weapon.update();
         }
         for(Environment environment : castDirector.getCurrentEnvironment() ) {
             environment.update();
         }
-    }
-    private void endRound() {
     }
     
     @Override

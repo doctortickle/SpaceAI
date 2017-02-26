@@ -18,7 +18,6 @@ package common;
 
 import static common.GameConstants.COORDINATE_TO_PIXEL;
 import static common.GameConstants.PIXEL_TO_COORDINATE;
-import java.text.DecimalFormat;
 
 /**
  *

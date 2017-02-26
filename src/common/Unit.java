@@ -85,22 +85,21 @@ public final class Unit extends Actor {
     public boolean isCommandable() {
         return true;
     }
-
     @Override
     public boolean isWeapon() {
         return false;
     }
-
     @Override
     public boolean isEnvironment() {
         return false;
     }
-
     @Override
-    public boolean collide(Actor object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean collide(Actor actor) {
+        if(this.getLocation().distanceTo(actor.getLocation()) < this.getRadius() + actor.getRadius()) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
-    
-    
-    
 }

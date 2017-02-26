@@ -16,7 +16,9 @@
  */
 package common;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 //test
 
@@ -33,7 +35,6 @@ public strictfp class AIController {
     private final double rightBoundary;
     private final double bottomBoundary;
     private final double topBoundary;
-
 
     public AIController(Unit unit, GameWorld gameWorld) {
         this.unit = unit;
@@ -55,9 +56,32 @@ public strictfp class AIController {
         return false;
     }
     private void updateSpriteAndLocation(Location location) {
-        unit.getSpriteFrame().setTranslateX(location.getPixelX());
-        unit.getSpriteFrame().setTranslateY(location.getPixelY());
+        Location oldLocation = unit.getLocation();
         unit.updateLocation(location.getX(), location.getY());
+        if(checkForCollision()) {
+            unit.updateLocation(oldLocation.getX(), oldLocation.getY());
+        }
+        else {
+            unit.getSpriteFrame().setTranslateX(location.getPixelX());
+            unit.getSpriteFrame().setTranslateY(location.getPixelY());
+        }
+        System.out.println(unit.getLocation().getX() + ", " + unit.getLocation().getY());
+    }
+    private boolean checkForCollision() {
+        QuadTree quad = gameWorld.getQuad();
+        quad.insert(unit);
+        List<Actor> returnActors = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, unit);
+        for (int x = 0; x < returnActors.size(); x++) {
+                if(unit.collide(returnActors.get(x))) {
+                    if(returnActors.get(x).getID() != unit.getID()) {
+                        System.out.println("Colliding with unit " + returnActors.get(x).getID());
+                        return true;
+                    }
+                }
+            }
+        return false;
     }
     private boolean checkBoundaries(Location location) {  
         if(location.getY() >= topBoundary - unit.getRadius()) { return false; }

@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeMap;
 
 /**
  *
@@ -56,7 +55,7 @@ public class CastingDirector {
     public List<Unit> getCurrentUnits() {
         return CURRENT_UNITS;
     }
-    public List<Weapon> getCurrentWeaponss() {
+    public List<Weapon> getCurrentWeapons() {
         return CURRENT_WEAPONS;
     }
     public List<Environment> getCurrentEnvironment() {

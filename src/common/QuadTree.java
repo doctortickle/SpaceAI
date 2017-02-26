@@ -16,7 +16,6 @@
  */
 package common;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,11 +74,11 @@ public class QuadTree {
         double xMidpoint = x + (width / 2);
         double yMidpoint = y + (height / 2);
         // Object can completely fit within the top quadrants
-        boolean topQuadrant = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + actor.getRadius() < yMidpoint);
+        boolean topQuadrant = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) < yMidpoint);
         // Object can completely fit within the bottom quadrants
-        boolean bottomQuadrant = (actor.getLocation().getPixelY() > yMidpoint && actor.getLocation().getPixelY() - actor.getRadius() > yMidpoint);
+        boolean bottomQuadrant = (actor.getLocation().getPixelY() > yMidpoint && actor.getLocation().getPixelY() - (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) > yMidpoint);
         // Object can completely fit within the left quadrants
-        if (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + actor.getRadius() < xMidpoint) {
+        if (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) < xMidpoint) {
             if (topQuadrant) {
                 index = 3;
             }
@@ -88,7 +87,7 @@ public class QuadTree {
             }
         }
          // Object can completely fit within the right quadrants
-        else if (actor.getLocation().getPixelX() > xMidpoint && actor.getLocation().getPixelX() - actor.getRadius() > xMidpoint) {
+        else if (actor.getLocation().getPixelX() > xMidpoint && actor.getLocation().getPixelX() - (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) > xMidpoint) {
             if (topQuadrant) {
                 index = 0;
             }
@@ -114,7 +113,6 @@ public class QuadTree {
             int i = 0;
             while (i < actors.size()) {
                 int index = getIndex((Actor) actors.get(i));
-                System.out.println("Index = " + index);
                 if (index != -1) {
                     nodes[index].insert((Actor) actors.get(i));
                     actors.remove(i);
@@ -133,24 +131,30 @@ public class QuadTree {
         if (index == -1 && nodes[0] != null) {
             double xMidpoint = x + (width / 2);
             double yMidpoint = y + (height / 2);
-            boolean topHalf = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + actor.getRadius() < yMidpoint);
-            boolean bottomHalf = (actor.getLocation().getPixelY() > yMidpoint && actor.getLocation().getPixelY() - actor.getRadius() > yMidpoint);
-            boolean rightHalf = (actor.getLocation().getPixelX() > xMidpoint && actor.getLocation().getPixelX() - actor.getRadius() > xMidpoint);
-            boolean leftHalf = (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + actor.getRadius() < xMidpoint);
+            boolean topHalf = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) < yMidpoint);
+            boolean bottomHalf = (actor.getLocation().getPixelY() > yMidpoint && actor.getLocation().getPixelY() - (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) > yMidpoint);
+            boolean rightHalf = (actor.getLocation().getPixelX() > xMidpoint && actor.getLocation().getPixelX() - (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) > xMidpoint);
+            boolean leftHalf = (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) < xMidpoint);
             if(topHalf) {
                 nodes[0].retrieve(returnActors, actor); 
                 returnActors.addAll(nodes[3].retrieve(returnActors, actor));
             }
-            if(bottomHalf) {
+            else if(bottomHalf) {
                 nodes[1].retrieve(returnActors, actor); 
                 returnActors.addAll(nodes[2].retrieve(returnActors, actor));
             }
-            if(rightHalf) {
+            else if(rightHalf) {
                 nodes[0].retrieve(returnActors, actor); 
                 returnActors.addAll(nodes[1].retrieve(returnActors, actor));
             }
-            if(leftHalf) {
+            else if(leftHalf) {
                 nodes[2].retrieve(returnActors, actor); 
+                returnActors.addAll(nodes[3].retrieve(returnActors, actor));
+            }
+            else {
+                nodes[0].retrieve(returnActors, actor); 
+                returnActors.addAll(nodes[1].retrieve(returnActors, actor));
+                returnActors.addAll(nodes[2].retrieve(returnActors, actor));
                 returnActors.addAll(nodes[3].retrieve(returnActors, actor));
             }
         }

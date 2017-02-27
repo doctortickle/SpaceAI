@@ -82,7 +82,7 @@ public strictfp enum UnitType {
                 5,      // flightRadius
                 1000,   // fuelMax
                 1,      // fuelBurnRate
-                new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                new Image("/HARVESTER.png", 20, 20, true, false, true)  // spriteImage
     ),
     REFUELER(   null,   // arsenal
                 5,      // spawnCooldown
@@ -94,7 +94,7 @@ public strictfp enum UnitType {
                 5,      // flightRadius
                 1000,   // fuelMax
                 1,      // fuelBurnRate
-                new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                new Image("/REFUELER.png", 20, 20, true, false, true)  // spriteImage
     ),
     BUILDER(    null,   // arsenal
                 5,      // spawnCooldown
@@ -106,7 +106,7 @@ public strictfp enum UnitType {
                 5,      // flightRadius
                 1000,   // fuelMax
                 1,      // fuelBurnRate
-                new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                new Image("/BUILDER.png", 20, 20, true, false, true)  // spriteImage
     ),
     
     HOME_STATION(   null,   // spawnLocations

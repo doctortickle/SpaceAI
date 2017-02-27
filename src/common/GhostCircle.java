@@ -69,6 +69,6 @@ public class GhostCircle extends Actor{
 
     @Override
     public boolean collide(Actor actor) {
-        return this.getLocation().distanceTo(actor.getLocation()) <= this.getRadius() + actor.getRadius();
+        return this.getLocation().distanceTo(actor.getLocation()) < this.getRadius() + actor.getRadius();
     }   
 }

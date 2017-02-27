@@ -151,7 +151,7 @@ public class GameWorld {
         }
     }
     public boolean checkIfLocationIsEmpty(Location location) {
-        updateQuadTree();
+        //updateQuadTree();
         ghostCircle = new GhostCircle(0,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -162,15 +162,14 @@ public class GameWorld {
                     if(returnActors.get(x).getID() != ghostCircle.getID()) {
                         System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
                         updateQuadTree();
-                        return true;
+                        return false;
                     }
                 }
             }
         updateQuadTree();
-        return false;
+        return true;
     }
     public boolean checkIfLocationIsEmpty(Location location, int radius) {
-        updateQuadTree();
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -181,15 +180,14 @@ public class GameWorld {
                     if(returnActors.get(x).getID() != ghostCircle.getID()) {
                         System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
                         updateQuadTree();
-                        return true;
+                        return false;
                     }
                 }
             }
         updateQuadTree();
-        return false;
+        return true;
     }
-    public boolean checkIfLocationIsEmpty(Location location, int radius, int ID) {
-        updateQuadTree();
+    public boolean checkIfLocationIsEmpty(Location location, int radius, int ID) { // Checks if location is empty except for the unit represented by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -200,11 +198,11 @@ public class GameWorld {
                     if(returnActors.get(x).getID() != ghostCircle.getID() && returnActors.get(x).getID() != ID) {
                         System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
                         updateQuadTree();
-                        return true;
+                        return false;
                     }
                 }
             }
         updateQuadTree();
-        return false;
+        return true;
     }
 }

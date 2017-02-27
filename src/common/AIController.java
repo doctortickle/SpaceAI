@@ -60,7 +60,7 @@ public strictfp class AIController {
         System.out.println(unit.getLocation().getX() + ", " + unit.getLocation().getY());
     }
     private boolean checkForCollision(Location location) {
-        return gameWorld.checkIfLocationIsEmpty(location, unit.getRadius(), unit.getID());
+        return !gameWorld.checkIfLocationIsEmpty(location, unit.getRadius(), unit.getID());
     }
     private boolean checkBoundaries(Location location) {  
         if(location.getY() >= topBoundary - unit.getRadius()) { return false; }
@@ -202,10 +202,10 @@ public strictfp class AIController {
         return getCurrentLocation().distanceTo(center) + radius <= getSensorRadius();
     }
     public boolean isLocationOccupied(Location location) {
-        return gameWorld.checkIfLocationIsEmpty(location);
+        return !gameWorld.checkIfLocationIsEmpty(location);
     }
     public boolean isCircleOccupied(Location center, int radius) {
-        return gameWorld.checkIfLocationIsEmpty(center, radius);
+        return !gameWorld.checkIfLocationIsEmpty(center, radius);
     }
     
     // ***********************************
@@ -237,7 +237,7 @@ public strictfp class AIController {
         if( isReadyToBuild() 
             && Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
             && getMineralCount()-type.getMineralCost() >= 0
-            && !checkForCollision(location)
+            && gameWorld.checkIfLocationIsEmpty(location, type.getBodyRadius())
             && onTheMap(location, type.getBodyRadius()) ) {
                 gameWorld.addUnit(type, location, getTeam());
                 unit.setBuildCooldown(type.getSpawnCooldown());

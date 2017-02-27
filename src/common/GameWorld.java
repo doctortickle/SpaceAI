@@ -36,6 +36,7 @@ public class GameWorld {
     private int gameSpeed;
     private QuadTree quad;
     private List<Actor> allActors;
+    private GhostCircle ghostCircle;
 
     public GameWorld(SpaceAI spaceAI, CastingDirector castDirector) {
         this.spaceAI = spaceAI;
@@ -43,6 +44,7 @@ public class GameWorld {
         this.gameSpeed = GameConstants.FRAMES_PER_ROUND_5;
         this.quad = new QuadTree(0,GameConstants.CENTER_WIDTH, GameConstants.CENTER_HEIGHT, GameConstants.TOP_LEFT_X_PIXEL, GameConstants.TOP_LEFT_Y_PIXEL);
         this.allActors = new ArrayList<Actor>();
+        this.ghostCircle = null;
     }
 
     public void update() {
@@ -149,6 +151,41 @@ public class GameWorld {
         }
     }
     public boolean checkIfLocationIsEmpty(Location location) {
-        return true;
+        updateQuadTree();
+        ghostCircle = new GhostCircle(0,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+                if(ghostCircle.collide(returnActors.get(x))) {
+                    if(returnActors.get(x).getID() != ghostCircle.getID()) {
+                        System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
+                        updateQuadTree();
+                        return true;
+                    }
+                }
+            }
+        updateQuadTree();
+        return false;
+    }
+    public boolean checkIfLocationIsEmpty(Location location, int radius) {
+        updateQuadTree();
+        ghostCircle = new GhostCircle(radius,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+                if(ghostCircle.collide(returnActors.get(x))) {
+                    if(returnActors.get(x).getID() != ghostCircle.getID()) {
+                        System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
+                        updateQuadTree();
+                        return true;
+                    }
+                }
+            }
+        updateQuadTree();
+        return false;
     }
 }

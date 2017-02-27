@@ -51,6 +51,7 @@ public class AICommandA {
     public static void runFighter() {
             ac.getCurrentLocation();
             ac.move(Direction.getRandom());
+            System.out.println(ac.isLocationOccupied(new Location(10,100)));
     }
     
     public static void runSiege() {

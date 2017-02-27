@@ -218,18 +218,17 @@ public strictfp class AIController {
     public boolean canSenseIncomingLocation(Location location) {
         return getCurrentLocation().distanceTo(location) <= getIncomingDetectionRadius();
     }
-    public boolean canSensePartOfCircle(Location center, double radius) {
+    public boolean canSensePartOfCircle(Location center, int radius) {
         return getCurrentLocation().distanceTo(center) - radius <= getSensorRadius();
     }
-    public boolean canSenseAllOfCirlce(Location center, double radius) {
+    public boolean canSenseAllOfCirlce(Location center, int radius) {
         return getCurrentLocation().distanceTo(center) + radius <= getSensorRadius();
     }
     public boolean isLocationOccupied(Location location) {
-        return true;
-        // TODO
+        return gameWorld.checkIfLocationIsEmpty(location);
     }
-    public boolean isCircleOccupied(Location center, double radius) {
-        return true;
+    public boolean isCircleOccupied(Location center, int radius) {
+        return gameWorld.checkIfLocationIsEmpty(center, radius);
         // TODO
     }
     

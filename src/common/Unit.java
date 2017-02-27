@@ -95,11 +95,6 @@ public final class Unit extends Actor {
     }
     @Override
     public boolean collide(Actor actor) {
-        if(this.getLocation().distanceTo(actor.getLocation()) < this.getRadius() + actor.getRadius()) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return this.getLocation().distanceTo(actor.getLocation()) < this.getRadius() + actor.getRadius();
     }
 }

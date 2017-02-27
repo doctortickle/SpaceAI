@@ -188,4 +188,23 @@ public class GameWorld {
         updateQuadTree();
         return false;
     }
+    public boolean checkIfLocationIsEmpty(Location location, int radius, int ID) {
+        updateQuadTree();
+        ghostCircle = new GhostCircle(radius,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+                if(ghostCircle.collide(returnActors.get(x))) {
+                    if(returnActors.get(x).getID() != ghostCircle.getID() && returnActors.get(x).getID() != ID) {
+                        System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
+                        updateQuadTree();
+                        return true;
+                    }
+                }
+            }
+        updateQuadTree();
+        return false;
+    }
 }

@@ -16,9 +16,7 @@
  */
 package common;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 //test
 
@@ -53,35 +51,16 @@ public strictfp class AIController {
         if(location.getY() <= bottomBoundary + unit.getRadius()) { return false; }
         if(location.getX() >= rightBoundary - unit.getRadius()) { return false; }
         if(location.getX() <= leftBoundary + unit.getRadius()) { return false; }
-        return false;
+        return true;
     }
     private void updateSpriteAndLocation(Location location) {
-        Location oldLocation = unit.getLocation();
         unit.updateLocation(location.getX(), location.getY());
-        if(checkForCollision()) {
-            unit.updateLocation(oldLocation.getX(), oldLocation.getY());
-            gameWorld.getUpdatedQuad();
-        }
-        else {
-            unit.getSpriteFrame().setTranslateX(location.getPixelX());
-            unit.getSpriteFrame().setTranslateY(location.getPixelY());
-        }
+        unit.getSpriteFrame().setTranslateX(location.getPixelX());
+        unit.getSpriteFrame().setTranslateY(location.getPixelY());
         System.out.println(unit.getLocation().getX() + ", " + unit.getLocation().getY());
     }
-    private boolean checkForCollision() {
-        QuadTree quad = gameWorld.getUpdatedQuad();
-        List<Actor> returnActors = new ArrayList();
-        returnActors.clear();
-        returnActors = quad.retrieve(returnActors, unit);
-        for (int x = 0; x < returnActors.size(); x++) {
-                if(unit.collide(returnActors.get(x))) {
-                    if(returnActors.get(x).getID() != unit.getID()) {
-                        System.out.println("Colliding with unit " + returnActors.get(x).getID());
-                        return true;
-                    }
-                }
-            }
-        return false;
+    private boolean checkForCollision(Location location) {
+        return gameWorld.checkIfLocationIsEmpty(location, unit.getRadius(), unit.getID());
     }
     private boolean checkBoundaries(Location location) {  
         if(location.getY() >= topBoundary - unit.getRadius()) { return false; }
@@ -90,7 +69,15 @@ public strictfp class AIController {
         if(location.getX() <= leftBoundary + unit.getRadius()) { return false; }
         return true;
     }
-
+    private boolean assertCanSenseLocation(Location location) {
+        return canSenseLocation(location);
+    }
+    private boolean assertCanSensePartOfCircle(Location center, int radius) {
+        return canSensePartOfCircle(center, radius);
+    }
+    private boolean assertCanSenseAllOfCircle(Location center, int radius) {
+        return canSenseAllOfCircle(center, radius);
+    }
     // *********************************
     // **** GAMEWORLD QUERY METHODS ****
     // *********************************
@@ -192,16 +179,6 @@ public strictfp class AIController {
     // *************************************
     // ****** GENERAL SENSOR METHODS *******
     // *************************************
-    
-    private void assertCanSenseLocation(Location location) {
-        // TODO
-    }
-    private void assertCanSensePartOfCircle(Location center, int radius) {
-        // TODO
-    }
-    private void assertCanSenseAllOfCircle(Location center, int radius) {
-        // TODO
-    }
     public boolean onTheMap(Location location) {
         return assertOnScreen(location);
     }
@@ -221,7 +198,7 @@ public strictfp class AIController {
     public boolean canSensePartOfCircle(Location center, int radius) {
         return getCurrentLocation().distanceTo(center) - radius <= getSensorRadius();
     }
-    public boolean canSenseAllOfCirlce(Location center, int radius) {
+    public boolean canSenseAllOfCircle(Location center, int radius) {
         return getCurrentLocation().distanceTo(center) + radius <= getSensorRadius();
     }
     public boolean isLocationOccupied(Location location) {
@@ -229,7 +206,6 @@ public strictfp class AIController {
     }
     public boolean isCircleOccupied(Location center, int radius) {
         return gameWorld.checkIfLocationIsEmpty(center, radius);
-        // TODO
     }
     
     // ***********************************
@@ -241,8 +217,10 @@ public strictfp class AIController {
     }
 
     public final void move(Location location) {
-        if (getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius() && checkBoundaries(location)) {
-            updateSpriteAndLocation(location);
+        if (getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius() 
+            && checkBoundaries(location)
+            && !checkForCollision(location)) {
+                updateSpriteAndLocation(location);
         } else {
             Direction moveDirection = getCurrentLocation().directionTo(location);
             move(moveDirection);
@@ -250,22 +228,23 @@ public strictfp class AIController {
     }
     public final void move(Direction direction) {
         Location movePoint = getCurrentLocation().add(unit.getType().getFlightRadius(), direction);
-        if(checkBoundaries(movePoint)) {
+        if(checkBoundaries(movePoint) && !checkForCollision(movePoint)) {
             move(movePoint);   
         }
     }
     public final void build(UnitType type, Direction direction) {
+        Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
         if( isReadyToBuild() 
             && Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
-            && getMineralCount()-type.getMineralCost() >= 0) {
-                Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+            && getMineralCount()-type.getMineralCost() >= 0
+            && !checkForCollision(location)
+            && onTheMap(location, type.getBodyRadius()) ) {
                 gameWorld.addUnit(type, location, getTeam());
                 unit.setBuildCooldown(type.getSpawnCooldown());
                 gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
         }
         else {
-            System.out.println("Can not build due to cooldown.");
+            System.out.println("Can not build.");
         }
     }
-
 }

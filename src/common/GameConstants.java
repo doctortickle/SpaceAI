@@ -61,7 +61,7 @@ public strictfp interface GameConstants {
     // ****** GAMEPLAY CONSTANTS *******
     // *********************************
     
-    final int STARTING_MINERAL_COUNT = 1000;
+    final int STARTING_MINERAL_COUNT = 10000;
     final Location TEAM_A_HOME_STATION = new Location(0,100);
     final Location TEAM_B_HOME_STATION = new Location(0,-100);
     

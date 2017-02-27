@@ -16,9 +16,6 @@
  */
 package common;
 
-import static common.AICommandA.ac;
-import java.util.Random;
-
 /**
  *
  * @author Dylan Russell
@@ -48,47 +45,100 @@ public class AICommandB {
             case FUEL_STATION: runFuelStation(); break;
         }    
     }    
-    
-    public static void runFighter() {
-            ac.getCurrentLocation();
-            ac.move(Direction.getRandom());
+    // *********************************
+    // ************ FIGHTER ************
+    // *********************************
+    private static void runFighter() {
+        // This code will be run every round.
+        ac.getCurrentLocation();
+        ac.move(Direction.getRandom());
     }
-    
-    public static void runSiege() {
-           // Siege code here.
+    // *********************************
+    // ************ SIEGE **************
+    // *********************************
+    private static void runSiege() {
+        // This code will be run every round.
     }
-    public static void runDestroyer() {
-           // Destroyer code here.
+    // *********************************
+    // *********** DESTROYER ***********
+    // *********************************
+    private static void runDestroyer() {
+        // This code will be run every round.
     }
-    public static void runCapital() {
-           // Capital code here.
+    // *********************************
+    // ************ CAPITAL ************
+    // *********************************
+    private static void runCapital() {
+        // This code will be run every round.
+        ac.move(Direction.getRandom());
     }
-    public static void runBuilder() {
-           // Builder code here.
+    // *********************************
+    // ************ BUILDER ************
+    // *********************************
+    private static void runBuilder() {
+        // This code will be run every round.
+        ac.move(Direction.getRandom());
+        int dockCount = 0;
+        if(dockCount == 0) {
+            ac.build(UnitType.CAPITAL_DOCK, Direction.EAST);
+            dockCount++;
+        }
     }
-    public static void runHarvester() {
-           // Harvester code here.
+    // *********************************
+    // ********** HARVESTER ************
+    // *********************************
+    private static void runHarvester() {
+        // This code will be run every round.
     }
-    public static void runRefueler() {
-           // Refueler code here.
+    // *********************************
+    // *********** REFUELER ************
+    // *********************************
+    private static void runRefueler() {
+        // This code will be run every round.
+    } 
+    // *********************************
+    // ********* HOME STATION **********
+    // *********************************
+    private static int builderCount;
+    private static void runHomeStation() {
+        // This code will be run every round.
+        if(builderCount == 0) {
+            ac.build(UnitType.BUILDER, Direction.EAST);
+            builderCount++;
+        }
     }
-    public static void runHomeStation() {
-           ac.build(UnitType.FIGHTER, Direction.WEST);
+    // *********************************
+    // ********** SMALL DOCK ***********
+    // *********************************
+    private static void runSmallDock() {
+        // This code will be run every round.
     }
-    public static void runSmallDock() {
-           // Small Dock code here.
+    // *********************************
+    // ********* LARGE DOCK ************
+    // *********************************
+    private static void runLargeDock() {
+        // This code will be run every round.
     }
-    public static void runLargeDock() {
-           // Large Dock code here.
+    // *********************************
+    // ********* CAPITAL DOCK **********
+    // *********************************
+    private static int capitalCount;
+    private static void runCapitalDock() {
+        // This code will be run every round.
+        if(capitalCount == 0) {
+            ac.build(UnitType.CAPITAL, Direction.NORTH);
+        }
     }
-    public static void runCapitalDock() {
-           // Capital Dock code here.
+    // *********************************
+    // ******* MINING FACILITY *********
+    // *********************************
+    private static void runMiningFacility() {
+        // This code will be run every round.
     }
-    public static void runMiningFacility() {
-           // Mining Facility code here.
-    }
-    public static void runFuelStation() {
-           // Fuel Station code here.
-    }
-    
+    // *********************************
+    // ******** FUEL STATION ***********
+    // *********************************
+    private static void runFuelStation() {
+        // This code will be run every round.
+    }  
 }

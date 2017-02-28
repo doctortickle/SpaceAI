@@ -16,6 +16,8 @@
  */
 package common;
 
+import javafx.scene.image.Image;
+
 /**
  *
  * @author dr4ur

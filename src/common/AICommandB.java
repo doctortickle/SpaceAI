@@ -70,6 +70,7 @@ public class AICommandB {
     private static void runCapital() {
         // This code will be run every round.
         ac.move(Direction.getRandom());
+        ac.fire(WeaponType.LARGE_BOMB, Direction.NORTH);
     }
     // *********************************
     // ************ BUILDER ************

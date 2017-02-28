@@ -21,7 +21,7 @@ public abstract class Actor {
     private int ID, health, radius;
     private Location location;
     private final Team team;
-    private final ImageView spriteFrame;
+    private ImageView spriteFrame;
 
     public Actor(int ID, int health, int radius, Location location, Team team, Image spriteImage) {
         this.ID = ID;
@@ -30,7 +30,9 @@ public abstract class Actor {
         this.team = team;
         this.location  = location;
         this.spriteFrame = new ImageView(spriteImage);
-        teamColorize(spriteFrame);
+        if(team != Team.NEUTRAL) {
+            teamColorize(spriteFrame);
+        }
     }
     
     public abstract void update();
@@ -99,9 +101,6 @@ public abstract class Actor {
         }
         if(this.team==Team.B) {
             lighting.setLight(new Light.Distant(45, 45, Color.BLUE));
-        }
-        if(this.team==Team.NEUTRAL) {
-            lighting.setLight(new Light.Distant(45, 45, Color.BROWN));
         }
         spriteFrame.setEffect(lighting);
         spriteFrame.setCache(true);

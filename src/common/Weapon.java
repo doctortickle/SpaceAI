@@ -99,94 +99,9 @@ public final class Weapon extends Actor {
 
     @Override
     public boolean collide(Actor actor) {
-        switch(this.type) {
-            case SMALL_LASER        : return laserCollision(actor);
-            case LARGE_LASER        : return laserCollision(actor); 
-            case SMALL_BOMB         : return bombCollision(actor);  
-            case LARGE_BOMB         : return bombCollision(actor);  
-            case MINE               : return mineCollision(actor);  
-            case PLANET_BOMBARDMENT : return laserCollision(actor);
-            default                 : return laserCollision(actor);
-        }
+        return wc.collide(actor);
     }   
     public void damageApplication(Actor actor) {
-        switch(this.type) {
-            case SMALL_LASER        : laserDamageApplication(actor); return;
-            case LARGE_LASER        : laserDamageApplication(actor); return; 
-            case SMALL_BOMB         : bombDamageApplication(actor); return;  
-            case LARGE_BOMB         : bombDamageApplication(actor); return;   
-            case MINE               : mineDamageApplication(actor); return;   
-            case PLANET_BOMBARDMENT : laserDamageApplication(actor);         
-        }
+        wc.damageApplication(actor);
     }   
-    private boolean laserCollision(Actor actor) {
-        return this.getLocation().distanceTo(actor.getLocation()) < this.type.getWeaponRadius() + actor.getRadius();
-    }
-    private void laserDamageApplication(Actor actor) {
-        if(actor.isCommandable()) {
-            actor.setHealth(this.getType().getUnitDamage());
-        }
-        else if(actor.isEnvironment()) {
-            actor.setHealth(this.getType().getEnvironmentDamage());
-        }
-        this.setSpent(true);
-        this.setExploded(true);
-    }
-    private boolean bombCollision(Actor actor) {
-        if(!this.isSpent()) {
-            if(this.getLocation().distanceTo(actor.getLocation()) < this.type.getWeaponRadius() + actor.getRadius()) {
-                return true;
-            }
-        }
-        else if(this.isSpent()) {
-            if(this.getLocation().distanceTo(actor.getLocation()) < this.type.getExplosionRadius() + actor.getRadius()) {
-                return true;
-            }
-        }
-        return false;
-    }
-    private void bombDamageApplication(Actor actor) {
-        if(!this.isSpent()) {
-            this.setSpent(true);
-            return;
-        }
-        if(this.isSpent() && !this.isExploded()) {
-            if(actor.isCommandable()) {
-                actor.setHealth(this.getType().getUnitDamage());
-            }
-            else if(actor.isEnvironment()) {
-                actor.setHealth(this.getType().getEnvironmentDamage());
-            }
-            this.setExploded(true);
-        }
-    }
-    private boolean mineCollision(Actor actor) {
-        if(!this.isSpent()) {
-            if(this.getLocation().distanceTo(actor.getLocation()) < this.type.getDetectionRadius() + actor.getRadius()
-                && actor.getTeam() == getTeam().opponent()) {
-                return true;
-            }
-        }
-        else if(this.isSpent()) {
-            if(this.getLocation().distanceTo(actor.getLocation()) < this.type.getExplosionRadius() + actor.getRadius()) {
-                return true;
-            }
-        }
-        return false;
-    }
-    private void mineDamageApplication(Actor actor) {
-        if(!this.isSpent()) {
-            this.setSpent(true);
-            return;
-        }
-        if(this.isSpent() && !this.isExploded()) {
-            if(actor.isCommandable()) {
-                actor.setHealth(this.getType().getUnitDamage());
-            }
-            else if(actor.isEnvironment()) {
-                actor.setHealth(this.getType().getEnvironmentDamage());
-            }
-            this.setExploded(true);
-        }
-    }
 }

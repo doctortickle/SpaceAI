@@ -46,8 +46,8 @@ public class GamePlayLoop extends AnimationTimer {
             }
             if(pulse==0) {
                 setGameSpeed(); //Checks the current game speed and changes var. 
-                gameWorld.update(); //Round number, quad tree, Home Station/Mineral initialization
-                spaceAI.update(); //Adds nodes, adds pixels
+                gameWorld.update(); //Round number, quad tree, health checks, weapon collision checks, Home Station/Mineral initialization
+                spaceAI.update(); //Adds nodes, adds and removes pixels
                 updateActors(); // Runs the space AI Controller
             }     
         }

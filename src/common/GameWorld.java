@@ -54,9 +54,9 @@ public class GameWorld {
             initializeStartingMineralCounts();
         }
         System.out.println("Game Round : " + gameRound);
-        checkHealth();
         updateQuadTree();
-        checkQuadTree();
+        checkWeaponCollisions();
+        checkHealth();
     }
 
     private void initializeStartingUnits() {
@@ -75,22 +75,30 @@ public class GameWorld {
         quad.clear();
         allActors.clear();
         allActors.addAll(castDirector.getCurrentUnits());
+        allActors.addAll(castDirector.getCurrentEnvironment());
         allActors.addAll(castDirector.getCurrentWeapons());
         for (int i = 0; i < allActors.size(); i++) {
             quad.insert(allActors.get(i));
         }      
 
     }
-    private void checkQuadTree() {
+    private void checkWeaponCollisions() {
         List<Actor> returnActors = new ArrayList();
         for (int i = 0; i < allActors.size(); i++) {
-            returnActors.clear();
-            returnActors = quad.retrieve(returnActors, allActors.get(i));
-            System.out.println("\nUnit " + allActors.get(i).getID() + " can collide with : ");
-            for (int x = 0; x < returnActors.size(); x++) {
-                System.out.print(returnActors.get(x).getID() + ", ");
-                //Collision algorithm here.
-            }
+            if(allActors.get(i).isWeapon()) {
+                returnActors.clear();
+                returnActors = quad.retrieve(returnActors, allActors.get(i));
+                System.out.println("\nWeapon " + allActors.get(i).getID() + " may collide with : ");
+                for (int x = 0; x < returnActors.size(); x++) {
+                    if(!(returnActors.get(x).isWeapon())) {
+                        System.out.print(returnActors.get(x).getID() + ", ");
+                        if(allActors.get(i).collide(returnActors.get(x))) {
+                            Weapon weapon = (Weapon) allActors.get(i);
+                            weapon.damageApplication(returnActors.get(x));
+                        }
+                    }
+                }
+            }  
         }
     }
     private void checkHealth() {
@@ -98,17 +106,21 @@ public class GameWorld {
        checkUnits.stream().filter((unit) -> (unit.isDead())).forEachOrdered((unit) -> {
            removeActor(unit);
         });
+       List<Weapon> checkWeapons = castDirector.getCurrentWeapons();
+       checkWeapons.stream().filter((weapon) -> (weapon.isSpent() && weapon.isExploded())).forEachOrdered((weapon) -> {
+           removeActor(weapon);
+        });
     }
     public void addUnit(UnitType type, Location location, Team team){
         Unit unit = new Unit(spaceAI, type, getUniqueID(), location, team);
         castDirector.addToBeAdded(unit);
     }
-    public void addWeapon(WeaponType type, Location location){
-        Weapon weapon = new Weapon(type, getUniqueID(), location);
+    public void addWeapon(WeaponType type, Location location, Team team, Direction direction){
+        Weapon weapon = new Weapon(spaceAI, type, getUniqueID(), location, team, direction);
         castDirector.addToBeAdded(weapon);
     }
     public void addEnvironment(EnvironmentType type, Location location){
-        Environment environment = new Environment(type, getUniqueID(), location);
+        Environment environment = new Environment(spaceAI, type, getUniqueID(), location);
         castDirector.addToBeAdded(environment);
     }
     public void removeActor(Actor actor) {
@@ -165,7 +177,7 @@ public class GameWorld {
         returnActors = quad.retrieve(returnActors, ghostCircle);
         for (int x = 0; x < returnActors.size(); x++) {
                 if(ghostCircle.collide(returnActors.get(x))) {
-                    if(returnActors.get(x).getID() != ghostCircle.getID()) {
+                    if(returnActors.get(x).getID() != ghostCircle.getID() && !returnActors.get(x).isWeapon()) {
                         System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
                         updateQuadTree();
                         return false;
@@ -183,7 +195,7 @@ public class GameWorld {
         returnActors = quad.retrieve(returnActors, ghostCircle);
         for (int x = 0; x < returnActors.size(); x++) {
                 if(ghostCircle.collide(returnActors.get(x))) {
-                    if(returnActors.get(x).getID() != ghostCircle.getID()) {
+                    if(returnActors.get(x).getID() != ghostCircle.getID() && !returnActors.get(x).isWeapon()) {
                         System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
                         updateQuadTree();
                         return false;
@@ -201,7 +213,7 @@ public class GameWorld {
         returnActors = quad.retrieve(returnActors, ghostCircle);
         for (int x = 0; x < returnActors.size(); x++) {
                 if(ghostCircle.collide(returnActors.get(x))) {
-                    if(returnActors.get(x).getID() != ghostCircle.getID() && returnActors.get(x).getID() != ID) {
+                    if(returnActors.get(x).getID() != ghostCircle.getID() && returnActors.get(x).getID() != ID && !returnActors.get(x).isWeapon()) {
                         System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
                         updateQuadTree();
                         return false;

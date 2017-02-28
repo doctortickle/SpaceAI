@@ -16,7 +16,6 @@
  */
 package common;
 
-
 /**
  *
  * @author dr4ur
@@ -70,6 +69,8 @@ public final class Unit extends Actor {
     
     private void beginTurn() {
         System.out.println("\n"+ getType() + " " + getTeam() + getID());
+        System.out.println("Health = " + getHealth());
+        System.out.println("Fuel = " + fuel);
         if(buildCooldown > 0) {
             buildCooldown--;
         }

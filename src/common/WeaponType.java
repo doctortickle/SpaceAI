@@ -31,9 +31,9 @@ public strictfp enum WeaponType {
     /**
      * The most basic WeaponType, quick and light. Can be fired by all attack-capable units.
      */
-    SMALL_LASER         (10,         1,      0,      0,      1,  1,      1,
+    SMALL_LASER         (10,         2,      0,      0,      1,  1,      1,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/TestImage.png", 50, 50, true, false, true)),
+                    new Image("/SMALL_LASER.png", 8, 8, true, false, true)),
     /**
      * An upgraded laser variant; more powerful, but twice as slow. Can be fired by a DESTROYER and a CAPITAL ship.
      */
@@ -84,11 +84,11 @@ public strictfp enum WeaponType {
     /**
      * The damage inflicted upon an Actor that collides with a WeaponType.
      */
-    private final int damage; //Used for all weapons.
+    private final int unitDamage; //Used for all weapons.
     /**
      * The damage inflicted specifically to a StructureType if it collides with a WeaponType. Only varies for PLANET_BOMBARDMENT.
      */
-    private final int structureDamage; //Used for all weapons.
+    private final int environmentDamage; //Used for all weapons.
     /**
      * The amount of time a UnitType must wait after firing or deploying a given WeaponType before firing or deploying again.
      */
@@ -100,14 +100,14 @@ public strictfp enum WeaponType {
     
 
     private WeaponType(int launchSpeed, int weaponRadius, int explosionRadius, 
-            int detectionRadius, int damage, int structureDamage, int reloadTime,
+            int detectionRadius, int unitDamage, int environmentDamage, int reloadTime,
             Image spriteImage) {
         this.launchSpeed        = launchSpeed;
         this.weaponRadius       = weaponRadius;
         this.explosionRadius    = explosionRadius;
         this.detectionRadius    = detectionRadius;
-        this.damage             = damage;
-        this.structureDamage    = structureDamage;
+        this.unitDamage         = unitDamage;
+        this.environmentDamage  = environmentDamage;
         this.reloadTime         = reloadTime;
         this.spriteImage        = spriteImage;
     }
@@ -140,19 +140,30 @@ public strictfp enum WeaponType {
     public int getDetectionRadius() {
         return detectionRadius;
     }
+    public int getCollisionRadius(WeaponType weaponType) {
+        switch(weaponType) {
+            case SMALL_LASER        : return weaponType.getWeaponRadius();
+            case LARGE_LASER        : return weaponType.getWeaponRadius(); 
+            case SMALL_BOMB         : return weaponType.getExplosionRadius(); 
+            case LARGE_BOMB         : return weaponType.getExplosionRadius(); 
+            case MINE               : return weaponType.getExplosionRadius(); 
+            case PLANET_BOMBARDMENT : return weaponType.getWeaponRadius();
+            default                 : return weaponType.getWeaponRadius();
+        }
+    }
     /**
      * Returns the damage inflicted upon an Actor that collides with a WeaponType.
      * @return the damage inflicted upon an Actor that collides with a WeaponType.
      */
-    public int getDamage() {
-        return damage;
+    public int getUnitDamage() {
+        return unitDamage;
     }
     /**
      * Returns the damage inflicted specifically to a StructureType if it collides with a WeaponType. Only varies for PLANET_BOMBARDMENT.
      * @return the damage inflicted specifically to a StructureType if it collides with a WeaponType.
      */
-    public int getStructureDamage() {
-        return structureDamage;
+    public int getEnvironmentDamage() {
+        return environmentDamage;
     }
     /**
      * Returns the amount of time a UnitType must wait after firing or deploying a given WeaponType before firing or deploying again.
@@ -164,6 +175,5 @@ public strictfp enum WeaponType {
 
     public Image getSpriteImage() {
         return spriteImage;
-    }
-        
+    }     
 }

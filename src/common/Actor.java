@@ -42,6 +42,10 @@ public abstract class Actor {
     public int getHealth() {
         return health;
     }
+    
+    public void setHealth(int damage) {
+        this.health -= damage;
+    }
 
     public int getRadius() {
         return radius;

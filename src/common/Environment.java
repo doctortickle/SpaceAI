@@ -38,6 +38,7 @@ public final class Environment extends Actor{
      * The current number of StructureType structures on this environment object.
      */
     public final int structureCount;
+    private final EnvironmentController ec;
     
     @Override
     public boolean isCommandable() {
@@ -54,11 +55,12 @@ public final class Environment extends Actor{
         return true;
     }
 
-    public Environment(EnvironmentType type, int ID, Location location) {
+    public Environment(SpaceAI spaceAI, EnvironmentType type, int ID, Location location) {
         super(ID, type.getMaxHealth(), type.getBodyRadius(), location, Team.NEUTRAL, type.getSpriteImage());
         this.type = type;
         this.mineralCount = type.getMineralMax();
         this.structureCount = 0;
+        this.ec = new EnvironmentController(this, spaceAI.gameWorld);
     }
        
     /**

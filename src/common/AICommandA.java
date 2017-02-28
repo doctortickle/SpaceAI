@@ -51,6 +51,7 @@ public class AICommandA {
         // This code will be run every round.
         ac.getCurrentLocation();
         ac.move(Direction.getRandom());
+        ac.fire(WeaponType.SMALL_LASER,Direction.SOUTH);
     }
     // *********************************
     // ************ SIEGE **************
@@ -77,10 +78,6 @@ public class AICommandA {
     private static void runBuilder() {
         // This code will be run every round.
         ac.move(Direction.getRandom());
-        ac.move(Direction.getRandom());
-        ac.move(Direction.getRandom());
-        ac.move(Direction.getRandom());
-        ac.move(Direction.getRandom());
         int dockCount = 0;
         if(dockCount == 0) {
             ac.build(UnitType.CAPITAL_DOCK, Direction.EAST);
@@ -102,12 +99,15 @@ public class AICommandA {
     // *********************************
     // ********* HOME STATION **********
     // *********************************
-    private static int builderCount;
+    static int fighterCount = 0;
     private static void runHomeStation() {
         // This code will be run every round.
-        if(builderCount == 0) {
-            ac.build(UnitType.BUILDER, Direction.EAST);
-            builderCount++;
+        if(fighterCount < 5) {
+            if(ac.canBuild(UnitType.FIGHTER, Direction.SOUTH)) {
+                ac.build(UnitType.FIGHTER, Direction.SOUTH);
+                fighterCount++;
+                System.out.println(fighterCount);
+            }
         }
     }
     // *********************************

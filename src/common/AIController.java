@@ -106,6 +106,14 @@ public strictfp class AIController {
     public final Location getInitialHomeStationLocation(Team team) {
         return gameWorld.getInitialHomeStationLocation(team);
     }
+    public final boolean canBuild(UnitType type, Direction direction) {
+        Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        return isReadyToBuild() 
+                && Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
+                && getMineralCount()-type.getMineralCost() >= 0
+                && gameWorld.checkIfLocationIsEmpty(location, type.getBodyRadius())
+                && onTheMap(location, type.getBodyRadius());
+    }
 
     // *********************************
     // ****** UNIT QUERY METHODS *******
@@ -224,6 +232,9 @@ public strictfp class AIController {
     public boolean isReadyToMove() {
         return !unit.getHasMoved() && !unit.isDead() && !unit.isStalled();
     }
+    public boolean isReadyToFire() {
+        return unit.getReloadCooldown() == 0;
+    }
    
     // ***********************************
     // ********* UNIT ACTIONS ************
@@ -236,7 +247,6 @@ public strictfp class AIController {
             && !checkForCollision(location)) {
                 updateSpriteAndLocation(location);
                 updateUnitMovementInfo();
-                System.out.println("Fuel = " + unit.getFuel());
         } else {
             Direction moveDirection = getCurrentLocation().directionTo(location);
             move(moveDirection);
@@ -263,6 +273,23 @@ public strictfp class AIController {
         }
         else {
             System.out.println("Can not build.");
+        }
+    }
+    public final void fire(WeaponType type, Direction direction) {
+        Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
+        if( isReadyToFire() 
+            && Arrays.asList(unit.getType().getArsenal()).contains(type)
+            && onTheMap(location, type.getWeaponRadius()) ) {
+                Team team;
+                switch(type) {
+                    case MINE : team = unit.getTeam(); break;
+                    default   : team = Team.NEUTRAL;
+                }
+                gameWorld.addWeapon(type, location, team, direction);
+                unit.setReloadCooldown(type.getReloadTime());
+        }
+        else {
+            System.out.println("Can not fire.");
         }
     }
 }

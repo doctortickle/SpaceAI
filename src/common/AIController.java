@@ -57,7 +57,10 @@ public strictfp class AIController {
         unit.updateLocation(location.getX(), location.getY());
         unit.getSpriteFrame().setTranslateX(location.getPixelX());
         unit.getSpriteFrame().setTranslateY(location.getPixelY());
-        System.out.println(unit.getLocation().getX() + ", " + unit.getLocation().getY());
+    }
+    private void updateUnitMovementInfo() {
+        unit.setHasMoved(true);
+        unit.setFuel(unit.getType().getFuelBurnRate());
     }
     private boolean checkForCollision(Location location) {
         return !gameWorld.checkIfLocationIsEmpty(location, unit.getRadius(), unit.getID());
@@ -68,6 +71,9 @@ public strictfp class AIController {
         if(location.getX() >= rightBoundary - unit.getRadius()) { return false; }
         if(location.getX() <= leftBoundary + unit.getRadius()) { return false; }
         return true;
+    }
+    private boolean assertCanMove() {
+        return isReadyToMove();
     }
     private boolean assertCanSenseLocation(Location location) {
         return canSenseLocation(location);
@@ -215,12 +221,22 @@ public strictfp class AIController {
     public boolean isReadyToBuild() {
         return unit.getBuildCooldown() == 0;
     }
-
+    public boolean isReadyToMove() {
+        return !unit.getHasMoved() && !unit.isDead() && !unit.isStalled();
+    }
+   
+    // ***********************************
+    // ********* UNIT ACTIONS ************
+    // ***********************************
+    
     public final void move(Location location) {
         if (getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius() 
+            && assertCanMove()
             && checkBoundaries(location)
             && !checkForCollision(location)) {
                 updateSpriteAndLocation(location);
+                updateUnitMovementInfo();
+                System.out.println("Fuel = " + unit.getFuel());
         } else {
             Direction moveDirection = getCurrentLocation().directionTo(location);
             move(moveDirection);
@@ -228,7 +244,9 @@ public strictfp class AIController {
     }
     public final void move(Direction direction) {
         Location movePoint = getCurrentLocation().add(unit.getType().getFlightRadius(), direction);
-        if(checkBoundaries(movePoint) && !checkForCollision(movePoint)) {
+        if  (assertCanMove()
+            && checkBoundaries(movePoint) 
+            && !checkForCollision(movePoint)) {
             move(movePoint);   
         }
     }

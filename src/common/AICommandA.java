@@ -28,7 +28,6 @@ public class AICommandA {
         
         AICommandA.ac = ac;
         
-        System.out.println("\n"+ ac.getType() + " " + ac.getTeam() + ac.getID());
         switch(ac.getType()) {
             case FIGHTER : runFighter(); break;
             case SIEGE : runSiege(); break;
@@ -77,6 +76,10 @@ public class AICommandA {
     // *********************************
     private static void runBuilder() {
         // This code will be run every round.
+        ac.move(Direction.getRandom());
+        ac.move(Direction.getRandom());
+        ac.move(Direction.getRandom());
+        ac.move(Direction.getRandom());
         ac.move(Direction.getRandom());
         int dockCount = 0;
         if(dockCount == 0) {

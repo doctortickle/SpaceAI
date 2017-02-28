@@ -35,6 +35,7 @@ public final class Unit extends Actor {
      * Tracks the cooldown required to build another unit.
      */
     private int buildCooldown;
+    private int reloadCooldown;
     /**
      * Tracks if a unit has moved this turn.
      */
@@ -42,6 +43,8 @@ public final class Unit extends Actor {
     /**
      * Defines the AIController for this unit.
      */
+    private boolean dead;
+    private boolean stalled;
     private final AIController ac;
     
     
@@ -50,20 +53,50 @@ public final class Unit extends Actor {
         this.fuel = type.getFuelMax();
         this.type = type;
         this.buildCooldown = 0;
+        this.reloadCooldown = 0;
         this.hasMoved = false;
+        this.dead = false;
+        this.stalled = false;
         this.ac = new AIController(this, spaceAI.gameWorld);
     }
 
     @Override
     public void update() {
+        beginTurn();
+        if(checkCondition()) {
+            runAICommand();
+        }  
+    }
+    
+    private void beginTurn() {
+        System.out.println("\n"+ getType() + " " + getTeam() + getID());
+        if(buildCooldown > 0) {
+            buildCooldown--;
+        }
+        if(reloadCooldown > 0) {
+            reloadCooldown--;
+        }
+        if(hasMoved) {
+            hasMoved = false;
+        }
+        if(getHealth() <= 0) {
+            System.out.println("I am dead!");
+            dead = true;
+        }
+        if(fuel <= 0) {
+            System.out.println("I am stalled because I have no fuel!");
+            stalled = true;
+        }
+    }
+    private boolean checkCondition() {
+        return !dead && !stalled;
+    }
+    private void runAICommand() {
         if(this.getTeam()==Team.A) {
             AICommandA.run(ac);
         }
         if(this.getTeam()==Team.B) {
             AICommandB.run(ac);
-        }
-        if(buildCooldown > 0) {
-            buildCooldown--;
         }
     }
 
@@ -73,14 +106,43 @@ public final class Unit extends Actor {
     public int getFuel() {
         return fuel;
     }
+    public void setFuel(int remove) {
+        this.fuel -= remove;
+        if(fuel < 0) {
+            fuel = 0;
+        }
+    }
     public int getBuildCooldown() {
         return buildCooldown;
     }
     public void setBuildCooldown(int i) {
         this.buildCooldown = i;
     }
-    
-    
+    public int getReloadCooldown() {
+        return reloadCooldown;
+    }
+    public void setReloadCooldown(int i) {
+        this.reloadCooldown = i;
+    }
+    public boolean getHasMoved() {
+        return hasMoved;
+    }
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
+    public boolean isDead() {
+        return dead;
+    }
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+    public boolean isStalled() {
+        return stalled;
+    }
+    public void setStalled(boolean stalled) {
+        this.stalled = stalled;
+    }
+     
     @Override
     public boolean isCommandable() {
         return true;

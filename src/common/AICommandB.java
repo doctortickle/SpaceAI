@@ -27,8 +27,7 @@ public class AICommandB {
     public static void run(AIController ac) {
         
         AICommandB.ac = ac;
-        
-        System.out.println("\n"+ac.getType() + " " + ac.getTeam() + ac.getID());
+
         switch(ac.getType()) {
             case FIGHTER : runFighter(); break;
             case SIEGE : runSiege(); break;

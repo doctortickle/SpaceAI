@@ -54,6 +54,7 @@ public class GameWorld {
             initializeStartingMineralCounts();
         }
         System.out.println("Game Round : " + gameRound);
+        checkHealth();
         updateQuadTree();
         checkQuadTree();
     }
@@ -74,7 +75,6 @@ public class GameWorld {
         quad.clear();
         allActors.clear();
         allActors.addAll(castDirector.getCurrentUnits());
-        allActors.addAll(castDirector.getCurrentEnvironment());
         allActors.addAll(castDirector.getCurrentWeapons());
         for (int i = 0; i < allActors.size(); i++) {
             quad.insert(allActors.get(i));
@@ -92,6 +92,12 @@ public class GameWorld {
                 //Collision algorithm here.
             }
         }
+    }
+    private void checkHealth() {
+       List<Unit> checkUnits = castDirector.getCurrentUnits();
+       checkUnits.stream().filter((unit) -> (unit.isDead())).forEachOrdered((unit) -> {
+           removeActor(unit);
+        });
     }
     public void addUnit(UnitType type, Location location, Team team){
         Unit unit = new Unit(spaceAI, type, getUniqueID(), location, team);

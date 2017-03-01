@@ -86,6 +86,7 @@ public class GameWorld {
         List<Actor> returnActors = new ArrayList();
         for (int i = 0; i < allActors.size(); i++) {
             if(allActors.get(i).isWeapon()) {
+                Weapon weapon = (Weapon) allActors.get(i);
                 returnActors.clear();
                 returnActors = quad.retrieve(returnActors, allActors.get(i));
                 System.out.println("\nWeapon " + allActors.get(i).getID() + " may collide with : ");
@@ -93,8 +94,13 @@ public class GameWorld {
                     if(!(returnActors.get(x).isWeapon())) {
                         System.out.print(returnActors.get(x).getID() + ", ");
                         if(allActors.get(i).collide(returnActors.get(x))) {
-                            Weapon weapon = (Weapon) allActors.get(i);
+                            System.out.println("\nWeapon " + weapon.getID() + " spent status : " + weapon.isSpent());
+                            System.out.println("\nWeapon " + weapon.getID() + " exploded status : " + weapon.isExploded());
+                            System.out.println("Impact!");
                             weapon.damageApplication(returnActors.get(x));
+                            System.out.println("\nWeapon " + weapon.getID() + " collied with unit : " + returnActors.get(x).getID());
+                            System.out.println("\nWeapon " + weapon.getID() + " spent status : " + weapon.isSpent());
+                            System.out.println("\nWeapon " + weapon.getID() + " exploded status : " + weapon.isExploded());
                         }
                     }
                 }

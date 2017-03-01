@@ -51,7 +51,7 @@ public class AICommandA {
         // This code will be run every round.
         ac.getCurrentLocation();
         ac.move(new Location(50,50));
-        ac.fire(WeaponType.SMALL_LASER,ac.getCurrentLocation().directionTo(ac.getInitialHomeStationLocation(ac.getTeam().opponent())));
+        //ac.fire(WeaponType.SMALL_LASER,ac.getCurrentLocation().directionTo(ac.getInitialHomeStationLocation(ac.getTeam().opponent())));
     }
     // *********************************
     // ************ SIEGE **************

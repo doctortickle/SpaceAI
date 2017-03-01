@@ -16,6 +16,7 @@
  */
 package common;
 
+import java.util.List;
 import javafx.scene.image.Image;
 
 /**
@@ -28,8 +29,7 @@ public strictfp class WeaponController {
     private final double leftBoundary;
     private final double rightBoundary;
     private final double bottomBoundary;
-    private final double topBoundary;
-    
+    private final double topBoundary;    
     
     public WeaponController(Weapon weapon, GameWorld gameWorld) {
         this.weapon = weapon;
@@ -86,9 +86,9 @@ public strictfp class WeaponController {
         switch(weapon.getType()) {
             case SMALL_LASER        : laserDamageApplication(actor); return;
             case LARGE_LASER        : laserDamageApplication(actor); return; 
-            case SMALL_BOMB         : bombDamageApplication(actor); return;  
-            case LARGE_BOMB         : bombDamageApplication(actor); return;   
-            case MINE               : mineDamageApplication(actor); return;   
+            case SMALL_BOMB         : bombDamageApplication(); return;  
+            case LARGE_BOMB         : bombDamageApplication(); return;   
+            case MINE               : mineDamageApplication(); return;   
             case PLANET_BOMBARDMENT : laserDamageApplication(actor);         
         }
     }   
@@ -104,32 +104,28 @@ public strictfp class WeaponController {
         }
         weapon.setSpent(true);
         weapon.setExploded(true);
+        weapon.setClearCountdown(GameConstants.WEAPON_CLEAR_COUNTDOWN);
     }
     private boolean bombCollision(Actor actor) {
         if(!weapon.isSpent()) {
             if(weapon.getLocation().distanceTo(actor.getLocation()) < weapon.getType().getWeaponRadius() + actor.getRadius()) {
+                weapon.setSpent(true);
                 explodeAnimation();
-                return true;
-            }
-        }
-        else if(weapon.isSpent()) {
-            if(weapon.getLocation().distanceTo(actor.getLocation()) < weapon.getType().getExplosionRadius() + actor.getRadius()) {
                 return true;
             }
         }
         return false;
     }
-    private void bombDamageApplication(Actor actor) {
-        if(!weapon.isSpent()) {
-            weapon.setSpent(true);
-            return;
-        }
-        if(weapon.isSpent() && !weapon.isExploded()) {
-            if(actor.isCommandable()) {
-                actor.setHealth(weapon.getType().getUnitDamage());
-            }
-            else if(actor.isEnvironment()) {
-                actor.setHealth(weapon.getType().getEnvironmentDamage());
+    private void bombDamageApplication() {
+        if(weapon.isSpent() && !weapon.isExploded()) {        
+            List<Actor> actorsHit = gameWorld.returnUnitsInCircle(weapon.getLocation(), weapon.getType().getExplosionRadius());
+            for(Actor actorHit : actorsHit) {
+                if(actorHit.isCommandable()) {
+                    actorHit.setHealth(weapon.getType().getUnitDamage());
+                }
+                else if(actorHit.isEnvironment()) {
+                    actorHit.setHealth(weapon.getType().getEnvironmentDamage());
+                }
             }
             weapon.setExploded(true);
         }
@@ -138,29 +134,24 @@ public strictfp class WeaponController {
         if(!weapon.isSpent()) {
             if(weapon.getLocation().distanceTo(actor.getLocation()) < weapon.getType().getDetectionRadius() + actor.getRadius()
                 && actor.getTeam() == weapon.getTeam().opponent()) {
-                return true;
-            }
-        }
-        else if(weapon.isSpent()) {
-            if(weapon.getLocation().distanceTo(actor.getLocation()) < weapon.getType().getExplosionRadius() + actor.getRadius()) {
+                weapon.setSpent(true);
+                explodeAnimation();
                 return true;
             }
         }
         return false;
     }
-    private void mineDamageApplication(Actor actor) {
-        if(!weapon.isSpent()) {
-            weapon.setSpent(true);
-            return;
-        }
+    private void mineDamageApplication() {
         if(weapon.isSpent() && !weapon.isExploded()) {
-            if(actor.isCommandable()) {
-                actor.setHealth(weapon.getType().getUnitDamage());
+            List<Actor> actorsHit = gameWorld.returnUnitsInCircle(weapon.getLocation(), weapon.getType().getExplosionRadius());
+            for(Actor actorHit : actorsHit) {
+                if(actorHit.isCommandable()) {
+                    actorHit.setHealth(weapon.getType().getUnitDamage());
+                }
+                else if(actorHit.isEnvironment()) {
+                    actorHit.setHealth(weapon.getType().getEnvironmentDamage());
+                }
             }
-            else if(actor.isEnvironment()) {
-                actor.setHealth(weapon.getType().getEnvironmentDamage());
-            }
-            explodeAnimation();
             weapon.setExploded(true);
         }
     }

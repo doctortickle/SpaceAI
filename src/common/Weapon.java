@@ -32,6 +32,7 @@ public final class Weapon extends Actor {
     private boolean spent;
     private boolean exploded;
     private final WeaponController wc;
+    private int clearCountdown;
 
     @Override
     public boolean isCommandable() {
@@ -53,6 +54,7 @@ public final class Weapon extends Actor {
         this.type = type;
         this.spent = false;
         this.exploded = false;
+        this.clearCountdown = 0;
         if(type == WeaponType.MINE) {
             this.direction = null;
         }
@@ -90,10 +92,21 @@ public final class Weapon extends Actor {
         this.exploded = exploded;
     }
 
+    public int getClearCountdown() {
+        return clearCountdown;
+    }
+
+    public void setClearCountdown(int clearCountdown) {
+        this.clearCountdown = clearCountdown;
+    }
+
     @Override
     public void update() {
         if(!isSpent() && (getType() != WeaponType.MINE)) {
             wc.move(direction);
+        }
+        if(isSpent() && isExploded()) {
+            clearCountdown++;
         }
     }
 

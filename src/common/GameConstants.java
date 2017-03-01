@@ -44,6 +44,7 @@ public strictfp interface GameConstants {
     final int FRAMES_PER_ROUND_1 = 30;
     final double    WINDOW_WIDTH = 1400, WINDOW_HEIGHT = 800, 
                     CENTER_WIDTH = 900, CENTER_HEIGHT = 700;
+    final int WEAPON_CLEAR_COUNTDOWN = 3;
     
     // *********************************
     // ****** GAMEWORLD CONSTANTS ******

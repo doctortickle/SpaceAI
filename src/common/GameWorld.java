@@ -56,7 +56,7 @@ public class GameWorld {
         System.out.println("Game Round : " + gameRound);
         updateQuadTree();
         checkWeaponCollisions();
-        checkHealth();
+        clearDepletedActors();
     }
 
     private void initializeStartingUnits() {
@@ -107,13 +107,13 @@ public class GameWorld {
             }  
         }
     }
-    private void checkHealth() {
+    private void clearDepletedActors() {
        List<Unit> checkUnits = castDirector.getCurrentUnits();
        checkUnits.stream().filter((unit) -> (unit.isDead())).forEachOrdered((unit) -> {
            removeActor(unit);
         });
        List<Weapon> checkWeapons = castDirector.getCurrentWeapons();
-       checkWeapons.stream().filter((weapon) -> (weapon.isSpent() && weapon.isExploded())).forEachOrdered((weapon) -> {
+       checkWeapons.stream().filter((weapon) -> (weapon.isSpent() && weapon.isExploded() && weapon.getClearCountdown() >= GameConstants.WEAPON_CLEAR_COUNTDOWN)).forEachOrdered((weapon) -> {
            removeActor(weapon);
         });
     }
@@ -228,5 +228,23 @@ public class GameWorld {
             }
         updateQuadTree();
         return true;
+    }
+    public List returnUnitsInCircle(Location location, int radius) {
+        ghostCircle = new GhostCircle(radius,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        List<Actor> returnCollisions = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+            if(ghostCircle.collide(returnActors.get(x))) {
+                if(returnActors.get(x).getID() != ghostCircle.getID() && !returnActors.get(x).isWeapon()) {
+                    System.out.println("Unit " + returnActors.get(x).getID() + " is in this circle.");
+                    returnCollisions.add(returnActors.get(x));
+                }
+            }
+        }
+        updateQuadTree();
+        return returnCollisions;
     }
 }

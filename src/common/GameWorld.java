@@ -164,7 +164,7 @@ public class GameWorld {
     public Location getInitialHomeStationLocation(Team team) {
         switch(team) {
             case A : {return teamAHomeStation;}
-            case B : {return teamAHomeStation;}
+            case B : {return teamBHomeStation;}
             default : {System.out.println("ERROR IN INITIAL HOME STATION LOCATION"); return new Location(0,0); }
         }
     }

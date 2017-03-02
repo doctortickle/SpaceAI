@@ -24,8 +24,8 @@ import javafx.scene.image.Image;
  * @author dr4ur
  */
 public strictfp class WeaponController {
-    private Weapon weapon;
-    private GameWorld gameWorld;
+    private final Weapon weapon;
+    private final GameWorld gameWorld;
     private final double leftBoundary;
     private final double rightBoundary;
     private final double bottomBoundary;
@@ -64,6 +64,7 @@ public strictfp class WeaponController {
         else if (!checkBoundaries(movePoint)) {
             weapon.setSpent(true);
             weapon.setExploded(true);
+            weapon.setClearCountdown(GameConstants.WEAPON_CLEAR_COUNTDOWN);
         }
     }
     

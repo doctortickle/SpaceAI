@@ -43,7 +43,7 @@ public class GameWorld {
         this.castDirector = castDirector;
         this.gameSpeed = GameConstants.FRAMES_PER_ROUND_5;
         this.quad = new QuadTree(0,GameConstants.CENTER_WIDTH, GameConstants.CENTER_HEIGHT, GameConstants.TOP_LEFT_X_PIXEL, GameConstants.TOP_LEFT_Y_PIXEL);
-        this.allActors = new ArrayList<Actor>();
+        this.allActors = new ArrayList<>();
         this.ghostCircle = null;
     }
 
@@ -87,20 +87,22 @@ public class GameWorld {
         for (int i = 0; i < allActors.size(); i++) {
             if(allActors.get(i).isWeapon()) {
                 Weapon weapon = (Weapon) allActors.get(i);
-                returnActors.clear();
-                returnActors = quad.retrieve(returnActors, allActors.get(i));
-                System.out.println("\nWeapon " + allActors.get(i).getID() + " may collide with : ");
-                for (int x = 0; x < returnActors.size(); x++) {
-                    if(!(returnActors.get(x).isWeapon())) {
-                        System.out.print(returnActors.get(x).getID() + ", ");
-                        if(allActors.get(i).collide(returnActors.get(x))) {
-                            System.out.println("\nWeapon " + weapon.getID() + " spent status : " + weapon.isSpent());
-                            System.out.println("\nWeapon " + weapon.getID() + " exploded status : " + weapon.isExploded());
-                            System.out.println("Impact!");
-                            weapon.damageApplication(returnActors.get(x));
-                            System.out.println("\nWeapon " + weapon.getID() + " collied with unit : " + returnActors.get(x).getID());
-                            System.out.println("\nWeapon " + weapon.getID() + " spent status : " + weapon.isSpent());
-                            System.out.println("\nWeapon " + weapon.getID() + " exploded status : " + weapon.isExploded());
+                if(!weapon.isSpent()){
+                    returnActors.clear();
+                    returnActors = quad.retrieve(returnActors, allActors.get(i));
+                    System.out.println("\nWeapon " + allActors.get(i).getID() + " may collide with : ");
+                    for (int x = 0; x < returnActors.size(); x++) {
+                        if(!(returnActors.get(x).isWeapon())) {
+                            System.out.print(returnActors.get(x).getID() + ", ");
+                            if(allActors.get(i).collide(returnActors.get(x))) {
+                                System.out.println("\nWeapon " + weapon.getID() + " spent status : " + weapon.isSpent());
+                                System.out.println("\nWeapon " + weapon.getID() + " exploded status : " + weapon.isExploded());
+                                System.out.println("Impact!");
+                                weapon.damageApplication(returnActors.get(x));
+                                System.out.println("\nWeapon " + weapon.getID() + " collied with unit : " + returnActors.get(x).getID());
+                                System.out.println("\nWeapon " + weapon.getID() + " spent status : " + weapon.isSpent());
+                                System.out.println("\nWeapon " + weapon.getID() + " exploded status : " + weapon.isExploded());
+                            }
                         }
                     }
                 }

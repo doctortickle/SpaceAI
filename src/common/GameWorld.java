@@ -177,7 +177,6 @@ public class GameWorld {
         }
     }
     public boolean checkIfLocationIsEmpty(Location location) {
-        //updateQuadTree();
         ghostCircle = new GhostCircle(0,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -231,7 +230,7 @@ public class GameWorld {
         updateQuadTree();
         return true;
     }
-    public List returnUnitsInCircle(Location location, int radius) {
+    public List returnActorsInCircle(Location location, int radius) { // Returns all actors in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -240,9 +239,144 @@ public class GameWorld {
         returnActors = quad.retrieve(returnActors, ghostCircle);
         for (int x = 0; x < returnActors.size(); x++) {
             if(ghostCircle.collide(returnActors.get(x))) {
-                if(returnActors.get(x).getID() != ghostCircle.getID() && !returnActors.get(x).isWeapon()) {
+                if(returnActors.get(x).getID() != ghostCircle.getID()) {
                     System.out.println("Unit " + returnActors.get(x).getID() + " is in this circle.");
                     returnCollisions.add(returnActors.get(x));
+                }
+            }
+        }
+        updateQuadTree();
+        return returnCollisions;
+    }
+    public List returnActorsInCircle(Location location, int radius, int ID) { // Returns all actors in circle. Returns actors in circle except for the unit represented by "ID"
+        ghostCircle = new GhostCircle(radius,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        List<Actor> returnCollisions = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+            if(ghostCircle.collide(returnActors.get(x))) {
+                if(returnActors.get(x).getID() != ghostCircle.getID()
+                    && returnActors.get(x).getID() != ID) {
+                        System.out.println("Actor " + returnActors.get(x).getID() + " is in this circle.");
+                        returnCollisions.add(returnActors.get(x));
+                }
+            }
+        }
+        updateQuadTree();
+        return returnCollisions;
+    }
+    public List returnUnitsInCircle(Location location, int radius) { // Returns all units in circle.
+        ghostCircle = new GhostCircle(radius,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        List<Actor> returnCollisions = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+            if(ghostCircle.collide(returnActors.get(x))) {
+                if(returnActors.get(x).getID() != ghostCircle.getID() 
+                    && returnActors.get(x).isCommandable()) {
+                        System.out.println("Unit " + returnActors.get(x).getID() + " is in this circle.");
+                        returnCollisions.add(returnActors.get(x));
+                }
+            }
+        }
+        updateQuadTree();
+        return returnCollisions;
+    }
+    public List returnUnitsInCircle(Location location, int radius, int ID) { // Returns all units in circle except the unit indicated by "ID"
+        ghostCircle = new GhostCircle(radius,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        List<Actor> returnCollisions = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+            if(ghostCircle.collide(returnActors.get(x))) {
+                if(returnActors.get(x).getID() != ghostCircle.getID() 
+                    && returnActors.get(x).isCommandable()
+                    && returnActors.get(x).getID() != ID) {
+                        System.out.println("Unit " + returnActors.get(x).getID() + " is in this circle.");
+                        returnCollisions.add(returnActors.get(x));
+                }
+            }
+        }
+        updateQuadTree();
+        return returnCollisions;
+    }    
+    public List returnNonWeaponsInCircle(Location location, int radius) { // Does not return weapons.
+        ghostCircle = new GhostCircle(radius,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        List<Actor> returnCollisions = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+            if(ghostCircle.collide(returnActors.get(x))) {
+                if(returnActors.get(x).getID() != ghostCircle.getID() 
+                    && !returnActors.get(x).isWeapon()) {
+                        System.out.println("Actor " + returnActors.get(x).getID() + " is in this circle.");
+                        returnCollisions.add(returnActors.get(x));
+                }
+            }
+        }
+        updateQuadTree();
+        return returnCollisions;
+    }
+    public List returnNonWeaponsInCircle(Location location, int radius, int ID) { // Does not return weapons. Returns actors in circle except for the unit represented by "ID"
+        ghostCircle = new GhostCircle(radius,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        List<Actor> returnCollisions = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+            if(ghostCircle.collide(returnActors.get(x))) {
+                if(returnActors.get(x).getID() != ghostCircle.getID() 
+                    && returnActors.get(x).getID() != ID 
+                    && !returnActors.get(x).isWeapon()) {
+                        System.out.println("Actor " + returnActors.get(x).getID() + " is in this circle.");
+                        returnCollisions.add(returnActors.get(x));
+                }
+            }
+        }
+        updateQuadTree();
+        return returnCollisions;
+    }
+    public List returnWeaponsInCircle(Location location, int radius) { // Returns all weapons in circle.
+        ghostCircle = new GhostCircle(radius,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        List<Actor> returnCollisions = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+            if(ghostCircle.collide(returnActors.get(x))) {
+                if(returnActors.get(x).getID() != ghostCircle.getID() 
+                    && returnActors.get(x).isWeapon()) {
+                        System.out.println("Weapon " + returnActors.get(x).getID() + " is in this circle.");
+                        returnCollisions.add(returnActors.get(x));
+                }
+            }
+        }
+        updateQuadTree();
+        return returnCollisions;
+    }
+    public List returnEnvironmentInCircle(Location location, int radius) { // Returns all environment in circle.
+        ghostCircle = new GhostCircle(radius,location);
+        quad.insert(ghostCircle);
+        List<Actor> returnActors = new ArrayList();
+        List<Actor> returnCollisions = new ArrayList();
+        returnActors.clear();
+        returnActors = quad.retrieve(returnActors, ghostCircle);
+        for (int x = 0; x < returnActors.size(); x++) {
+            if(ghostCircle.collide(returnActors.get(x))) {
+                if(returnActors.get(x).getID() != ghostCircle.getID() 
+                    && returnActors.get(x).isEnvironment()) {
+                        System.out.println("Environment " + returnActors.get(x).getID() + " is in this circle.");
+                        returnCollisions.add(returnActors.get(x));
                 }
             }
         }

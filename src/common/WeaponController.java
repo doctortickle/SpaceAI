@@ -119,7 +119,7 @@ public strictfp class WeaponController {
     }
     private void bombDamageApplication() {
         if(weapon.isSpent() && !weapon.isExploded()) {        
-            List<Actor> actorsHit = gameWorld.returnUnitsInCircle(weapon.getLocation(), weapon.getType().getExplosionRadius());
+            List<Actor> actorsHit = gameWorld.returnNonWeaponsInCircle(weapon.getLocation(), weapon.getType().getExplosionRadius());
             for(Actor actorHit : actorsHit) {
                 if(actorHit.isCommandable()) {
                     actorHit.setHealth(weapon.getType().getUnitDamage());
@@ -144,7 +144,7 @@ public strictfp class WeaponController {
     }
     private void mineDamageApplication() {
         if(weapon.isSpent() && !weapon.isExploded()) {
-            List<Actor> actorsHit = gameWorld.returnUnitsInCircle(weapon.getLocation(), weapon.getType().getExplosionRadius());
+            List<Actor> actorsHit = gameWorld.returnNonWeaponsInCircle(weapon.getLocation(), weapon.getType().getExplosionRadius());
             for(Actor actorHit : actorsHit) {
                 if(actorHit.isCommandable()) {
                     actorHit.setHealth(weapon.getType().getUnitDamage());

@@ -56,7 +56,7 @@ public final class Unit extends Actor {
         this.hasMoved = false;
         this.dead = false;
         this.stalled = false;
-        this.ac = new AIController(this, spaceAI.gameWorld);
+        this.ac = new AIController(this, spaceAI.getGameWorld());
     }
 
     @Override

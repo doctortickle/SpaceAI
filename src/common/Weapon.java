@@ -61,7 +61,7 @@ public final class Weapon extends Actor {
         else {
             this.direction = direction;
         }
-        this.wc = new WeaponController(this, spaceAI.gameWorld);
+        this.wc = new WeaponController(this, spaceAI.getGameWorld());
     }
   
     /**

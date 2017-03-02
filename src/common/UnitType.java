@@ -449,6 +449,5 @@ public strictfp enum UnitType {
 
     public Image getSpriteImage() {
         return spriteImage;
-    }
-    
+    }    
 }

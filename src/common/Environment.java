@@ -60,7 +60,7 @@ public final class Environment extends Actor{
         this.type = type;
         this.mineralCount = type.getMineralMax();
         this.structureCount = 0;
-        this.ec = new EnvironmentController(this, spaceAI.gameWorld);
+        this.ec = new EnvironmentController(this, spaceAI.getGameWorld());
     }
        
     /**

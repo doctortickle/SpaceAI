@@ -54,4 +54,5 @@ public class GameWinner {
         return victoryCondition;
     }
     
+    
 }

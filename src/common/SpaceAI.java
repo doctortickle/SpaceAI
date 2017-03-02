@@ -47,7 +47,7 @@ public class SpaceAI extends Application {
     private CastingDirector castDirector;
     private boolean pause;
     private String styleSheet;
-    public static GameWorld gameWorld;
+    private GameWorld gameWorld;
     
     @Override
     public void start(Stage primaryStage) throws ActionException {
@@ -233,4 +233,8 @@ public class SpaceAI extends Application {
     public boolean getPause() {
         return pause;
     }
+    public GameWorld getGameWorld() {
+        return gameWorld;
+    }
+    
 }

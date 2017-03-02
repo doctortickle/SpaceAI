@@ -294,10 +294,10 @@ public strictfp class AIController {
         }
         return gameWorld.returnWeaponsInCircle(unit.getLocation(), range);
     }
-    public List<Environment> senseEnvironment(){
+    public List<Environment> senseEnvironment() {
         return gameWorld.returnEnvironmentInCircle(unit.getLocation(), unit.getType().getSensorRadius());
     }
-    public List<Environment> senseEnvironment(int range){
+    public List<Environment> senseEnvironment(int range) {
         if(range > unit.getType().getSensorRadius()){
             range = unit.getType().getSensorRadius();
         }

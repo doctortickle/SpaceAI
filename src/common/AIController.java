@@ -205,16 +205,16 @@ public strictfp class AIController {
         return assertOnScreen(check1) && assertOnScreen(check2) && assertOnScreen(check3) && assertOnScreen(check4);
     }
     public boolean canSenseLocation(Location location) {
-        return getCurrentLocation().distanceTo(location) <= getSensorRadius();
+        return assertOnScreen(location) && getCurrentLocation().distanceTo(location) <= getSensorRadius();
     }
     public boolean canSenseIncomingLocation(Location location) {
-        return getCurrentLocation().distanceTo(location) <= getIncomingDetectionRadius();
+        return assertOnScreen(location) && getCurrentLocation().distanceTo(location) <= getIncomingDetectionRadius();
     }
     public boolean canSensePartOfCircle(Location center, int radius) {
-        return getCurrentLocation().distanceTo(center) - radius <= getSensorRadius();
+        return assertOnScreen(center) && getCurrentLocation().distanceTo(center) - radius <= getSensorRadius();
     }
     public boolean canSenseAllOfCircle(Location center, int radius) {
-        return getCurrentLocation().distanceTo(center) + radius <= getSensorRadius();
+        return assertOnScreen(center) && getCurrentLocation().distanceTo(center) + radius <= getSensorRadius();
     }
     public boolean isLocationOccupied(Location location) {
         if(assertCanSenseLocation(location)) {
@@ -266,6 +266,23 @@ public strictfp class AIController {
             range = unit.getType().getSensorRadius();
         }
         return gameWorld.returnUnitsInCircle(unit.getLocation(), range, unit.getID());
+    }
+    public List<Unit> senseUnitsExceptThisUnit(Team team) {
+        List<Unit> returnUnits = gameWorld.returnUnitsInCircle(unit.getLocation(), unit.getType().getSensorRadius(), unit.getID());
+        returnUnits.stream().filter((sUnit) -> (sUnit.getTeam() == team.opponent())).forEachOrdered((sUnit) -> {
+            returnUnits.remove(sUnit);
+        });
+        return returnUnits;
+    }
+    public List<Unit> senseUnitsExceptThisUnit(int range, Team team) {
+        if(range > unit.getType().getSensorRadius()) {
+            range = unit.getType().getSensorRadius();
+        }
+        List<Unit> returnUnits = gameWorld.returnUnitsInCircle(unit.getLocation(), range, unit.getID());
+        returnUnits.stream().filter((sUnit) -> (sUnit.getTeam() == team.opponent())).forEachOrdered((sUnit) -> {
+            returnUnits.remove(sUnit);
+        });
+        return returnUnits;
     }
     
     // ***********************************

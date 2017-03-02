@@ -284,6 +284,10 @@ public strictfp class AIController {
         });
         return returnUnits;
     }
+    public List<Weapon> senseWeapons() {
+        return gameWorld.returnWeaponsInCircle(unit.getLocation(), unit.getType().getIncomingDetectionRadius());
+        //test
+    }
     
     // ***********************************
     // ****** READINESS METHODS **********

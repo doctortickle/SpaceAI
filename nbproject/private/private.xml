@@ -3,17 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/GameWorld.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/Actor.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/UnitType.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/QuadTree.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/AICommandB.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/GhostCircle.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/AICommandA.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/AIController.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/SpaceAI.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/GameConstants.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/Unit.java</file>
+            <file>file:/C:/Users/myles/Documents/SpaceAI/src/common/AIController.java</file>
         </group>
     </open-files>
 </project-private>

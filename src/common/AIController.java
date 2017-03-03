@@ -364,13 +364,13 @@ public strictfp class AIController {
     // ***********************************
     
     public boolean isReadyToBuild() {
-        return unit.getBuildCooldown() == 0;
+        return unit.getBuildCooldown() == 0 && (unit.getType().canBuildShip() || unit.getType().canBuildStructure());
     }
     public boolean isReadyToMove() {
         return !unit.getHasMoved() && !unit.isDead() && !unit.isStalled();
     }
     public boolean isReadyToFire() {
-        return unit.getReloadCooldown() == 0;
+        return unit.getReloadCooldown() == 0 && unit.getType().canAttack();
     }
    
     // ***********************************

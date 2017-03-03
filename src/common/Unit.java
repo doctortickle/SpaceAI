@@ -46,6 +46,7 @@ public final class Unit extends Actor {
     /**
      * Defines the AIController for this unit.
      */
+    private boolean hasHarvested;
     private boolean dead;
     private boolean stalled;
     private final AIController ac;
@@ -59,6 +60,7 @@ public final class Unit extends Actor {
         this.reloadCooldown = 0;
         this.hasRefueled = false;
         this.hasMoved = false;
+        this.hasHarvested = false;
         this.dead = false;
         this.stalled = false;
         this.ac = new AIController(this, spaceAI.getGameWorld());
@@ -87,6 +89,9 @@ public final class Unit extends Actor {
         }
         if(hasMoved) {
             hasMoved = false;
+        }
+        if(hasHarvested) {
+            hasHarvested = false;
         }
         if(getHealth() <= 0) {
             System.out.println("I am dead!");
@@ -150,6 +155,12 @@ public final class Unit extends Actor {
     }
     public void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
+    }
+    public boolean getHasHarvested() {
+        return hasHarvested;
+    }
+    public void setHasHarvested(boolean hasHarvested) {
+        this.hasHarvested = hasHarvested;
     }
     public boolean isDead() {
         return dead;

@@ -99,6 +99,11 @@ public strictfp class AIController {
         return unit.getLocation().distanceTo(target.getLocation()) < unit.getType().getRefuelRadius()
                 && unit.getType().canRefuel();
     }
+    private boolean assertCanHarvest(Environment environment) {
+        return environment.getLocation().distanceTo(unit.getLocation()) < (unit.getType().getMiningRadius() + environment.getRadius())
+                 && environment.getMineralCount() > 0 
+                 && unit.getType().canHarvest();
+    }
     // *********************************
     // **** GAMEWORLD QUERY METHODS ****
     // *********************************
@@ -434,19 +439,19 @@ public strictfp class AIController {
             System.out.println("Can not fire.");
         }
     }
-    public final void harvest(Environment environment) {
-        //TODO
-        if(canHarvest() && environment.getMineralCount() > 0 ){
-            if (unit.getType().getMiningRate() > environment.getMineralCount()) {
-                int newMineralCount = environment.getMineralCount();
-                environment.decreaseMineralCount(newMineralCount);
-                gameWorld.increaseMineralCount(newMineralCount, unit.getTeam());
-            }   
-            else{
-                environment.decreaseMineralCount(unit.getType().getMiningRate());
-                gameWorld.increaseMineralCount(unit.getType().getMiningRate(), unit.getTeam());
+    public final void harvest(Environment environment) { 
+            if(assertCanHarvest(environment)){
+                if (unit.getType().getMiningRate() > environment.getMineralCount()) {
+                    int newMineralCount = environment.getMineralCount();
+                    environment.decreaseMineralCount(newMineralCount);
+                    gameWorld.increaseMineralCount(newMineralCount, unit.getTeam());
+                }   
+                else{
+                    environment.decreaseMineralCount(unit.getType().getMiningRate());
+                    gameWorld.increaseMineralCount(unit.getType().getMiningRate(), unit.getTeam());
+                }
+                unit.setHasHarvested(true);
             }
-        }
     }
     public final void refuel(Unit target) {
         if(assertCanRefuel(target) && isReadyToFuel()) {

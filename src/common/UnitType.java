@@ -36,6 +36,7 @@ public strictfp enum UnitType {
                 1,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
+                0,      // miningRadius
                 0,      // miningRate
                 new Image("/FIGHTER.png", 20, 20, true, false, true)  // spriteImage
     ),
@@ -51,7 +52,8 @@ public strictfp enum UnitType {
                 3,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
-                0,      // miningRate
+                0,      // miningRadius
+                0,      // miningRate 
                 new Image("/SIEGE.png", 32, 32, true, false, true)  // spriteImage
     ),
     DESTROYER(  new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.MINE},  // arsenal
@@ -66,6 +68,7 @@ public strictfp enum UnitType {
                 3,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
+                0,      // miningRadius
                 0,      // miningRate
                 new Image("/DESTROYER.png", 40, 40, true, false, true)  // spriteImage
     ),
@@ -81,6 +84,7 @@ public strictfp enum UnitType {
                 5,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
+                0,      // miningRadius
                 0,      // miningRate
                 new Image("/CAPITAL.png", 80, 80, true, false, true)  // spriteImage
     ),
@@ -96,6 +100,7 @@ public strictfp enum UnitType {
                 1,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
+                6,      // miningRadius
                 20,      // miningRate
                 new Image("/HARVESTER.png", 20, 20, true, false, true)  // spriteImage
     ),
@@ -111,6 +116,7 @@ public strictfp enum UnitType {
                 1,      // fuelBurnRate
                 10,      // refuelRadius
                 5,      // refuelRate
+                0,      // miningRadius
                 0,      // miningRate
                 new Image("/REFUELER.png", 20, 20, true, false, true)  // spriteImage
     ),
@@ -126,6 +132,7 @@ public strictfp enum UnitType {
                 1,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
+                0,      // miningRadius
                 0,      // miningRate
                 new Image("/BUILDER.png", 20, 20, true, false, true)  // spriteImage
     ),
@@ -138,6 +145,7 @@ public strictfp enum UnitType {
                     1,      // flightRadius
                     10,     // refuelRadius
                     10,     // refuelRate
+                    0,      // miningRadius    
                     10,     // miningRate
                     new Image("/HOME_STATION.png", 40, 40, true, false, true)  // spriteImage
     ),
@@ -148,7 +156,8 @@ public strictfp enum UnitType {
                     5,      // bodyRadius
                     0,      // flightRadius
                     0,      // refuelRadius
-                    0,      // refuelRate                    
+                    0,      // refuelRate
+                    0,      // miningRadius
                     0,      // miningRate
                     new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
     ),
@@ -160,6 +169,7 @@ public strictfp enum UnitType {
                     0,      // flightRadius
                     0,      // refuelRadius
                     0,      // refuelRate
+                    0,      // miningRadius
                     0,      // miningRate
                     new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
     ),
@@ -171,6 +181,7 @@ public strictfp enum UnitType {
                     0,      // flightRadius
                     0,      // refuelRadius
                     0,      // refuelRate
+                    0,      // miningRadius
                     0,      // miningRate
                     new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
     ),
@@ -182,6 +193,7 @@ public strictfp enum UnitType {
                     0,      // flightRadius
                     0,      // refuelRadius
                     0,      // refuelRate
+                    6,      // miningRadius
                     10,     // miningRate
                     new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
     ),
@@ -193,6 +205,7 @@ public strictfp enum UnitType {
                     0,      // flightRadius
                     20,     // refuelRadius
                     10,     // refuelRate
+                    0,      // miningRadius
                     0,      // miningRate
                     new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
     );
@@ -258,7 +271,11 @@ public strictfp enum UnitType {
      */
     private final int refuelRate;
     /**
-     * The rate at which a MINING_FACILITY can mine minerals from a SMALL_METEOR or LARGE_METEOR. 
+     *  The radius at which HARVESTER or MINING_FACILITY can mine minerals from a SMALL_METEOR, ASTEROID, or LARGE_METEOR.
+     */
+    private final int miningRadius;
+    /**
+     * The rate at which a MINING_FACILITY can mine minerals from a SMALL_METEOR, ASTEROID, or LARGE_METEOR. 
      */
     private final int miningRate;
     /**
@@ -305,7 +322,7 @@ public strictfp enum UnitType {
     private UnitType(WeaponType[] arsenal, int spawnCooldown, int maxHealth,
             int mineralCost, int bodyRadius, int enemySensorRadius, 
             int incomingDetectionRadius, int flightRadius, int refuelRadius, 
-            int refuelRate, int miningRate, int fuelMax, 
+            int refuelRate, int miningRadius, int miningRate, int fuelMax, 
             int fuelBurnRate, Image spriteImage) {
         this.spawnLocations = null;
         this.arsenal = arsenal;
@@ -320,6 +337,7 @@ public strictfp enum UnitType {
         this.fuelBurnRate = fuelBurnRate;
         this.refuelRadius = refuelRadius;
         this.refuelRate = refuelRate;
+        this.miningRadius = miningRadius;
         this.miningRate = miningRate;
         this.bytecodeLimit = 10000;
         this.spriteImage = spriteImage;
@@ -327,7 +345,7 @@ public strictfp enum UnitType {
 
     private UnitType(EnvironmentType[] spawnLocations, int spawnCooldown, 
             int maxHealth, int mineralCost, int bodyRadius, int flightRadius, 
-            int refuelRadius, int refuelRate, int miningRate, Image spriteImage) {
+            int refuelRadius, int refuelRate, int miningRadius, int miningRate, Image spriteImage) {
         this.spawnLocations = spawnLocations;
         this.arsenal = null;
         this.spawnCooldown = spawnCooldown;
@@ -341,6 +359,7 @@ public strictfp enum UnitType {
         this.fuelBurnRate = 0;
         this.refuelRadius = refuelRadius;
         this.refuelRate = refuelRate;
+        this.miningRadius = miningRadius;
         this.miningRate = miningRate;
         this.bytecodeLimit = 10000;
         this.spriteImage = spriteImage;
@@ -461,6 +480,9 @@ public strictfp enum UnitType {
         return refuelRate;
     }
 
+    public int getMiningRadius(){
+        return miningRadius;
+    }
     public int getMiningRate() {
         return miningRate;
     }

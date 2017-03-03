@@ -435,7 +435,6 @@ public strictfp class AIController {
         }
     }
     public final void harvest(Environment environment) {
-        //TODO
         if(canHarvest() && environment.getMineralCount() > 0 ){
             if (unit.getType().getMiningRate() > environment.getMineralCount()) {
                 int newMineralCount = environment.getMineralCount();

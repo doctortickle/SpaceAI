@@ -19,11 +19,17 @@ package common;
 import javafx.scene.image.Image;
 
 /**
- *
- * @author dr4ur
+ * Details the attributes of the various types of units available in Space AI. 
+ * All of these unit types can be directly commanded by the player.
+ * @author Dylan Russell
+ * @author Myles Russell
+ * @version 1.0
+ * @see Unit
  */
 public strictfp enum UnitType {
-    
+    /**
+     * A basic attacking unit. Quick and cheap, but with little firepower.
+     */
     FIGHTER (   new WeaponType[] {WeaponType.SMALL_LASER},  // arsenal
                 5,      // spawnCooldown
                 10,     // maxHealth
@@ -36,10 +42,13 @@ public strictfp enum UnitType {
                 1,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
-                0,      // miningRadius
-                0,      // miningRate
+                0,      // harvestingRadius
+                0,      // harvestingRate
                 new Image("/FIGHTER.png", 20, 20, true, false, true)  // spriteImage
     ),
+    /**
+     * A unit specializing in dealing damage to structures and environments. Can use planet bombardment.
+     */
     SIEGE(   new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.PLANET_BOMBARDMENT},  // arsenal
                 10,     // spawnCooldown
                 50,     // maxHealth
@@ -52,10 +61,13 @@ public strictfp enum UnitType {
                 3,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
-                0,      // miningRadius
-                0,      // miningRate 
+                0,      // harvestingRadius
+                0,      // harvestingRate 
                 new Image("/SIEGE.png", 32, 32, true, false, true)  // spriteImage
     ),
+    /**
+     * A unit specializing in dealing damage to other ships. Can deploy mines and small bombs.
+     */
     DESTROYER(  new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.MINE},  // arsenal
                 10,     // spawnCooldown
                 100,    // maxHealth
@@ -68,10 +80,13 @@ public strictfp enum UnitType {
                 3,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
-                0,      // miningRadius
-                0,      // miningRate
+                0,      // harvestingRadius
+                0,      // harvestingRate
                 new Image("/DESTROYER.png", 40, 40, true, false, true)  // spriteImage
     ),
+    /**
+     * A slow-moving and expensive, but powerful, unit. Can deploy all possible weapons.
+     */
     CAPITAL(    new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.LARGE_BOMB, WeaponType.MINE, WeaponType.PLANET_BOMBARDMENT},  // arsenal
                 50,     // spawnCooldown
                 500,    // maxHealth
@@ -84,10 +99,13 @@ public strictfp enum UnitType {
                 5,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
-                0,      // miningRadius
-                0,      // miningRate
+                0,      // harvestingRadius
+                0,      // harvestingRate
                 new Image("/CAPITAL.png", 80, 80, true, false, true)  // spriteImage
     ),
+    /**
+     * A unit specializing in gathering minerals from asteroids and meteors. Can build mining facilities.
+     */
     HARVESTER(  null,   // arsenal
                 5,      // spawnCooldown
                 10,     // maxHealth
@@ -100,10 +118,13 @@ public strictfp enum UnitType {
                 1,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
-                6,      // miningRadius
-                20,      // miningRate
+                6,      // harvestingRadius
+                20,      // harvestingRate
                 new Image("/HARVESTER.png", 20, 20, true, false, true)  // spriteImage
     ),
+    /**
+     * A unit specializing in refueling friendly ships. Can build fuel stations.
+     */
     REFUELER(   null,   // arsenal
                 5,      // spawnCooldown
                 10,     // maxHealth
@@ -116,10 +137,13 @@ public strictfp enum UnitType {
                 1,      // fuelBurnRate
                 10,      // refuelRadius
                 5,      // refuelRate
-                0,      // miningRadius
-                0,      // miningRate
+                0,      // harvestingRadius
+                0,      // harvestingRate
                 new Image("/REFUELER.png", 20, 20, true, false, true)  // spriteImage
     ),
+    /**
+     * The primary construction unit. Can construct all docks.
+     */
     BUILDER(    null,   // arsenal
                 5,      // spawnCooldown
                 10,     // maxHealth
@@ -132,11 +156,14 @@ public strictfp enum UnitType {
                 1,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
-                0,      // miningRadius
-                0,      // miningRate
+                0,      // harvestingRadius
+                0,      // harvestingRate
                 new Image("/BUILDER.png", 20, 20, true, false, true)  // spriteImage
     ),
-    
+    /**
+     * The primary and most important structure. Both teams begin with a home station. 
+     * Only structure capable of building builders. Only structure that can move.
+     */
     HOME_STATION(   null,   // spawnLocations
                     0,      // spawnCooldown
                     2000,   // maxHealth
@@ -145,10 +172,13 @@ public strictfp enum UnitType {
                     1,      // flightRadius
                     10,     // refuelRadius
                     10,     // refuelRate
-                    0,      // miningRadius    
-                    10,     // miningRate
+                    0,      // harvestingRadius    
+                    10,     // harvestingRate
                     new Image("/HOME_STATION.png", 40, 40, true, false, true)  // spriteImage
     ),
+    /**
+     * The cheapest and least versatile space dock. Can build fighters, harvesters, and refuelers.
+     */
     SMALL_DOCK(     new EnvironmentType[] {EnvironmentType.SMALL_PLANET, EnvironmentType.LARGE_PLANET},   // spawnLocations
                     100,    // spawnCooldown
                     500,    // maxHealth
@@ -157,10 +187,13 @@ public strictfp enum UnitType {
                     0,      // flightRadius
                     0,      // refuelRadius
                     0,      // refuelRate
-                    0,      // miningRadius
-                    0,      // miningRate
+                    0,      // harvestingRadius
+                    0,      // harvestingRate
                     new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
     ),
+    /**
+     * A superior space dock. Can build fighters, siege, destroyers, harvesters, and refuelers.
+     */
     LARGE_DOCK(     new EnvironmentType[] {EnvironmentType.SMALL_PLANET, EnvironmentType.LARGE_PLANET},   // spawnLocations
                     100,    // spawnCooldown
                     1200,   // maxHealth
@@ -169,10 +202,13 @@ public strictfp enum UnitType {
                     0,      // flightRadius
                     0,      // refuelRadius
                     0,      // refuelRate
-                    0,      // miningRadius
-                    0,      // miningRate
+                    0,      // harvestingRadius
+                    0,      // harvestingRate
                     new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
     ),
+    /**
+     * The most expensive and powerful space dock. Can build all units (except builders), including the mighty capital ship.
+     */
     CAPITAL_DOCK(   new EnvironmentType[] {EnvironmentType.LARGE_PLANET},   // spawnLocations
                     100,    // spawnCooldown
                     3000,   // maxHealth
@@ -181,10 +217,13 @@ public strictfp enum UnitType {
                     0,      // flightRadius
                     0,      // refuelRadius
                     0,      // refuelRate
-                    0,      // miningRadius
-                    0,      // miningRate
+                    0,      // harvestingRadius
+                    0,      // harvestingRate
                     new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
     ),
+    /**
+     * A structure that can continually harvest minerals from meteors.
+     */
     MINING_FACILITY(new EnvironmentType[] {EnvironmentType.SMALL_METEOR, EnvironmentType.LARGE_METEOR},   // spawnLocations
                     100,    // spawnCooldown
                     500,    // maxHealth
@@ -193,10 +232,13 @@ public strictfp enum UnitType {
                     0,      // flightRadius
                     0,      // refuelRadius
                     0,      // refuelRate
-                    6,      // miningRadius
-                    10,     // miningRate
+                    6,      // harvestingRadius
+                    10,     // harvestingRate
                     new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
     ),
+    /**
+     * A structure that can continually refuel friendly ships in a given radius.
+     */
     FUEL_STATION(new EnvironmentType[] {EnvironmentType.SMALL_METEOR, EnvironmentType.LARGE_METEOR},   // spawnLocations
                     100,    // spawnCooldown
                     200,    // maxHealth
@@ -205,8 +247,8 @@ public strictfp enum UnitType {
                     0,      // flightRadius
                     20,     // refuelRadius
                     10,     // refuelRate
-                    0,      // miningRadius
-                    0,      // miningRate
+                    0,      // harvestingRadius
+                    0,      // harvestingRate
                     new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
     );
     
@@ -243,11 +285,11 @@ public strictfp enum UnitType {
      */
     private final int bodyRadius;
     /**
-     * The radius at which a given UnitType can sense enemy UnitTypes.
+     * The radius at which a given UnitType can sense enemy units.
      */
     private final int sensorRadius;
     /**
-     * The radius at which a given UnitType can detect incoming WeaponTypes.
+     * The radius at which a given UnitType can detect incoming weapons.
      */
     private final int incomingDetectionRadius;
     /**
@@ -263,21 +305,21 @@ public strictfp enum UnitType {
      */
     private final int fuelBurnRate;
     /**
-     * The radius at which a FUEL_STATION can refuel ships.
+     * The radius at which a REFUELER or FUEL_STATION can refuel ships.
      */
     private final int refuelRadius;
     /**
-     * The rate at which a FUEL_STATION refuels a unit.
+     * The rate at which a REFUELER or FUEL_STATION refuels a unit.
      */
     private final int refuelRate;
     /**
-     *  The radius at which HARVESTER or MINING_FACILITY can mine minerals from a SMALL_METEOR, ASTEROID, or LARGE_METEOR.
+     *  The radius at which a HARVESTER or MINING_FACILITY can harvest minerals from an appropriate EnvironmentType.
      */
-    private final int miningRadius;
+    private final int harvestingRadius;
     /**
-     * The rate at which a MINING_FACILITY can mine minerals from a SMALL_METEOR, ASTEROID, or LARGE_METEOR. 
+     * The rate at which a HARVESTER or MINING_FACILITY can harvest minerals from an appropriate EnvironmentType.
      */
-    private final int miningRate;
+    private final int harvestingRate;
     /**
      * The bytecode usage limit per turn for a given UnitType.
      */
@@ -322,7 +364,7 @@ public strictfp enum UnitType {
     private UnitType(WeaponType[] arsenal, int spawnCooldown, int maxHealth,
             int mineralCost, int bodyRadius, int enemySensorRadius, 
             int incomingDetectionRadius, int flightRadius, int refuelRadius, 
-            int refuelRate, int miningRadius, int miningRate, int fuelMax, 
+            int refuelRate, int harvestingRadius, int harvestingRate, int fuelMax, 
             int fuelBurnRate, Image spriteImage) {
         this.spawnLocations = null;
         this.arsenal = arsenal;
@@ -337,15 +379,15 @@ public strictfp enum UnitType {
         this.fuelBurnRate = fuelBurnRate;
         this.refuelRadius = refuelRadius;
         this.refuelRate = refuelRate;
-        this.miningRadius = miningRadius;
-        this.miningRate = miningRate;
+        this.harvestingRadius = harvestingRadius;
+        this.harvestingRate = harvestingRate;
         this.bytecodeLimit = 10000;
         this.spriteImage = spriteImage;
     }
 
     private UnitType(EnvironmentType[] spawnLocations, int spawnCooldown, 
             int maxHealth, int mineralCost, int bodyRadius, int flightRadius, 
-            int refuelRadius, int refuelRate, int miningRadius, int miningRate, Image spriteImage) {
+            int refuelRadius, int refuelRate, int harvestingRadius, int harvestingRate, Image spriteImage) {
         this.spawnLocations = spawnLocations;
         this.arsenal = null;
         this.spawnCooldown = spawnCooldown;
@@ -359,138 +401,249 @@ public strictfp enum UnitType {
         this.fuelBurnRate = 0;
         this.refuelRadius = refuelRadius;
         this.refuelRate = refuelRate;
-        this.miningRadius = miningRadius;
-        this.miningRate = miningRate;
+        this.harvestingRadius = harvestingRadius;
+        this.harvestingRate = harvestingRate;
         this.bytecodeLimit = 10000;
         this.spriteImage = spriteImage;
     }
     
+    /**
+     * Determines if the UnitType has the capability to launch any kind of WeaponType.
+     * @return true if the UnitType's arsenal contains any kind of WeaponType.
+     * @see #FIGHTER
+     * @see #SIEGE
+     * @see #DESTROYER
+     * @see #CAPITAL
+     * @see WeaponType
+     */
     public boolean canAttack() {
         return arsenal.length > 0;
     }
     /**
-     * True if the ship has the capability to launch a SMALL_BOMB or LARGE_BOMB.
-     * @return true if the UnitType's arsenal contains a SMALL_BOMB or LARGE_BOMB.
+     * Determines if the UnitType has the capability to launch a SMALL_BOMB or LARGE_BOMB.
+     * @return true if the UnitType is a DESTROYER or CAPITAL.
+     * @see #DESTROYER
+     * @see #CAPITAL
+     * @see WeaponType#SMALL_BOMB
+     * @see WeaponType#LARGE_BOMB
      */
     public boolean canBomb() {
         return this == UnitType.DESTROYER || this == UnitType.CAPITAL;
     }
     /**
-     * True if the UnitType has the capability to deploy a MINE.
-     * @return true if the UnitType's arsenal contains a MINE.
+     * Determines if the UnitType has the capability to deploy a MINE.
+     * @return true if the UnitType is a DESTROYER or a CAPITAL.
+     * @see #DESTROYER
+     * @see #CAPITAL
+     * @see WeaponType#MINE
      */
     public boolean canDeployMine() {
         return this == UnitType.DESTROYER || this == UnitType.CAPITAL;
     }
     /**
-     * True if the UnitType has PLANET_BOMBARDMENT in it's arsenal.
-     * @return true if the UnitType has PLANET_BOMBARDMENT in it's arsenal.
+     * Determines if the UnitType has the capability to deploy PLANET_BOMBARDMENT.
+     * @return true if the UnitType is a SIEGE or CAPITAL.
+     * @see #SIEGE
+     * @see #CAPITAL
+     * @see WeaponType#PLANET_BOMBARDMENT
      */
     public boolean canPlanetBombardment() {
         return this == SIEGE || this == CAPITAL;
     }
     /**
-     * True if the UnitType can construct a UnitType that is a structure.
-     * @return true if the UnitType can construct a StructureType (including a MINING_FACILITY or FUEL_STATION).
+     * Determines if the UnitType can construct a UnitType that is a structure.
+     * @return true if the UnitType is a BUILDER, HARVESTER, or REFUELER.
+     * @see #BUILDER
+     * @see #HARVESTER
+     * @see #REFUELER
      */
     public boolean canBuildStructure() {
         return this == BUILDER || this == HARVESTER || this == REFUELER;
     }
     /**
-     * True if the UnitType can construct a UnitType that is a ship.
-     * @return true if the UnitType can construct a StructureType (including a MINING_FACILITY or FUEL_STATION).
+     * Determines if the UnitType can construct a UnitType that is a ship.
+     * @return true if the UnitType is a SMALL_DOCK, LARGE_DOCK, CAPITAL_DOCK, or HOME_STATION.
+     * @see #SMALL_DOCK
+     * @see #LARGE_DOCK
+     * @see #CAPITAL_DOCK
+     * @see #HOME_STATION
      */
     public boolean canBuildShip() {
         return this == SMALL_DOCK || this == LARGE_DOCK || this == CAPITAL_DOCK
                || this == HOME_STATION;
     }
     /**
-     * True if the UnitType can harvest directly from a SMALL_ASTEROID, LARGE_ASTEROID, SMALL_METEOR, or LARGE_METEOR.
-     * @return true if the UnitType can harvest directly from a SMALL_ASTEROID, LARGE_ASTEROID, SMALL_METEOR, or LARGE_METEOR.
+     * Determines if the UnitType can harvest directly from a SMALL_ASTEROID, LARGE_ASTEROID, SMALL_METEOR, or LARGE_METEOR.
+     * Returns true for HARVESTER and MINING_FACILITY.
+     * @return true if the UnitType is a HARVESTER or a MINING_FACILITY.
+     * @see #HARVESTER
+     * @see #MINING_FACILITY
      */
     public boolean canHarvest() {
         return this == HARVESTER || this == MINING_FACILITY;
     }
     /**
-     * True if the UnitType can refuel another UnitType directly.
-     * @return true if the UnitType can refuel another UnitType directly.
+     * Determines if the UnitType can refuel another UnitType directly.
+     * @return true if the UnitType is a REFUELER or FUEL_STATION.
+     * @see #REFUELER
+     * @see #FUEL_STATION
      */
     public boolean canRefuel() {
         return this == REFUELER || this == FUEL_STATION;
     }
-    
-    
+    /**
+     * Returns an array of UnitTypes that may spawn a given UnitType.
+     * @return UnitType array of spawn sources for a given UnitType. Null if there are no spawn sources.
+     */
     public UnitType[] getSpawnSources() {
         return this.spawnSources;
     }
-    
+    /**
+     * Returns an array of UnitTypes that may be spawned by a given UnitType.
+     * @return UnitType array that may be spawned by a given UnitType. Null if there are no spawn units.
+     * @see #canBuildShip()
+     * @see #canBuildStructure() 
+     */
     public UnitType[] getSpawnUnits() {
         return this.spawnUnits;
     }
-    
+    /**
+     * Returns an array of EnvironmentTypes where a given UnitType may be spawned.
+     * @return EnvironmentType array where a given UnitType may be spawned. Null if unit can be spawned anywhere.
+     */
     public EnvironmentType[] getSpawnLocations() {
         return spawnLocations;
     }
-
+    /**
+     * Returns an array of WeaponTypes that a given UnitType may fire or deploy.
+     * @return WeaponType array that a given UnitType may fire or deploy. Null if UnitType can not attack.
+     * @see #canAttack() 
+     * @see #canBomb()
+     * @see #canDeployMine()
+     * @see #canPlanetBombardment()
+     * @see EnvironmentType
+     */
     public WeaponType[] getArsenal() {
         return arsenal;
     }
-
+    /**
+     * Returns the number of turns a unit must wait after spawning a given UnitType.
+     * @return int number of turns required cooldown after spawning UnitType.
+     * @see #spawnCooldown
+     * @see WeaponType
+     */
     public int getSpawnCooldown() {
         return spawnCooldown;
     }
-
+    /**
+     * Returns the max health (not current) of a given UnitType.
+     * @return int max health of a given UnitType.
+     * @see #maxHealth
+     */
     public int getMaxHealth() {
         return maxHealth;
     }
-
+    /**
+     * Returns the mineral cost of a given UnitType
+     * @return int mineral cost of a given UnitType
+     * @see #mineralCost
+     */
     public int getMineralCost() {
         return mineralCost;
     }
-
+    /**
+     * Returns the body radius of a given UnitType.
+     * @return int body radius of a given UnitType.
+     * @see #bodyRadius
+     */
     public int getBodyRadius() {
         return bodyRadius;
     }
-
+    /**
+     * Returns the radius at which a given UnitType can detect other units.
+     * @return int radius at which a given UnitType can detect other units.
+     * @see #sensorRadius
+     */
     public int getSensorRadius() {
         return sensorRadius;
     }
-
+    /**
+     * Returns the radius at which a given UnitType can detect incoming weapons.
+     * @return int radius at which a given UnitType can detect incoming weapons.
+     * @see #incomingDetectionRadius
+     */
     public int getIncomingDetectionRadius() {
         return incomingDetectionRadius;
     }
-
+    /**
+     * Returns the distance a UnitType can move in one turn.
+     * @return int distance a UnitType can move in one turn.
+     * @see #flightRadius
+     */
     public int getFlightRadius() {
         return flightRadius;
     }
-
+    /**
+     * Returns the max (not current) fuel of a given UnitType.
+     * @return int max (not current) fuel of a given UnitType.
+     * @see #fuelMax
+     */
     public int getFuelMax() {
         return fuelMax;
     }
-
+    /**
+     * Returns the rate at which a given UnitType will burn fuel while moving per turn.
+     * @return int rate at which a given UnitType will burn fuel while moving per turn.
+     * @see #fuelBurnRate
+     */
     public int getFuelBurnRate() {
         return fuelBurnRate;
     }
-
+    /**
+     * Returns the radius at which a UnitType can refuel a unit.
+     * @return int radius at which a UnitType can refuel a unit.
+     * @see #refuelRadius
+     */
     public int getRefuelRadius() {
         return refuelRadius;
     }
-
+    /**
+     * Returns the rate at which a UnitType refuels a unit.
+     * @return int rate at which a UnitType refuels a unit.
+     * @see #refuelRate
+     */
     public int getRefuelRate() {
         return refuelRate;
     }
-
-    public int getMiningRadius(){
-        return miningRadius;
+    /**
+     * Returns the radius at which a UnitType can harvest minerals from an appropriate EnvironmentType.
+     * @return int radius at which a UnitType can harvest minerals from an appropriate EnvironmentType.
+     * @see #harvestingRadius
+     */
+    public int getHarvestingRadius(){
+        return harvestingRadius;
     }
-    public int getMiningRate() {
-        return miningRate;
+    /**
+     * Returns the rate at which a UnitType harvests minerals from an appropriate EnvironmentType.
+     * @return int rate at which a UnitType harvests minerals from an appropriate EnvironmentType.
+     * @see #harvestingRate
+     */
+    public int getHarvestingRate() {
+        return harvestingRate;
     }
-
+    /**
+     * Returns the bytecode limit per turn for a given UnitType.
+     * @return int bytecode limit per turn for a given UnitType.
+     * @see #bytecodeLimit
+     */
     int getBytecodeLimit() {
         return bytecodeLimit;
     }
-
+    /**
+     * Returns the sprite image for a given UnitType.
+     * @return Image sprite image for a given UnitType.
+     * @see #spriteImage
+     */
     Image getSpriteImage() {
         return spriteImage;
     }    

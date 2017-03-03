@@ -88,6 +88,10 @@ public abstract class Actor {
 
     public abstract boolean isEnvironment();
     
+    public abstract boolean isShip();
+    
+    public abstract boolean isStructure();
+    
     public abstract boolean collide(Actor object);
     
     private void teamColorize(ImageView spriteFrame) {         

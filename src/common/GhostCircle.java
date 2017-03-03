@@ -66,7 +66,17 @@ public class GhostCircle extends Actor{
     public boolean isEnvironment() {
         return false;
     }
+    
+    @Override
+    public boolean isShip() {
+        return false;
+    }
 
+    @Override
+    public boolean isStructure() {
+        return false;
+    }
+    
     @Override
     public boolean collide(Actor actor) {
         return this.getLocation().distanceTo(actor.getLocation()) < this.getRadius() + actor.getRadius();

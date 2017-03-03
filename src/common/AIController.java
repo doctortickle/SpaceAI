@@ -47,12 +47,20 @@ public strictfp class AIController {
     // *********************************
     // ******** INTERNAL METHODS *******
     // *********************************
+    
     private boolean assertOnScreen(Location location) {
         if(location.getY() >= topBoundary - unit.getRadius()) { return false; }
         if(location.getY() <= bottomBoundary + unit.getRadius()) { return false; }
         if(location.getX() >= rightBoundary - unit.getRadius()) { return false; }
         if(location.getX() <= leftBoundary + unit.getRadius()) { return false; }
         return true;
+    }
+    private boolean assertOnScreen(Location location, int radius) {
+        Location check1 = location.add(radius,Direction.NORTH);
+        Location check2 = location.add(radius,Direction.EAST);
+        Location check3 = location.add(radius,Direction.SOUTH);
+        Location check4 = location.add(radius,Direction.WEST);
+        return assertOnScreen(check1) && assertOnScreen(check2) && assertOnScreen(check3) && assertOnScreen(check4);
     }
     private void updateSpriteAndLocation(Location location) {
         unit.updateLocation(location.getX(), location.getY());
@@ -73,8 +81,28 @@ public strictfp class AIController {
         if(location.getX() <= leftBoundary + unit.getRadius()) { return false; }
         return true;
     }
-    private boolean assertCanMove() {
-        return isReadyToMove();
+    private boolean assertCanSenseLocation(Location location) {
+        return assertOnScreen(location) && getCurrentLocation().distanceTo(location) <= getSensorRadius();
+    }
+    private boolean assertCanSenseIncomingLocation(Location location) {
+        return assertOnScreen(location) && getCurrentLocation().distanceTo(location) <= getIncomingDetectionRadius();
+    }
+    private boolean assertLocationIsEmpty(Location location) {
+        return gameWorld.checkIfLocationIsEmpty(location);
+    }
+    private boolean assertLocationIsEmpty(Location location, int radius) {
+        return gameWorld.checkIfLocationIsEmpty(location, radius);
+    }
+    private boolean assertCanSensePartOfCircle(Location center, int radius) {
+        return assertOnScreen(center) && getCurrentLocation().distanceTo(center) - radius <= getSensorRadius();
+    }
+    private boolean assertCanSenseAllOfCircle(Location center, int radius) {
+        return assertOnScreen(center) && getCurrentLocation().distanceTo(center) + radius <= getSensorRadius();
+    }
+    private boolean assertCanMove(Location location) {
+        return getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius()
+                && checkBoundaries(location)
+                && !checkForCollision(location);
     }
     private boolean assertCanBuild(UnitType type) {
         return Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
@@ -83,27 +111,17 @@ public strictfp class AIController {
     private boolean assertCanFire(WeaponType type) {
         return unit.getType().canAttack() && Arrays.asList(unit.getType().getArsenal()).contains(type);
     }
-    private boolean assertCanSenseLocation(Location location) {
-        return canSenseLocation(location);
-    }
-    private boolean assertLocationIsEmpty(Location location, int radius) {
-        return gameWorld.checkIfLocationIsEmpty(location, radius);
-    }
-    private boolean assertCanSensePartOfCircle(Location center, int radius) {
-        return canSensePartOfCircle(center, radius);
-    }
-    private boolean assertCanSenseAllOfCircle(Location center, int radius) {
-        return canSenseAllOfCircle(center, radius);
-    }
     private boolean assertCanRefuel(Unit target) {
         return unit.getLocation().distanceTo(target.getLocation()) < unit.getType().getRefuelRadius()
-                && unit.getType().canRefuel();
+                && unit.getType().canRefuel()
+                && target.getTeam() == unit.getTeam();
     }
     private boolean assertCanHarvest(Environment environment) {
-        return environment.getLocation().distanceTo(unit.getLocation()) < (unit.getType().getMiningRadius() + environment.getRadius())
+        return environment.getLocation().distanceTo(unit.getLocation()) < (unit.getType().getHarvestingRadius() + environment.getRadius())
                  && environment.getMineralCount() > 0 
                  && unit.getType().canHarvest();
     }
+    
     // *********************************
     // **** GAMEWORLD QUERY METHODS ****
     // *********************************
@@ -122,14 +140,6 @@ public strictfp class AIController {
     }
     public final Location getInitialHomeStationLocation(Team team) {
         return gameWorld.getInitialHomeStationLocation(team);
-    }
-    public final boolean canBuild(UnitType type, Direction direction) {
-        Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-        return isReadyToBuild() 
-                && Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
-                && getMineralCount()-type.getMineralCost() >= 0
-                && gameWorld.checkIfLocationIsEmpty(location, type.getBodyRadius())
-                && onTheMap(location, type.getBodyRadius());
     }
 
     // *********************************
@@ -191,7 +201,7 @@ public strictfp class AIController {
         return unit.getType().getRefuelRate();
     }
     public int getMiningRate() {
-        return unit.getType().getMiningRate();
+        return unit.getType().getHarvestingRate();
     }
     public boolean canAttack() {
         return unit.getType().canAttack();
@@ -226,35 +236,31 @@ public strictfp class AIController {
         return assertOnScreen(location);
     }
     public boolean onTheMap(Location location, int radius) {
-        Location check1 = location.add(radius,Direction.NORTH);
-        Location check2 = location.add(radius,Direction.EAST);
-        Location check3 = location.add(radius,Direction.SOUTH);
-        Location check4 = location.add(radius,Direction.WEST);
-        return assertOnScreen(check1) && assertOnScreen(check2) && assertOnScreen(check3) && assertOnScreen(check4);
+        return assertOnScreen(location, radius);
     }
     public boolean canSenseLocation(Location location) {
-        return assertOnScreen(location) && getCurrentLocation().distanceTo(location) <= getSensorRadius();
+        return assertCanSenseLocation(location);
     }
     public boolean canSenseIncomingLocation(Location location) {
-        return assertOnScreen(location) && getCurrentLocation().distanceTo(location) <= getIncomingDetectionRadius();
+        return assertCanSenseIncomingLocation(location);
     }
     public boolean canSensePartOfCircle(Location center, int radius) {
-        return assertOnScreen(center) && getCurrentLocation().distanceTo(center) - radius <= getSensorRadius();
+        return assertCanSensePartOfCircle(center, radius);
     }
     public boolean canSenseAllOfCircle(Location center, int radius) {
-        return assertOnScreen(center) && getCurrentLocation().distanceTo(center) + radius <= getSensorRadius();
+        return assertCanSenseAllOfCircle(center, radius);
     }
     public boolean isLocationOccupied(Location location) {
         if(assertCanSenseLocation(location)) {
-            return !gameWorld.checkIfLocationIsEmpty(location);
+            return !assertLocationIsEmpty(location);
         }
         else {
             return false;
         }
     }
     public boolean isCircleOccupied(Location center, int radius) {
-        if(assertCanSenseLocation(center)) {
-            return !gameWorld.checkIfLocationIsEmpty(center, radius);
+        if(assertCanSenseAllOfCircle(center, radius)) {
+            return !assertLocationIsEmpty(center, radius);
         }
         else {
             return false;
@@ -368,11 +374,11 @@ public strictfp class AIController {
     // ****** READINESS METHODS **********
     // ***********************************
     
-    public boolean isReadyToBuild() {
-        return unit.getBuildCooldown() == 0 && (unit.getType().canBuildShip() || unit.getType().canBuildStructure());
-    }
     public boolean isReadyToMove() {
         return !unit.getHasMoved();
+    }
+    public boolean isReadyToBuild() {
+        return unit.getBuildCooldown() == 0 && (unit.getType().canBuildShip() || unit.getType().canBuildStructure());
     }
     public boolean isReadyToFire() {
         return unit.getReloadCooldown() == 0 && unit.getType().canAttack();
@@ -383,37 +389,58 @@ public strictfp class AIController {
     public boolean isReadyToHarvest() {
         return !unit.getHasHarvested() && unit.getType().canHarvest();
     }
+    public boolean canMove(Location location) {
+        return assertCanMove(location)
+                && isReadyToMove();
+    }
+    public boolean canMove(Direction direction) {
+        return assertCanMove(getCurrentLocation().add(unit.getType().getFlightRadius(), direction))
+                && isReadyToMove();
+    }
+    public boolean canBuild(UnitType type, Direction direction) {
+        Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        return assertCanBuild(type) 
+                && assertLocationIsEmpty(location, type.getBodyRadius())
+                && assertOnScreen(location, type.getBodyRadius())
+                && isReadyToBuild(); 
+    }
+    public boolean canFire(WeaponType type, Direction direction) {
+        Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
+        return assertCanFire(type)
+                && assertOnScreen(location, type.getWeaponRadius())
+                && isReadyToFire();
+    }
+    public boolean canHarvest(Environment environment) {
+        return assertCanHarvest(environment)
+                && isReadyToHarvest();
+    }
+    public boolean canRefuel(Unit target) {
+        return assertCanRefuel(target) 
+               && isReadyToFuel();
+    }
    
     // ***********************************
     // ********* UNIT ACTIONS ************
     // ***********************************
     
     public final void move(Location location) {
-        if (getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius() 
-            && assertCanMove()
-            && checkBoundaries(location)
-            && !checkForCollision(location)) {
+        if (canMove(location) ) {
                 updateSpriteAndLocation(location);
                 updateUnitMovementInfo();
         } else {
-            Direction moveDirection = getCurrentLocation().directionTo(location);
-            move(moveDirection);
+                Direction moveDirection = getCurrentLocation().directionTo(location);
+                move(moveDirection);
         }
     }
     public final void move(Direction direction) {
         Location movePoint = getCurrentLocation().add(unit.getType().getFlightRadius(), direction);
-        if  (assertCanMove()
-            && checkBoundaries(movePoint) 
-            && !checkForCollision(movePoint)) {
-            move(movePoint);   
+        if  (canMove(movePoint)) {
+                move(movePoint);   
         }
     }
     public final void build(UnitType type, Direction direction) {
         Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-        if( isReadyToBuild() 
-            && assertCanBuild(type)
-            && assertLocationIsEmpty(location, type.getBodyRadius())
-            && onTheMap(location, type.getBodyRadius()) ) {
+        if(canBuild(type, direction)) {
                 gameWorld.addUnit(type, location, getTeam());
                 unit.setBuildCooldown(type.getSpawnCooldown());
                 gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
@@ -424,9 +451,7 @@ public strictfp class AIController {
     }
     public final void fire(WeaponType type, Direction direction) {
         Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
-        if( isReadyToFire() 
-            && assertCanFire(type)
-            && onTheMap(location, type.getWeaponRadius()) ) {
+        if(canFire(type, direction)) {
                 Team team;
                 switch(type) {
                     case MINE : team = unit.getTeam(); break;
@@ -440,23 +465,23 @@ public strictfp class AIController {
         }
     }
     public final void harvest(Environment environment) { 
-            if(assertCanHarvest(environment) && isReadyToHarvest()){
-                if (unit.getType().getMiningRate() > environment.getMineralCount()) {
-                    int newMineralCount = environment.getMineralCount();
-                    environment.decreaseMineralCount(newMineralCount);
-                    gameWorld.increaseMineralCount(newMineralCount, unit.getTeam());
-                }   
-                else{
-                    environment.decreaseMineralCount(unit.getType().getMiningRate());
-                    gameWorld.increaseMineralCount(unit.getType().getMiningRate(), unit.getTeam());
-                }
-                unit.setHasHarvested(true);
+            if(canHarvest(environment)){
+                    if (unit.getType().getHarvestingRate() > environment.getMineralCount()) {
+                        int newMineralCount = environment.getMineralCount();
+                        environment.decreaseMineralCount(newMineralCount);
+                        gameWorld.increaseMineralCount(newMineralCount, unit.getTeam());
+                    }   
+                    else{
+                        environment.decreaseMineralCount(unit.getType().getHarvestingRate());
+                        gameWorld.increaseMineralCount(unit.getType().getHarvestingRate(), unit.getTeam());
+                    }
+                    unit.setHasHarvested(true);
             }
     }
     public final void refuel(Unit target) {
-        if(assertCanRefuel(target) && isReadyToFuel()) {
-            target.increaseFuel(unit.getType().getRefuelRate());
-            unit.setHasRefueled(true);
+        if(canRefuel(target)) {
+                target.increaseFuel(unit.getType().getRefuelRate());
+                unit.setHasRefueled(true);
         }
     }
 }

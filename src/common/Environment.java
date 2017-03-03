@@ -54,6 +54,17 @@ public final class Environment extends Actor{
     public boolean isEnvironment() {
         return true;
     }
+    
+    @Override
+    public boolean isShip() {
+        return false;
+    }
+
+    @Override
+    public boolean isStructure() {
+        return false;
+    }
+    
 
     public Environment(SpaceAI spaceAI, EnvironmentType type, int ID, Location location) {
         super(ID, type.getMaxHealth(), type.getBodyRadius(), location, Team.NEUTRAL, type.getSpriteImage());
@@ -99,5 +110,4 @@ public final class Environment extends Actor{
     public boolean collide(Actor object) {
         return false;
     }
-    
 }

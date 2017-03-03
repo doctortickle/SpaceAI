@@ -48,6 +48,16 @@ public final class Weapon extends Actor {
     public boolean isEnvironment() {
         return false;
     }
+    
+    @Override
+    public boolean isShip() {
+        return false;
+    }
+
+    @Override
+    public boolean isStructure() {
+        return false;
+    }
 
     public Weapon(SpaceAI spaceAI, WeaponType type, int ID, Location location, Team team, Direction direction) {
         super(ID, Integer.MAX_VALUE, type.getCollisionRadius(type), location, team, type.getSpriteImage());

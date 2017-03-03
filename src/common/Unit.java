@@ -188,6 +188,44 @@ public final class Unit extends Actor {
         return false;
     }
     @Override
+    public boolean isShip() {
+        switch(type) {
+            case FIGHTER : return true;
+            case SIEGE : return true;
+            case DESTROYER : return true;
+            case CAPITAL : return true;
+            case BUILDER : return true;
+            case HARVESTER : return true;
+            case REFUELER : return true;
+            case HOME_STATION: return false;
+            case SMALL_DOCK: return false;
+            case LARGE_DOCK: return false;
+            case CAPITAL_DOCK: return false;
+            case MINING_FACILITY: return false;
+            case FUEL_STATION: return false;
+            default : return false;
+        }
+    }
+    @Override
+    public boolean isStructure() {
+        switch(type) {
+            case FIGHTER : return false;
+            case SIEGE : return false;
+            case DESTROYER : return false;
+            case CAPITAL : return false;
+            case BUILDER : return false;
+            case HARVESTER : return false;
+            case REFUELER : return false;
+            case HOME_STATION: return true;
+            case SMALL_DOCK: return true;
+            case LARGE_DOCK: return true;
+            case CAPITAL_DOCK: return true;
+            case MINING_FACILITY: return true;
+            case FUEL_STATION: return true;
+            default : return false;
+        }
+    }  
+    @Override
     public boolean collide(Actor actor) {
         return this.getLocation().distanceTo(actor.getLocation()) < this.getRadius() + actor.getRadius();
     }

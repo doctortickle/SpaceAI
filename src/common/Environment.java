@@ -32,12 +32,12 @@ public final class Environment extends Actor{
     /**
      * The number of minerals this environment object has currently remaining.
      */
-    public final int mineralCount;
+    public int mineralCount;
     
     /**
      * The current number of StructureType structures on this environment object.
      */
-    public final int structureCount;
+    public int structureCount;
     private final EnvironmentController ec;
     
     @Override
@@ -77,6 +77,10 @@ public final class Environment extends Actor{
      */
     public int getMineralCount() {
         return mineralCount;
+    }
+
+    public void decreaseMineralCount(int decrement) {
+        this.mineralCount -= decrement;
     }
     /**
      * Returns the current number of StructureType structures built upon this environment object.

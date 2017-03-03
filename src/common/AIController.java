@@ -439,7 +439,6 @@ public strictfp class AIController {
             System.out.println("Can not fire.");
         }
     }
-<<<<<<< HEAD
     public final void harvest(Environment environment) { 
             if(assertCanHarvest(environment)){
                 if (unit.getType().getMiningRate() > environment.getMineralCount()) {
@@ -452,18 +451,6 @@ public strictfp class AIController {
                     gameWorld.increaseMineralCount(unit.getType().getMiningRate(), unit.getTeam());
                 }
                 unit.setHasHarvested(true);
-=======
-    public final void harvest(Environment environment) {
-        if(canHarvest() && environment.getMineralCount() > 0 ){
-            if (unit.getType().getMiningRate() > environment.getMineralCount()) {
-                int newMineralCount = environment.getMineralCount();
-                environment.decreaseMineralCount(newMineralCount);
-                gameWorld.increaseMineralCount(newMineralCount, unit.getTeam());
-            }   
-            else{
-                environment.decreaseMineralCount(unit.getType().getMiningRate());
-                gameWorld.increaseMineralCount(unit.getType().getMiningRate(), unit.getTeam());
->>>>>>> 88031bdb1734f40d41b8dea2ebe4e3108c80a4fa
             }
     }
     public final void refuel(Unit target) {

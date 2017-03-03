@@ -61,7 +61,7 @@ public strictfp class AIController {
     }
     private void updateUnitMovementInfo() {
         unit.setHasMoved(true);
-        unit.setFuel(unit.getType().getFuelBurnRate());
+        unit.decreaseFuel(unit.getType().getFuelBurnRate());
     }
     private boolean checkForCollision(Location location) {
         return !gameWorld.checkIfLocationIsEmpty(location, unit.getRadius(), unit.getID());
@@ -367,13 +367,13 @@ public strictfp class AIController {
         return unit.getBuildCooldown() == 0 && (unit.getType().canBuildShip() || unit.getType().canBuildStructure());
     }
     public boolean isReadyToMove() {
-        return !unit.getHasMoved() && !unit.isDead() && !unit.isStalled();
+        return !unit.getHasMoved();
     }
     public boolean isReadyToFire() {
         return unit.getReloadCooldown() == 0 && unit.getType().canAttack();
     }
     public boolean isReadyToFuel() {
-        return unit.getRefuelCooldown() == 0 && unit.getType().canRefuel();
+        return !unit.getHasRefueled() && unit.getType().canRefuel();
     }
     public boolean isReadyToHarvest() {
         return !unit.getHasHarvested() && unit.getType().canHarvest();
@@ -450,7 +450,8 @@ public strictfp class AIController {
     }
     public final void refuel(Unit target) {
         if(assertCanRefuel(target) && isReadyToFuel()) {
-            
+            target.increaseFuel(unit.getType().getRefuelRate());
+            unit.setHasRefueled(true);
         }
     }
 }

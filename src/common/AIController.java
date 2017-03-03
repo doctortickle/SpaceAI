@@ -430,6 +430,10 @@ public strictfp class AIController {
     }
     public final void harvest(Environment environment) {
         //TODO
+        if(canHarvest() && environment.getMineralCount() > 0 ){
+                environment.decreaseMineralCount(unit.getType().getMiningRate());
+                gameWorld.increaseMineralCount(unit.getType().getMiningRate(), unit.getTeam());
+            }   
     }
     public final void refuel(Unit unit) {
         if(assertCanRefuel(unit)) {

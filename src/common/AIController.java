@@ -372,6 +372,9 @@ public strictfp class AIController {
     public boolean isReadyToFire() {
         return unit.getReloadCooldown() == 0 && unit.getType().canAttack();
     }
+    public boolean isReadyToFuel() {
+        return unit.getRefuelCooldown() == 0 && unit.getType().canRefuel();
+    }
    
     // ***********************************
     // ********* UNIT ACTIONS ************
@@ -431,8 +434,8 @@ public strictfp class AIController {
     public final void harvest(Environment environment) {
         //TODO
     }
-    public final void refuel(Unit unit) {
-        if(assertCanRefuel(unit)) {
+    public final void refuel(Unit target) {
+        if(assertCanRefuel(target) && isReadyToFuel()) {
             
         }
     }

@@ -338,7 +338,7 @@ public strictfp enum UnitType {
      * True if the UnitType has the capability to deploy a MINE.
      * @return true if the UnitType's arsenal contains a MINE.
      */
-    public boolean canMine() {
+    public boolean canDeployMine() {
         return this == UnitType.DESTROYER || this == UnitType.CAPITAL;
     }
     /**
@@ -443,11 +443,11 @@ public strictfp enum UnitType {
         return miningRate;
     }
 
-    public int getBytecodeLimit() {
+    int getBytecodeLimit() {
         return bytecodeLimit;
     }
 
-    public Image getSpriteImage() {
+    Image getSpriteImage() {
         return spriteImage;
     }    
 }

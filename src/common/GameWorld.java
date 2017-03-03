@@ -383,4 +383,14 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
+    public int getUnitCount(Team team) {
+        int count = 0;
+        count = castDirector.getCurrentUnits().stream().filter((unit) -> (unit.getTeam() == team)).map((_item) -> 1).reduce(count, Integer::sum);
+        return count;
+    }
+    public int getUnitCount(Team team, UnitType type) {
+        int count = 0;
+        count = castDirector.getCurrentUnits().stream().filter((unit) -> (unit.getTeam() == team && unit.getType() == type)).map((_item) -> 1).reduce(count, Integer::sum);
+        return count;
+    } 
 }

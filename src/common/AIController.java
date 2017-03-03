@@ -88,22 +88,19 @@ public strictfp class AIController {
     // *********************************
     // **** GAMEWORLD QUERY METHODS ****
     // *********************************
+    
     public final int getGameRound() {
         return gameWorld.getGameRound();
     }
-
     public final int getMineralCount() {
         return gameWorld.getMineralCount(getTeam());
     }
-
     public final int getUnitCount() {
-        return 0; // TODO
+        return gameWorld.getUnitCount(unit.getTeam());
     }
-
     public final int getUnitCount(UnitType type) {
-        return 0; // TODO
+        return gameWorld.getUnitCount(unit.getTeam(), type);
     }
-
     public final Location getInitialHomeStationLocation(Team team) {
         return gameWorld.getInitialHomeStationLocation(team);
     }
@@ -119,81 +116,93 @@ public strictfp class AIController {
     // *********************************
     // ****** UNIT QUERY METHODS *******
     // *********************************
+    
     public final int getID() {
         return unit.getID();
     }
-
     public final Team getTeam() {
         return unit.getTeam();
     }
-
     public final UnitType getType() {
         return unit.getType();
     }
-
     public final int getBodyRadius() {
         return unit.getRadius();
     }
-
     public final Location getCurrentLocation() {
         return unit.getLocation();
     }
-
     public final int getHealth() {
         return unit.getHealth();
     }
-
     public final int getFuel() {
         return unit.getFuel();
+    } 
+    public final int getFuelMax() {
+        return unit.getType().getFuelMax();
     }
-    
     public final int getBuildCooldown() {
         return unit.getBuildCooldown();
     }
-
     public final WeaponType[] getArsenal() {
         return unit.getType().getArsenal();
     }
-
     public final UnitType[] getSpawnSources() {
         return unit.getType().getSpawnSources();
     }
-
     public final UnitType[] getSpawnUnits() {
         return unit.getType().getSpawnUnits();
     }
-
     public int getSensorRadius() {
         return unit.getType().getSensorRadius();
     }
-
     public int getIncomingDetectionRadius() {
         return unit.getType().getIncomingDetectionRadius();
     }
-
     public double getFlightRadius() {
         return unit.getType().getFlightRadius();
     }
-
     public int getFuelBurnRate() {
         return unit.getType().getFuelBurnRate();
     }
-
     public int getRefuelRadius() {
         return unit.getType().getRefuelRadius();
     }
-
     public int getRefuelRate() {
         return unit.getType().getRefuelRate();
     }
-
     public int getMiningRate() {
         return unit.getType().getMiningRate();
+    }
+    public boolean canAttack() {
+        return unit.getType().canAttack();
+    }
+    public boolean canBomb() {
+        return unit.getType().canBomb();
+    }
+    public boolean canDeployMine() {
+        return unit.getType().canDeployMine();
+    }
+    public boolean canPlanetBombardment() {
+        return unit.getType().canPlanetBombardment();
+    }
+    public boolean canBuildStructure() {
+        return unit.getType().canBuildStructure();
+    }
+    public boolean canBuildShip() {
+        return unit.getType().canBuildShip();
+    }
+    public boolean canHarvest() {
+        return unit.getType().canHarvest();
+    }
+    public boolean canRefuel() {
+        return unit.getType().canRefuel();
     }
 
     // *************************************
     // ****** GENERAL SENSOR METHODS *******
     // *************************************
+    
     public boolean onTheMap(Location location) {
         return assertOnScreen(location);
     }
@@ -231,6 +240,39 @@ public strictfp class AIController {
         else {
             return false;
         }
+    }
+    public Actor senseActorAtLocation(Location location) {
+        if(assertCanSenseLocation(location) && gameWorld.returnActorsInCircle(location, 0).size() > 0) {
+            return (Actor) gameWorld.returnActorsInCircle(location, 0).get(0);
+        }
+        return null;
+    }
+    public Unit senseUnitAtLocation(Location location) {
+        if(assertCanSenseLocation(location) && gameWorld.returnUnitsInCircle(location, 0).size() > 0) {
+            return (Unit) gameWorld.returnUnitsInCircle(location, 0).get(0);
+        }
+        return null;
+    }
+    public Weapon senseWeaponAtLocation(Location location) {
+        if(assertCanSenseLocation(location) && gameWorld.returnWeaponsInCircle(location, 0).size() > 0) {
+            return (Weapon) gameWorld.returnWeaponsInCircle(location, 0).get(0);
+        }
+        return null;
+    }
+    public Environment senseEnvironmentAtLocation(Location location) {
+        if(assertCanSenseLocation(location) && gameWorld.returnEnvironmentInCircle(location, 0).size() > 0) {
+            return (Environment) gameWorld.returnEnvironmentInCircle(location, 0).get(0);
+        }
+        return null;       
+    }
+    public List<Actor> senseActors() {
+        return gameWorld.returnActorsInCircle(unit.getLocation(), unit.getType().getSensorRadius());
+    }
+    public List<Unit> senseActors(int range) {
+        if(range > unit.getType().getSensorRadius()) {
+            range = unit.getType().getSensorRadius();
+        }
+        return gameWorld.returnActorsInCircle(unit.getLocation(), range);
     }
     public List<Unit> senseUnits() {
         return gameWorld.returnUnitsInCircle(unit.getLocation(), unit.getType().getSensorRadius());
@@ -286,7 +328,6 @@ public strictfp class AIController {
     }
     public List<Weapon> senseWeapons() {
         return gameWorld.returnWeaponsInCircle(unit.getLocation(), unit.getType().getIncomingDetectionRadius());
-        //test
     }
     public List<Weapon> senseWeapons(int range) {
         if(range > unit.getType().getIncomingDetectionRadius()){
@@ -373,5 +414,11 @@ public strictfp class AIController {
         else {
             System.out.println("Can not fire.");
         }
+    }
+    public final void harvest(Environment environment) {
+        //TODO
+    }
+    public final void refuel() {
+        //TODO
     }
 }

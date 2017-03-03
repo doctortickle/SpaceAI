@@ -76,14 +76,28 @@ public strictfp class AIController {
     private boolean assertCanMove() {
         return isReadyToMove();
     }
+    private boolean assertCanBuild(UnitType type) {
+        return Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
+            && getMineralCount()-type.getMineralCost() >= 0;
+    }
+    private boolean assertCanFire(WeaponType type) {
+        return unit.getType().canAttack() && Arrays.asList(unit.getType().getArsenal()).contains(type);
+    }
     private boolean assertCanSenseLocation(Location location) {
         return canSenseLocation(location);
+    }
+    private boolean assertLocationIsEmpty(Location location, int radius) {
+        return gameWorld.checkIfLocationIsEmpty(location, radius);
     }
     private boolean assertCanSensePartOfCircle(Location center, int radius) {
         return canSensePartOfCircle(center, radius);
     }
     private boolean assertCanSenseAllOfCircle(Location center, int radius) {
         return canSenseAllOfCircle(center, radius);
+    }
+    private boolean assertCanRefuel(Unit target) {
+        return unit.getLocation().distanceTo(target.getLocation()) < unit.getType().getRefuelRadius()
+                && unit.getType().canRefuel();
     }
     // *********************************
     // **** GAMEWORLD QUERY METHODS ****
@@ -386,9 +400,8 @@ public strictfp class AIController {
     public final void build(UnitType type, Direction direction) {
         Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
         if( isReadyToBuild() 
-            && Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
-            && getMineralCount()-type.getMineralCost() >= 0
-            && gameWorld.checkIfLocationIsEmpty(location, type.getBodyRadius())
+            && assertCanBuild(type)
+            && assertLocationIsEmpty(location, type.getBodyRadius())
             && onTheMap(location, type.getBodyRadius()) ) {
                 gameWorld.addUnit(type, location, getTeam());
                 unit.setBuildCooldown(type.getSpawnCooldown());
@@ -401,7 +414,7 @@ public strictfp class AIController {
     public final void fire(WeaponType type, Direction direction) {
         Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
         if( isReadyToFire() 
-            && Arrays.asList(unit.getType().getArsenal()).contains(type)
+            && assertCanFire(type)
             && onTheMap(location, type.getWeaponRadius()) ) {
                 Team team;
                 switch(type) {
@@ -418,7 +431,9 @@ public strictfp class AIController {
     public final void harvest(Environment environment) {
         //TODO
     }
-    public final void refuel() {
-        //TODO
+    public final void refuel(Unit unit) {
+        if(assertCanRefuel(unit)) {
+            
+        }
     }
 }

@@ -34,6 +34,9 @@ public strictfp enum UnitType {
                 5,      // flightRadius
                 1000,   // fuelMax
                 1,      // fuelBurnRate
+                0,      // refuelRadius
+                0,      // refuelRate
+                0,      // miningRate
                 new Image("/FIGHTER.png", 20, 20, true, false, true)  // spriteImage
     ),
     SIEGE(   new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.PLANET_BOMBARDMENT},  // arsenal
@@ -46,6 +49,9 @@ public strictfp enum UnitType {
                 3,      // flightRadius
                 1000,   // fuelMax
                 3,      // fuelBurnRate
+                0,      // refuelRadius
+                0,      // refuelRate
+                0,      // miningRate
                 new Image("/SIEGE.png", 32, 32, true, false, true)  // spriteImage
     ),
     DESTROYER(  new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.MINE},  // arsenal
@@ -58,6 +64,9 @@ public strictfp enum UnitType {
                 3,      // flightRadius
                 1000,   // fuelMax
                 3,      // fuelBurnRate
+                0,      // refuelRadius
+                0,      // refuelRate
+                0,      // miningRate
                 new Image("/DESTROYER.png", 40, 40, true, false, true)  // spriteImage
     ),
     CAPITAL(    new WeaponType[] {WeaponType.SMALL_LASER, WeaponType.LARGE_LASER, WeaponType.SMALL_BOMB, WeaponType.LARGE_BOMB, WeaponType.MINE, WeaponType.PLANET_BOMBARDMENT},  // arsenal
@@ -70,6 +79,9 @@ public strictfp enum UnitType {
                 1,      // flightRadius
                 2000,   // fuelMax
                 5,      // fuelBurnRate
+                0,      // refuelRadius
+                0,      // refuelRate
+                0,      // miningRate
                 new Image("/CAPITAL.png", 80, 80, true, false, true)  // spriteImage
     ),
     HARVESTER(  null,   // arsenal
@@ -82,6 +94,9 @@ public strictfp enum UnitType {
                 5,      // flightRadius
                 1000,   // fuelMax
                 1,      // fuelBurnRate
+                0,      // refuelRadius
+                0,      // refuelRate
+                20,      // miningRate
                 new Image("/HARVESTER.png", 20, 20, true, false, true)  // spriteImage
     ),
     REFUELER(   null,   // arsenal
@@ -94,6 +109,9 @@ public strictfp enum UnitType {
                 5,      // flightRadius
                 1000,   // fuelMax
                 1,      // fuelBurnRate
+                10,      // refuelRadius
+                5,      // refuelRate
+                0,      // miningRate
                 new Image("/REFUELER.png", 20, 20, true, false, true)  // spriteImage
     ),
     BUILDER(    null,   // arsenal
@@ -106,6 +124,9 @@ public strictfp enum UnitType {
                 5,      // flightRadius
                 1000,   // fuelMax
                 1,      // fuelBurnRate
+                0,      // refuelRadius
+                0,      // refuelRate
+                0,      // miningRate
                 new Image("/BUILDER.png", 20, 20, true, false, true)  // spriteImage
     ),
     
@@ -283,7 +304,8 @@ public strictfp enum UnitType {
 
     private UnitType(WeaponType[] arsenal, int spawnCooldown, int maxHealth,
             int mineralCost, int bodyRadius, int enemySensorRadius, 
-            int incomingDetectionRadius, int flightRadius, int fuelMax, 
+            int incomingDetectionRadius, int flightRadius, int refuelRadius, 
+            int refuelRate, int miningRate, int fuelMax, 
             int fuelBurnRate, Image spriteImage) {
         this.spawnLocations = null;
         this.arsenal = arsenal;
@@ -296,9 +318,9 @@ public strictfp enum UnitType {
         this.flightRadius = flightRadius;
         this.fuelMax = fuelMax;
         this.fuelBurnRate = fuelBurnRate;
-        this.refuelRadius = 0;
-        this.refuelRate = 0;
-        this.miningRate = 0;
+        this.refuelRadius = refuelRadius;
+        this.refuelRate = refuelRate;
+        this.miningRate = miningRate;
         this.bytecodeLimit = 10000;
         this.spriteImage = spriteImage;
     }

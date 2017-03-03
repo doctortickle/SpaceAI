@@ -35,6 +35,7 @@ public final class Unit extends Actor {
      */
     private int buildCooldown;
     private int reloadCooldown;
+    private int refuelCooldown;
     /**
      * Tracks if a unit has moved this turn.
      */
@@ -53,6 +54,7 @@ public final class Unit extends Actor {
         this.type = type;
         this.buildCooldown = 0;
         this.reloadCooldown = 0;
+        this.refuelCooldown = 0;
         this.hasMoved = false;
         this.dead = false;
         this.stalled = false;
@@ -76,6 +78,9 @@ public final class Unit extends Actor {
         }
         if(reloadCooldown > 0) {
             reloadCooldown--;
+        }
+        if(refuelCooldown > 0) {
+            refuelCooldown--;
         }
         if(hasMoved) {
             hasMoved = false;
@@ -124,6 +129,12 @@ public final class Unit extends Actor {
     }
     public void setReloadCooldown(int i) {
         this.reloadCooldown = i;
+    }
+    public int getRefuelCooldown() {
+        return refuelCooldown;
+    }
+    public void setRefuelCooldown(int refuelCooldown) {
+        this.refuelCooldown = refuelCooldown;
     }
     public boolean getHasMoved() {
         return hasMoved;

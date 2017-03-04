@@ -363,9 +363,8 @@ public strictfp enum UnitType {
 
     private UnitType(WeaponType[] arsenal, int spawnCooldown, int maxHealth,
             int mineralCost, int bodyRadius, int enemySensorRadius, 
-            int incomingDetectionRadius, int flightRadius, int refuelRadius, 
-            int refuelRate, int harvestingRadius, int harvestingRate, int fuelMax, 
-            int fuelBurnRate, Image spriteImage) {
+            int incomingDetectionRadius, int flightRadius, int fuelMax, 
+            int fuelBurnRate, int refuelRadius, int refuelRate, int harvestingRadius, int harvestingRate,  Image spriteImage) {
         this.spawnLocations = null;
         this.arsenal = arsenal;
         this.spawnCooldown = spawnCooldown;

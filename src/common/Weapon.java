@@ -59,7 +59,7 @@ public final class Weapon extends Actor {
         return false;
     }
 
-    public Weapon(SpaceAI spaceAI, WeaponType type, int ID, Location location, Team team, Direction direction) {
+    Weapon(SpaceAI spaceAI, WeaponType type, int ID, Location location, Team team, Direction direction) {
         super(ID, Integer.MAX_VALUE, type.getCollisionRadius(type), location, team, type.getSpriteImage());
         this.type = type;
         this.spent = false;
@@ -86,32 +86,32 @@ public final class Weapon extends Actor {
         return direction;
     }
 
-    public boolean isSpent() {
+    boolean isSpent() {
         return spent;
     }
 
-    public void setSpent(boolean spent) {
+    void setSpent(boolean spent) {
         this.spent = spent;
     }
 
-    public boolean isExploded() {
+    boolean isExploded() {
         return exploded;
     }
 
-    public void setExploded(boolean exploded) {
+    void setExploded(boolean exploded) {
         this.exploded = exploded;
     }
 
-    public int getClearCountdown() {
+    int getClearCountdown() {
         return clearCountdown;
     }
 
-    public void setClearCountdown(int clearCountdown) {
+    void setClearCountdown(int clearCountdown) {
         this.clearCountdown = clearCountdown;
     }
 
     @Override
-    public void update() {
+    void update() {
         if(!isSpent() && (getType() != WeaponType.MINE)) {
             wc.move(direction);
         }
@@ -121,10 +121,10 @@ public final class Weapon extends Actor {
     }
 
     @Override
-    public boolean collide(Actor actor) {
+    boolean collide(Actor actor) {
         return wc.collide(actor);
     }   
-    public void damageApplication(Actor actor) {
+    void damageApplication(Actor actor) {
         wc.damageApplication(actor);
     }   
 }

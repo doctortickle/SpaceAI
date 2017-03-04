@@ -28,14 +28,14 @@ import java.util.List;
  */
 public strictfp class AIController {
 
-    private Unit unit;
-    private GameWorld gameWorld;
+    private final Unit unit;
+    private final GameWorld gameWorld;
     private final double leftBoundary;
     private final double rightBoundary;
     private final double bottomBoundary;
     private final double topBoundary;
 
-    public AIController(Unit unit, GameWorld gameWorld) {
+    AIController(Unit unit, GameWorld gameWorld) {
         this.unit = unit;
         this.gameWorld = gameWorld;
         this.leftBoundary = GameConstants.MIN_X_COORDINATE;

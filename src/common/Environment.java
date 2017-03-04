@@ -27,17 +27,17 @@ public final class Environment extends Actor{
     /**
      * The EnvironmentType of this environment object.
      */
-    public final EnvironmentType type;
+    private final EnvironmentType type;
    
     /**
      * The number of minerals this environment object has currently remaining.
      */
-    public int mineralCount;
+    private int mineralCount;
     
     /**
      * The current number of StructureType structures on this environment object.
      */
-    public int structureCount;
+    private int structureCount;
     private final EnvironmentController ec;
     
     @Override
@@ -66,7 +66,7 @@ public final class Environment extends Actor{
     }
     
 
-    public Environment(SpaceAI spaceAI, EnvironmentType type, int ID, Location location) {
+    Environment(SpaceAI spaceAI, EnvironmentType type, int ID, Location location) {
         super(ID, type.getMaxHealth(), type.getBodyRadius(), location, Team.NEUTRAL, type.getSpriteImage());
         this.type = type;
         this.mineralCount = type.getMineralMax();
@@ -90,7 +90,7 @@ public final class Environment extends Actor{
         return mineralCount;
     }
 
-    public void decreaseMineralCount(int decrement) {
+    void decreaseMineralCount(int decrement) {
         this.mineralCount -= decrement;
     }
     /**
@@ -102,12 +102,12 @@ public final class Environment extends Actor{
     }
 
     @Override
-    public void update() {
+    void update() {
         // update method goes here.
     }
 
     @Override
-    public boolean collide(Actor object) {
+    boolean collide(Actor object) {
         return false;
     }
 }

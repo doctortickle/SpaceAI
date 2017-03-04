@@ -23,7 +23,7 @@ public abstract class Actor {
     private final Team team;
     private ImageView spriteFrame;
 
-    public Actor(int ID, int health, int radius, Location location, Team team, Image spriteImage) {
+    Actor(int ID, int health, int radius, Location location, Team team, Image spriteImage) {
         this.ID = ID;
         this.health = health;
         this.radius = radius;
@@ -35,7 +35,7 @@ public abstract class Actor {
         }
     }
     
-    public abstract void update();
+    abstract void update();
     
     public int getID() {
         return ID;
@@ -45,7 +45,7 @@ public abstract class Actor {
         return health;
     }
     
-    public void setHealth(int damage) {
+    void setHealth(int damage) {
         this.health -= damage;
     }
 
@@ -61,12 +61,12 @@ public abstract class Actor {
         return location;
     }
     
-    public void updateLocation(double x, double y) {
+    void updateLocation(double x, double y) {
         setX(x);
         setY(y);
     }
     
-    public void updateLocation(Location location) {
+    void updateLocation(Location location) {
         this.location = location;
     }
 
@@ -78,7 +78,7 @@ public abstract class Actor {
         this.location = new Location(this.location.getX(), y);
     }
     
-    protected ImageView getSpriteFrame() {
+    ImageView getSpriteFrame() {
         return spriteFrame;
     }
 
@@ -92,7 +92,7 @@ public abstract class Actor {
     
     public abstract boolean isStructure();
     
-    public abstract boolean collide(Actor object);
+    abstract boolean collide(Actor object);
     
     private void teamColorize(ImageView spriteFrame) {         
         Lighting lighting = new Lighting();

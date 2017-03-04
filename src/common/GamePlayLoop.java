@@ -36,7 +36,7 @@ public class GamePlayLoop extends AnimationTimer {
     
     @Override
     public void handle(long now) {
-        if(!spaceAI.getPause()) {
+        if(!spaceAI.getPause() && checkForWinner()) {
             if(pulse<gameSpeed) {
             pulse++;
             System.out.println(pulse);
@@ -46,13 +46,17 @@ public class GamePlayLoop extends AnimationTimer {
             }
             if(pulse==0) {
                 setGameSpeed(); //Checks the current game speed and changes var. 
-                gameWorld.update(); //Round number, quad tree, health checks, weapon collision checks, Home Station/Mineral initialization
+                gameWorld.update(); //Round number, check winner, quad tree, health checks, weapon collision checks, Home Station/Mineral initialization
                 spaceAI.update(); //Adds nodes, adds and removes pixels
                 updateActors(); // Runs the space AI Controller
             }     
         }
         if(spaceAI.getPause()) {
             System.out.println("Game Paused");
+        }
+        if(!checkForWinner()) {
+            System.out.println("Team " + gameWorld.getGameWinner().getWinner() + " wins due to " + gameWorld.getGameWinner().getDominationFactor());
+            stop();
         }
     }
     
@@ -70,6 +74,9 @@ public class GamePlayLoop extends AnimationTimer {
         for(Environment environment : castDirector.getCurrentEnvironment() ) {
             environment.update();
         }
+    }
+    private boolean checkForWinner() {
+        return gameWorld.getGameWinningTeam() == null;
     }
     
     @Override

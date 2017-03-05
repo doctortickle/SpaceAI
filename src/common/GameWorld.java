@@ -38,6 +38,11 @@ public class GameWorld {
     private List<Actor> allActors;
     private GhostCircle ghostCircle;
 
+/**
+ * Instantiates the GameWorld class and sets the starting value of class variables.
+ * @param spaceAI        an instance of the SpaceAI class that facilitates game animation.
+ * @param castDirector   an instance of the CastingDirector class that communicates current unit count and status  
+ */
     public GameWorld(SpaceAI spaceAI, CastingDirector castDirector) {
         this.spaceAI = spaceAI;
         this.castDirector = castDirector;
@@ -47,6 +52,9 @@ public class GameWorld {
         this.ghostCircle = null;
     }
 
+/**
+ * Begins and updates game rounds and unit losses.    
+ */
     public void update() {
         gameRound++;
         if(gameRound==1) {
@@ -59,18 +67,31 @@ public class GameWorld {
         clearDepletedActors();
     }
 
+ /**
+ * Initializes values for units during the first game round.
+ */
     private void initializeStartingUnits() {
         this.teamAHomeStation = GameConstants.TEAM_A_HOME_STATION;
         this.teamBHomeStation = GameConstants.TEAM_B_HOME_STATION;
         addUnit(UnitType.HOME_STATION, teamAHomeStation, Team.A);
         addUnit(UnitType.HOME_STATION, teamBHomeStation, Team.B);
     }
+ /**
+ * Initializes mineral count values for units during the first game round.
+ */
     private void initializeStartingMineralCounts() {
         this.teamAMineralCount = this.teamBMineralCount = GameConstants.STARTING_MINERAL_COUNT;
     }
+ /**
+ * Provides unique identification number.
+ * @return   increments uniqueID 
+ */
     private synchronized int getUniqueID() {
         return uniqueID++;
     }
+ /**
+ * Updates game world with current unit information from the Casting Director class..
+ */
     private void updateQuadTree() {
         quad.clear();
         allActors.clear();
@@ -82,6 +103,11 @@ public class GameWorld {
         }      
 
     }
+ /**
+ * This method sorts current actor lists in order to determine actors that are weapons. Once 
+ * sorted, method checks for weapons that have collided, been spent, or exploded and prints
+ * current status of weapon. 
+ */
     private void checkWeaponCollisions() {
         List<Actor> returnActors = new ArrayList();
         for (int i = 0; i < allActors.size(); i++) {
@@ -109,6 +135,10 @@ public class GameWorld {
             }  
         }
     }
+/**
+ * Clears actors, units and weapons, from the CastingDirector castDirector class if unit is dead 
+ * or weapon is spent, exploded, or countdown is cleared.
+ */
     private void clearDepletedActors() {
        List<Unit> checkUnits = castDirector.getCurrentUnits();
        checkUnits.stream().filter((unit) -> (unit.isDead())).forEachOrdered((unit) -> {
@@ -119,35 +149,77 @@ public class GameWorld {
            removeActor(weapon);
         });
     }
+ /**
+ * Adds unit to the CastingDirector castDirector class.
+ * @param type         defines the type of unit to be added 
+ * @param location     defines the location of unit to be added
+ * @param team         defines the team of the unit to be added
+ */
     public void addUnit(UnitType type, Location location, Team team){
         Unit unit = new Unit(spaceAI, type, getUniqueID(), location, team);
         castDirector.addToBeAdded(unit);
     }
+ /**
+ * Adds weapon to the CastingDirector castDirector class.
+ * @param type         defines the type of weapon to be added 
+ * @param location     defines the location of weapon to be added
+ * @param team         defines the team of the weapon to be added
+ * @param direction    defines the direction of the weapon to be added
+ */
     public void addWeapon(WeaponType type, Location location, Team team, Direction direction){
         Weapon weapon = new Weapon(spaceAI, type, getUniqueID(), location, team, direction);
         castDirector.addToBeAdded(weapon);
     }
+ /**
+ * Adds environment to the CastingDirector castDirector class.
+ * @param type         defines the type of environment to be added 
+ * @param location     defines the location of environment to be added
+ * @param team         defines the team of the environment to be added
+ */
     public void addEnvironment(EnvironmentType type, Location location){
         Environment environment = new Environment(spaceAI, type, getUniqueID(), location);
         castDirector.addToBeAdded(environment);
     }
+/**    
+ * Removes actor from the CastingDirector castDirector class.
+ * @param actor         defines the actor to be removed 
+ */
     public void removeActor(Actor actor) {
         castDirector.addToRemovedActors(actor);
     }
-    
+/**
+ * Gets Game Speed. 
+ * @return gameSpeed
+ */    
     public int getGameSpeed() {
         return this.gameSpeed;
     }
+/**
+ * Sets the Game Speed.
+ * @param gameSpeed    defines the speed of the game by the frame per seconds in the Game Constants class.
+ */
     public void setGameSpeed(int gameSpeed) {
         this.gameSpeed = gameSpeed;
     }
+/**
+ * Gets the Game Round.
+ * @return gameRound
+ */
     public int getGameRound() {
         return gameRound;
     }
+/**
+ * Runs method updateQuadtree.
+ * @return quad
+ */
     public QuadTree getUpdatedQuad() {
         updateQuadTree();
         return quad;
     }
+/**
+ * Gets mineral count for the requested Team.
+ * @param team   defines the team
+ */
     public int getMineralCount(Team team) {
         switch(team) {
             case A : {return teamAMineralCount;}
@@ -155,13 +227,23 @@ public class GameWorld {
             default : {System.out.println("ERROR IN GET MINERAL COUNT"); return 0;}
         }
     }
+/**
+ * Decreases mineral count.
+ * @param i         the amount to be decreased
+ * @param team      defines the team's mineral count to decrease
+ */
     public void decreaseMineralCount(int i, Team team) {
         switch(team) {
             case A : {this.teamAMineralCount -= i; break;}
             case B : {this.teamBMineralCount -= i; break;}
             default : {System.out.println("ERROR IN DECREASE MINERAL COUNT");}
         }
-    }
+   }
+/**
+ * Increases mineral count. 
+ * @param i         the amount to be increased
+ * @param team      defines the team's mineral count to increase
+ */
     public void increaseMineralCount(int i, Team team) {
         switch(team) {
             case A : {this.teamAMineralCount += i; break;}
@@ -169,6 +251,11 @@ public class GameWorld {
             default : {System.out.println("ERROR IN INCREASE MINERAL COUNT");}
         }
     }
+/**
+ * Obtains the initial home station location.
+ * @param team    defines the team's home location
+ * @return 
+ */
     public Location getInitialHomeStationLocation(Team team) {
         switch(team) {
             case A : {return teamAHomeStation;}
@@ -176,6 +263,12 @@ public class GameWorld {
             default : {System.out.println("ERROR IN INITIAL HOME STATION LOCATION"); return new Location(0,0); }
         }
     }
+/**
+ * Passes the location variable into the GhostCircle class into the QuadTree class to obtain Actors radius and 
+ * check if the location variable is occupied by an actor.
+ * @param location      the desired location the player would like to check is or is not occupied
+ * @return false
+ */
     public boolean checkIfLocationIsEmpty(Location location) {
         ghostCircle = new GhostCircle(0,location);
         quad.insert(ghostCircle);
@@ -194,6 +287,13 @@ public class GameWorld {
         updateQuadTree();
         return true;
     }
+/**
+ * Passes the location variable into the GhostCircle class into the QuadTree class to obtain Actors radius and 
+ * check if the location variable is occupied by an actor.
+ * @param location      the desired location the player would like to check is or is not occupied
+ * @param radius        the desired radius the player would like to check is or is not occupied
+ * @return 
+ */
     public boolean checkIfLocationIsEmpty(Location location, int radius) {
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -212,6 +312,14 @@ public class GameWorld {
         updateQuadTree();
         return true;
     }
+/**
+ * Passes the location variable into the GhostCircle class into the QuadTree class to obtain Actors radius and 
+ * check if the location variable is occupied by an actor.
+ * @param location      the desired location the player would like to check is or is not occupied
+ * @param radius        the desired radius the player would like to check is or is not occupied
+ * @param ID            the desired ID the player would like to check is or is not occupying the desired location     
+ * @return 
+ */
     public boolean checkIfLocationIsEmpty(Location location, int radius, int ID) { // Checks if location is empty except for the unit represented by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -230,6 +338,7 @@ public class GameWorld {
         updateQuadTree();
         return true;
     }
+
     public List returnActorsInCircle(Location location, int radius) { // Returns all actors in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);

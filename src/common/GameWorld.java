@@ -90,11 +90,12 @@ public class GameWorld {
     }
     private void initializeEnvironment() {
         createInitialEnvironment();
-        mirrorEnvironment();
+        //mirrorEnvironment();
         
     }
     private void createInitialEnvironment() {
         addEnvironment(EnvironmentType.LARGE_PLANET, new Location(200, 200));
+        addEnvironment(EnvironmentType.LARGE_PLANET, new Location(-200, -200));
     }
     private void mirrorEnvironment() {
         for(Environment environment : castDirector.getCurrentEnvironment()) {

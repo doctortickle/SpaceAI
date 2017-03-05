@@ -281,9 +281,17 @@ public class GameWorld {
     public int getGameRound() {
         return gameRound;
     }
+/**
+ * Gets the Game Winner.
+ * @return gameWinner
+ */
     public GameWinner getGameWinner() {
         return gameWinner;
     }
+/**
+ * Gets the Game Winning Team.
+ * @return gameWinner.getWinner()
+ */
     public Team getGameWinningTeam() {
         return gameWinner.getWinner();
     }
@@ -417,7 +425,12 @@ public class GameWorld {
         updateQuadTree();
         return true;
     }
-
+/**
+ * Queries and returns any actor operating in the ghostCircle radius of the AI.
+ * @param location      defines the location of the Actor who's location will be queried
+ * @param radius        defines the radius size of the Actor who's radius will be queried
+ * @return returnCollisions
+ */
     public List returnActorsInCircle(Location location, int radius) { // Returns all actors in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -436,6 +449,13 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
+/**
+ * Queries and returns any actor operating in the ghostCircle radius of the AI.
+ * @param location      defines the location of the Actor who's location will be queried
+ * @param radius        defines the radius size of the Actor who's radius will be queried
+ * @param ID            defines the ID of the actor that will be excluded from the method's query
+ * @return returnCollisions
+ */
     public List returnActorsInCircle(Location location, int radius, int ID) { // Returns all actors in circle. Returns actors in circle except for the unit represented by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -455,6 +475,12 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
+/**
+ * Queries and returns any unit operating in the ghostCircle radius of the AI.
+ * @param location      defines the location of the unit who's location will be queried
+ * @param radius        defines the radius size of the unit who's radius will be queried
+ * @return returnCollisions
+ */
     public List returnUnitsInCircle(Location location, int radius) { // Returns all units in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -474,6 +500,13 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
+/**
+ * Queries and returns any unit operating in the ghostCircle radius of the AI.
+ * @param location      defines the location of the unit who's location will be queried
+ * @param radius        defines the radius size of the unit who's radius will be queried
+ * @param ID            defines the ID of the unit that will be excluded from the method's query
+ * @return returnCollisions
+ */
     public List returnUnitsInCircle(Location location, int radius, int ID) { // Returns all units in circle except the unit indicated by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -494,6 +527,12 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }    
+/**
+ * Queries and returns anything other than weapons operating in the ghostCircle radius of the AI.
+ * @param location      defines the location of all actors, excluding Weapons, who's location will be queried
+ * @param radius        defines the radius size of all actors, excluding Weapons, who's radius will be queried
+ * @return returnCollisions
+ */
     public List returnNonWeaponsInCircle(Location location, int radius) { // Does not return weapons.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -513,6 +552,13 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
+/**
+ * Queries and returns anything other than weapons operating in the ghostCircle radius of the AI.
+ * @param location      defines the location of all actors, excluding Weapons, who's location will be queried
+ * @param radius        defines the radius size of all actors, excluding Weapons, who's radius will be queried
+ * @param ID            defines the ID of the unit that will be excluded from the method's query 
+ * @return returnCollisions
+ */
     public List returnNonWeaponsInCircle(Location location, int radius, int ID) { // Does not return weapons. Returns actors in circle except for the unit represented by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -533,6 +579,12 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
+/**
+ * Queries and returns any weapon operating in the ghostCircle radius of the AI.
+ * @param location      defines the location of the weapon who's location will be queried
+ * @param radius        defines the radius size of the weapon who's radius will be queried
+ * @return returnCollisions
+ */
     public List returnWeaponsInCircle(Location location, int radius) { // Returns all weapons in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -552,6 +604,12 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
+    /**
+ * Queries and returns any environment variable operating in the ghostCircle radius of the AI.
+ * @param location      defines the location of the environment variable who's location will be queried
+ * @param radius        defines the radius size of the environment variable who's radius will be queried
+ * @return returnCollisions
+ */
     public List returnEnvironmentInCircle(Location location, int radius) { // Returns all environment in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -571,11 +629,22 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
+/**
+ * Gets Unit Count for queried team.
+ * @param team      defines the team to be passed to obtain the Unit Count
+ * @return count
+ */
     public int getUnitCount(Team team) {
         int count = 0;
         count = castDirector.getCurrentUnits().stream().filter((unit) -> (unit.getTeam() == team)).map((_item) -> 1).reduce(count, Integer::sum);
         return count;
     }
+/**
+ * Gets Unit Count for queried team.
+ * @param team      defines the team to be passed to obtain the Unit Count
+ * @param type      defines the type to be passed to obtain the Unit Count
+ * @return count
+ */
     public int getUnitCount(Team team, UnitType type) {
         int count = 0;
         count = castDirector.getCurrentUnits().stream().filter((unit) -> (unit.getTeam() == team && unit.getType() == type)).map((_item) -> 1).reduce(count, Integer::sum);

@@ -19,9 +19,6 @@
  */
 package common;
 
-import common.VictoryCondition;
-import common.Team;
-
 /**
  *
  * @author Dylan Russell

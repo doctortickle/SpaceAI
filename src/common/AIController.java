@@ -82,10 +82,10 @@ public strictfp class AIController {
         return true;
     }
     private boolean assertCanSenseLocation(Location location) {
-        return assertOnScreen(location) && getCurrentLocation().distanceTo(location) <= getSensorRadius();
+        return assertOnScreen(location) && getLocation().distanceTo(location) <= getSensorRadius();
     }
     private boolean assertCanSenseIncomingLocation(Location location) {
-        return assertOnScreen(location) && getCurrentLocation().distanceTo(location) <= getIncomingDetectionRadius();
+        return assertOnScreen(location) && getLocation().distanceTo(location) <= getIncomingDetectionRadius();
     }
     private boolean assertLocationIsEmpty(Location location) {
         return gameWorld.checkIfLocationIsEmpty(location);
@@ -94,13 +94,13 @@ public strictfp class AIController {
         return gameWorld.checkIfLocationIsEmpty(location, radius);
     }
     private boolean assertCanSensePartOfCircle(Location center, int radius) {
-        return assertOnScreen(center) && getCurrentLocation().distanceTo(center) - radius <= getSensorRadius();
+        return assertOnScreen(center) && getLocation().distanceTo(center) - radius <= getSensorRadius();
     }
     private boolean assertCanSenseAllOfCircle(Location center, int radius) {
-        return assertOnScreen(center) && getCurrentLocation().distanceTo(center) + radius <= getSensorRadius();
+        return assertOnScreen(center) && getLocation().distanceTo(center) + radius <= getSensorRadius();
     }
     private boolean assertCanMove(Location location) {
-        return getCurrentLocation().distanceTo(location) <= unit.getType().getFlightRadius()
+        return getLocation().distanceTo(location) <= unit.getType().getFlightRadius()
                 && checkBoundaries(location)
                 && !checkForCollision(location);
     }
@@ -141,7 +141,24 @@ public strictfp class AIController {
     public final Location getInitialHomeStationLocation(Team team) {
         return gameWorld.getInitialHomeStationLocation(team);
     }
-
+    
+    // *********************************
+    // ****** ACTOR QUERY METHODS ******
+    // *********************************
+    
+    public final int getID(Actor actor) {
+        return actor.getID();
+    }
+    public final Team getTeam(Actor actor) {
+        return actor.getTeam();
+    }
+    public final int getHealth(Actor actor) {
+        return actor.getHealth();
+    }
+    public final Location getLocation(Actor actor) {
+        return actor.getLocation();
+    }
+    
     // *********************************
     // ****** UNIT QUERY METHODS *******
     // *********************************
@@ -158,7 +175,7 @@ public strictfp class AIController {
     public final int getBodyRadius() {
         return unit.getRadius();
     }
-    public final Location getCurrentLocation() {
+    public final Location getLocation() {
         return unit.getLocation();
     }
     public final int getHealth() {
@@ -227,7 +244,7 @@ public strictfp class AIController {
     public boolean canRefuel() {
         return unit.getType().canRefuel();
     }
-
+    
     // *************************************
     // ****** GENERAL SENSOR METHODS *******
     // *************************************
@@ -394,18 +411,18 @@ public strictfp class AIController {
                 && isReadyToMove();
     }
     public boolean canMove(Direction direction) {
-        return assertCanMove(getCurrentLocation().add(unit.getType().getFlightRadius(), direction))
+        return assertCanMove(getLocation().add(unit.getType().getFlightRadius(), direction))
                 && isReadyToMove();
     }
     public boolean canBuild(UnitType type, Direction direction) {
-        Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
         return assertCanBuild(type) 
                 && assertLocationIsEmpty(location, type.getBodyRadius())
                 && assertOnScreen(location, type.getBodyRadius())
                 && isReadyToBuild(); 
     }
     public boolean canFire(WeaponType type, Direction direction) {
-        Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
+        Location location = getLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
         return assertCanFire(type)
                 && assertOnScreen(location, type.getWeaponRadius())
                 && isReadyToFire();
@@ -428,18 +445,18 @@ public strictfp class AIController {
                 updateSpriteAndLocation(location);
                 updateUnitMovementInfo();
         } else {
-                Direction moveDirection = getCurrentLocation().directionTo(location);
+                Direction moveDirection = getLocation().directionTo(location);
                 move(moveDirection);
         }
     }
     public final void move(Direction direction) {
-        Location movePoint = getCurrentLocation().add(unit.getType().getFlightRadius(), direction);
+        Location movePoint = getLocation().add(unit.getType().getFlightRadius(), direction);
         if  (canMove(movePoint)) {
                 move(movePoint);   
         }
     }
     public final void build(UnitType type, Direction direction) {
-        Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
         if(canBuild(type, direction)) {
                 gameWorld.addUnit(type, location, getTeam());
                 unit.setBuildCooldown(type.getSpawnCooldown());
@@ -450,7 +467,7 @@ public strictfp class AIController {
         }
     }
     public final void fire(WeaponType type, Direction direction) {
-        Location location = getCurrentLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
+        Location location = getLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
         if(canFire(type, direction)) {
                 Team team;
                 switch(type) {

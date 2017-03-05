@@ -145,7 +145,7 @@ public strictfp enum WeaponType {
      * @param weaponType the weaponType being checked.
      * @return int radius that should be used by QuadTree when detecting collisions
      */
-    public int getCollisionRadius(WeaponType weaponType) {
+    int getCollisionRadius(WeaponType weaponType) {
         switch(weaponType) {
             case SMALL_LASER        : return weaponType.getWeaponRadius();
             case LARGE_LASER        : return weaponType.getWeaponRadius(); 

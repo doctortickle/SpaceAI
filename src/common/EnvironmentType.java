@@ -64,7 +64,7 @@ public strictfp enum EnvironmentType {
      */
     LARGE_PLANET    (30000, 50,     4,      0,      (Math.PI)/12,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
-                    new Image("/TestImage.png", 50, 50, true, false, true));
+                    new Image("/LARGE_PLANET.png", 200, 200, true, false, true));
     
     /**
      * The maximum (not current) health of a given EnvironmentType.
@@ -118,35 +118,35 @@ public strictfp enum EnvironmentType {
     
     /**
      * Returns the maximum (not current) health of a given EnvironmentType.
-     * @return the maximum (not current) health of a given EnvironmentType.
+     * @return int maximum (not current) health of a given EnvironmentType.
      */
     public int getMaxHealth() {
         return maxHealth;
     }
     /**
      * Returns the body radius of a given EnvironmentType.
-     * @return the body radius of a given EnvironmentType.
+     * @return int body radius of a given EnvironmentType.
      */
     public int getBodyRadius() {
         return bodyRadius;
     }
     /**
      * Returns the maximum (not current) number of StructureTypes that can be hosted on a given EnvironmentType.
-     * @return the maximum (not current) number of StructureTypes that can be hosted on a given EnvironmentType.
+     * @return int maximum (not current) number of StructureTypes that can be hosted on a given EnvironmentType.
      */
     public int getStructureCap() {
         return structureCap;
     }
     /**
      * Returns the maximum (not current) minerals available to be harvested or mined on a given EnvironmentType.
-     * @return the maximum (not current) minerals available to be harvested or mined on a given EnvironmentType.
+     * @return int maximum (not current) minerals available to be harvested or mined on a given EnvironmentType.
      */
     public int getMineralMax() {
         return mineralMax;
     }
     /**
      * Returns the rotational velocity of a given EnvironmentType.
-     * @return the rotational velocity of a given EnvironmentType.
+     * @return double rotational velocity of a given EnvironmentType.
      */
     public double getRotationV() {
         return rotationV;

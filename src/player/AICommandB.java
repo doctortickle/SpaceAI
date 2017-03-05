@@ -54,7 +54,7 @@ public class AICommandB {
     // *********************************
     private static void runFighter() {
         // This code will be run every round.
-        ac.getCurrentLocation();
+        ac.getLocation();
         ac.move(Direction.getRandom());
     }
     // *********************************
@@ -74,7 +74,7 @@ public class AICommandB {
     // *********************************
     private static void runCapital() {
         // This code will be run every round.
-        ac.fire(WeaponType.LARGE_BOMB, ac.getCurrentLocation().directionTo(ac.getInitialHomeStationLocation(ac.getTeam().opponent())));
+        ac.fire(WeaponType.LARGE_BOMB, ac.getLocation().directionTo(ac.getInitialHomeStationLocation(ac.getTeam().opponent())));
     }
     // *********************************
     // ************ BUILDER ************

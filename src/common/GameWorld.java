@@ -62,6 +62,7 @@ public class GameWorld {
         if(gameRound==1) {
             initializeStartingUnits();
             initializeStartingMineralCounts();
+            initializeEnvironment();
         }
         checkForGameWinner();
         if(gameWinner.getWinner() == null) {
@@ -86,6 +87,23 @@ public class GameWorld {
  */
     private void initializeStartingMineralCounts() {
         this.teamAMineralCount = this.teamBMineralCount = GameConstants.STARTING_MINERAL_COUNT;
+    }
+    private void initializeEnvironment() {
+        createInitialEnvironment();
+        mirrorEnvironment();
+    }
+    private void createInitialEnvironment() {
+        addEnvironment(EnvironmentType.LARGE_PLANET, new Location(200, 200));
+    }
+    private void mirrorEnvironment() {
+        for(Actor actor : castDirector.getToBeAdded()) {
+            if(actor instanceof Environment) {
+                Environment environment = (Environment) actor;
+                double mirrorLocationX = -(environment.getLocation().getX());
+                double mirrorLocationY = -(environment.getLocation().getY());
+                addEnvironment(environment.getType(),new Location(mirrorLocationX, mirrorLocationY));
+            }
+        }
     }
  /**
  * Provides unique identification number.

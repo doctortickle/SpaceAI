@@ -14,20 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package common;
+package player;
+
+import common.AIController;
+import common.Direction;
+import common.Location;
+import common.Unit;
+import common.UnitType;
+
 
 /**
  *
  * @author Dylan Russell
  */
-public class AICommandB {
+public class AICommandA {
     
     static AIController ac;
     
     public static void run(AIController ac) {
         
-        AICommandB.ac = ac;
-
+        AICommandA.ac = ac;
+        
         switch(ac.getType()) {
             case FIGHTER : runFighter(); break;
             case SIEGE : runSiege(); break;
@@ -50,7 +57,11 @@ public class AICommandB {
     private static void runFighter() {
         // This code will be run every round.
         ac.getCurrentLocation();
-        ac.move(Direction.getRandom());
+        ac.move(new Location(50,50));
+        //ac.fire(WeaponType.SMALL_LASER,ac.getCurrentLocation().directionTo(ac.getInitialHomeStationLocation(ac.getTeam().opponent())));
+        for(Unit unit : ac.senseUnits()) {
+            unit.getHealth();
+        }
     }
     // *********************************
     // ************ SIEGE **************
@@ -70,7 +81,6 @@ public class AICommandB {
     private static void runCapital() {
         // This code will be run every round.
         ac.move(Direction.getRandom());
-        ac.fire(WeaponType.LARGE_BOMB, Direction.NORTH);
     }
     // *********************************
     // ************ BUILDER ************
@@ -99,12 +109,15 @@ public class AICommandB {
     // *********************************
     // ********* HOME STATION **********
     // *********************************
-    private static int builderCount;
+    static int fighterCount = 0;
     private static void runHomeStation() {
         // This code will be run every round.
-        if(builderCount == 0) {
-            ac.build(UnitType.BUILDER, Direction.EAST);
-            builderCount++;
+        if(fighterCount < 5) {
+            if(ac.canBuild(UnitType.FIGHTER, Direction.SOUTH)) {
+                ac.build(UnitType.FIGHTER, Direction.SOUTH);
+                fighterCount++;
+                System.out.println(fighterCount);
+            }
         }
     }
     // *********************************

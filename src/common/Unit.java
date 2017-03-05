@@ -16,9 +16,14 @@
  */
 package common;
 
+import player.AICommandA;
+import player.AICommandB;
+
 /**
- *
- * @author dr4ur
+ * This class represents actors that are directly commandable by the player via AICommand.
+ * @author Dylan Russell
+ * @author Myles Russell
+ * @version 1.0
  */
 public final class Unit extends Actor {
 
@@ -31,28 +36,47 @@ public final class Unit extends Actor {
      */
     private int fuel;
     /**
-     * Tracks the cooldown required to build another unit.
+     * Tracks the cooldown (# of turns) required to build another unit.
      */
     private int buildCooldown;
+    /**
+     * Tracks the cooldown (# of turns) required to fire another weapon.
+     */
     private int reloadCooldown;
     /**
-     * Tracks if a unit has refueled this turn.
+     * True if a unit has refueled this turn.
      */
     private boolean hasRefueled;
     /**
-     * Tracks if a unit has moved this turn.
+     * True if a unit has moved this turn.
      */
     private boolean hasMoved;
     /**
-     * Defines the AIController for this unit.
+     * True if a unit has harvested this turn.
      */
     private boolean hasHarvested;
+    /**
+     * True if a unit is dead. 
+     */
     private boolean dead;
+    /**
+     * True if a unit is stalled due to zero fuel.
+     */
     private boolean stalled;
+    /**
+     * Holds the AIController for this unit.
+     */
     private final AIController ac;
     
-    
-    public Unit(SpaceAI spaceAI, UnitType type, int ID, Location location, Team team) {
+    /**
+     * Creates a new unit object.
+     * @param spaceAI the instance of SpaceAI that animates the game
+     * @param type the UnitType of the unit to be instantiated
+     * @param ID the ID of the unit to be instantiated
+     * @param location the location of the unit to be instantiated
+     * @param team the team of the unit to be instantiated
+     */
+    Unit(SpaceAI spaceAI, UnitType type, int ID, Location location, Team team) {
         super(ID, type.getMaxHealth(), type.getBodyRadius(), location, team, type.getSpriteImage());
         this.fuel = type.getFuelMax();
         this.type = type;
@@ -67,13 +91,15 @@ public final class Unit extends Actor {
     }
 
     @Override
-    public void update() {
+    void update() {
         beginTurn();
         if(checkCondition()) {
             runAICommand();
         }  
     }
-    
+    /**
+     * Various unit checks to be conducted at the beginning of every turn.
+     */
     private void beginTurn() {
         System.out.println("\n"+ getType() + " " + getTeam() + getID());
         System.out.println("Health = " + getHealth());
@@ -101,10 +127,22 @@ public final class Unit extends Actor {
             System.out.println("I am stalled because I have no fuel!");
             stalled = true;
         }
+        else if(fuel > 0) {
+            stalled = false;
+        }
     }
+    /**
+     * Checks if a unit is either dead or stalled.
+     * @return true if the unit is neither dead nor stalled
+     * @see #dead
+     * @see #stalled
+     */
     private boolean checkCondition() {
         return !dead && !stalled;
     }
+    /**
+     * Runs the AICommand class that corresponds to the units team.
+     */
     private void runAICommand() {
         if(this.getTeam()==Team.A) {
             AICommandA.run(ac);
@@ -113,65 +151,154 @@ public final class Unit extends Actor {
             AICommandB.run(ac);
         }
     }
-
+    /**
+     * Returns the UnitType of this unit.
+     * @return UnitType of this unit
+     * @see UnitType
+     */
     public UnitType getType() {
         return type;
     }
+    /**
+     * Returns the current fuel in this unit's tank.
+     * @return int current fuel in this unit's tank
+     * @see #fuel
+     */
     public int getFuel() {
         return fuel;
     }
-    public void decreaseFuel(int remove) {
+    /**
+     * Decreases the fuel by the parameter remove.
+     * @param remove amount to decrease this unit's fuel
+     * @see #fuel
+     */
+    void decreaseFuel(int remove) {
         this.fuel -= remove;
         if(fuel < 0) {
             fuel = 0;
         }
     }
-    public void increaseFuel(int add) {
+    /**
+     * Increases the fuel by the parameter add.
+     * @param add amount to increase this unit's fuel
+     * @see #fuel
+     */
+    void increaseFuel(int add) {
         this.fuel += add;
         if(fuel > this.getType().getFuelMax()) {
             fuel = this.getType().getFuelMax();
         }
     }
-    public int getBuildCooldown() {
+    /**
+     * Returns the current build cooldown for this unit.
+     * @return int current build cooldown for this unit
+     * @see #buildCooldown
+     */
+    int getBuildCooldown() {
         return buildCooldown;
     }
-    public void setBuildCooldown(int i) {
+    /**
+     * Set the build cooldown of this unit to the parameter i.
+     * @param i build cooldown to be applied to this unit.
+     * @see #buildCooldown
+     */
+    void setBuildCooldown(int i) {
         this.buildCooldown = i;
     }
-    public int getReloadCooldown() {
+    /**
+     * Returns the current reload cooldown for this unit.
+     * @return int current reload cooldown for this unit.
+     * @see #reloadCooldown
+     */
+    int getReloadCooldown() {
         return reloadCooldown;
     }
-    public void setReloadCooldown(int i) {
+    /**
+     * Set the reload cooldown of this unit to parameter i.
+     * @param i reload cooldown to be applied to this unit.
+     * @see #reloadCooldown
+     */
+    void setReloadCooldown(int i) {
         this.reloadCooldown = i;
     }
-    public boolean getHasRefueled() {
+    /**
+     * Returns the current value of hasRefueled for this unit.
+     * @return boolean hasRefueled
+     * @see #hasRefueled
+     */
+    boolean getHasRefueled() {
         return hasRefueled;
     }
-    public void setHasRefueled(boolean hasRefueled) {
+    /**
+     * Set the current value of hasRefueled for this unit.
+     * @param hasRefueled true if unit has refueled this turn.
+     * @see #hasRefueled
+     */
+    void setHasRefueled(boolean hasRefueled) {
         this.hasRefueled = hasRefueled;
     }
-    public boolean getHasMoved() {
+    /**
+     * Returns the current value of hasMoved for this unit.
+     * @return boolean hasMoved
+     * @see #hasMoved
+     */
+    boolean getHasMoved() {
         return hasMoved;
     }
-    public void setHasMoved(boolean hasMoved) {
+    /**
+     * Set the current value of hasMoved for this unit.
+     * @param hasMoved true if unit has moved this turn.
+     * @see #hasMoved
+     */
+    void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
     }
-    public boolean getHasHarvested() {
+    /**
+     * Returns the current value of hasHarvested for this unit.
+     * @return boolean hasHarvested
+     * @see #hasHarvested
+     */
+    boolean getHasHarvested() {
         return hasHarvested;
     }
-    public void setHasHarvested(boolean hasHarvested) {
+    /**
+     * Set the current value of hasHarvested for this unit.
+     * @param hasHarvested true if unit has harvested this turn.
+     * @see #hasHarvested
+     */
+    void setHasHarvested(boolean hasHarvested) {
         this.hasHarvested = hasHarvested;
     }
-    public boolean isDead() {
+    /**
+     * Returns the current value of dead for this unit.
+     * @return boolean dead
+     * @see #dead
+     */
+    boolean isDead() {
         return dead;
     }
-    public void setDead(boolean dead) {
+    /**
+     * Set the current value of dead for this unit.
+     * @param dead true if unit is dead.
+     * @see #dead
+     */
+    void setDead(boolean dead) {
         this.dead = dead;
     }
+    /**
+     * Returns the current value of stalled for this unit.
+     * @return boolean stalled
+     * @see #stalled
+     */
     public boolean isStalled() {
         return stalled;
     }
-    public void setStalled(boolean stalled) {
+    /**
+     * Set the current value of stalled for this unit.
+     * @param stalled true if unit is stalled.
+     * @see #stalled
+     */
+    void setStalled(boolean stalled) {
         this.stalled = stalled;
     }
      
@@ -188,7 +315,45 @@ public final class Unit extends Actor {
         return false;
     }
     @Override
-    public boolean collide(Actor actor) {
+    public boolean isShip() {
+        switch(type) {
+            case FIGHTER : return true;
+            case SIEGE : return true;
+            case DESTROYER : return true;
+            case CAPITAL : return true;
+            case BUILDER : return true;
+            case HARVESTER : return true;
+            case REFUELER : return true;
+            case HOME_STATION: return false;
+            case SMALL_DOCK: return false;
+            case LARGE_DOCK: return false;
+            case CAPITAL_DOCK: return false;
+            case MINING_FACILITY: return false;
+            case FUEL_STATION: return false;
+            default : return false;
+        }
+    }
+    @Override
+    public boolean isStructure() {
+        switch(type) {
+            case FIGHTER : return false;
+            case SIEGE : return false;
+            case DESTROYER : return false;
+            case CAPITAL : return false;
+            case BUILDER : return false;
+            case HARVESTER : return false;
+            case REFUELER : return false;
+            case HOME_STATION: return true;
+            case SMALL_DOCK: return true;
+            case LARGE_DOCK: return true;
+            case CAPITAL_DOCK: return true;
+            case MINING_FACILITY: return true;
+            case FUEL_STATION: return true;
+            default : return false;
+        }
+    }  
+    @Override
+    boolean collide(Actor actor) {
         return this.getLocation().distanceTo(actor.getLocation()) < this.getRadius() + actor.getRadius();
     }
 }

@@ -20,36 +20,37 @@ package common;
  *
  * @author dr4ur
  */
-public class GhostCircle extends Actor{
+class GhostCircle extends Actor{
     
     private int radius;
     private Location center;
 
-    public GhostCircle(int radius, Location center) {
+    GhostCircle(int radius, Location center) {
         super(-1, Integer.MAX_VALUE, radius, center, Team.NEUTRAL, null);
         this.radius = radius;
         this.center = center;
     }
 
+    @Override
     public int getRadius() {
-        return radius;
+        return this.radius;
     }
 
-    public void setRadius(int radius) {
+    void setRadius(int radius) {
         this.radius = radius;
     }
 
-    public Location getCenter() {
+    Location getCenter() {
         return center;
     }
 
-    public void setCenter(Location center) {
+    void setCenter(Location center) {
         this.center = center;
     }
 
     @Override
-    public void update() {
-        //
+    void update() {
+        //Does not need updating.
     }
 
     @Override
@@ -66,9 +67,19 @@ public class GhostCircle extends Actor{
     public boolean isEnvironment() {
         return false;
     }
+    
+    @Override
+    public boolean isShip() {
+        return false;
+    }
 
     @Override
-    public boolean collide(Actor actor) {
+    public boolean isStructure() {
+        return false;
+    }
+    
+    @Override
+    boolean collide(Actor actor) {
         return this.getLocation().distanceTo(actor.getLocation()) < this.getRadius() + actor.getRadius();
     }   
 }

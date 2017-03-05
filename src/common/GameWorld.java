@@ -37,6 +37,7 @@ public class GameWorld {
     private QuadTree quad;
     private List<Actor> allActors;
     private GhostCircle ghostCircle;
+    private GameWinner gameWinner;
 
 /**
  * Instantiates the GameWorld class and sets the starting value of class variables.
@@ -50,6 +51,7 @@ public class GameWorld {
         this.quad = new QuadTree(0,GameConstants.CENTER_WIDTH, GameConstants.CENTER_HEIGHT, GameConstants.TOP_LEFT_X_PIXEL, GameConstants.TOP_LEFT_Y_PIXEL);
         this.allActors = new ArrayList<>();
         this.ghostCircle = null;
+        this.gameWinner = new GameWinner();
     }
 
 /**
@@ -61,10 +63,13 @@ public class GameWorld {
             initializeStartingUnits();
             initializeStartingMineralCounts();
         }
-        System.out.println("Game Round : " + gameRound);
-        updateQuadTree();
-        checkWeaponCollisions();
-        clearDepletedActors();
+        checkForGameWinner();
+        if(gameWinner.getWinner() == null) {
+            System.out.println("Game Round : " + gameRound);
+            updateQuadTree();
+            checkWeaponCollisions();
+            clearDepletedActors();
+        }
     }
 
  /**
@@ -89,9 +94,81 @@ public class GameWorld {
     private synchronized int getUniqueID() {
         return uniqueID++;
     }
+<<<<<<< HEAD
  /**
  * Updates game world with current unit information from the Casting Director class..
  */
+=======
+    private void checkForGameWinner() {
+        Boolean homeStationA = false;
+        Boolean homeStationB = false;
+        int highestID = 0;
+        int valueA = 0;
+        int valueB = 0;
+        Team highestIDTeam = Team.NEUTRAL;
+        Team highestMineralTeam = Team.NEUTRAL;
+        
+        for(Unit unit : castDirector.getCurrentUnits()) {
+            if(unit.getType() == UnitType.HOME_STATION) {
+                switch(unit.getTeam()) {
+                    case A : homeStationA = true; break;
+                    case B : homeStationB = true; break;
+                }
+                if(homeStationA && homeStationB && gameRound < GameConstants.GAME_LIMIT) {
+                    break;
+                }
+            }
+            else {
+                if(unit.getID() > highestID) {
+                    highestIDTeam = unit.getTeam();
+                }
+                switch(unit.getTeam()) {
+                    case A : valueA += unit.getType().getMineralCost();
+                    case B : valueB += unit.getType().getMineralCost();
+                }
+                if(teamAMineralCount > teamBMineralCount) {
+                    highestMineralTeam = Team.A;
+                }
+                else if(teamBMineralCount > teamAMineralCount) {
+                    highestMineralTeam = Team.B;
+                }
+                else {
+                    highestMineralTeam = Team.NEUTRAL;
+                }
+            }
+        }
+        if((homeStationA && !homeStationB) || (!homeStationA && homeStationB)) { // Check for Domination win
+            if(homeStationA) {
+                gameWinner.setWinner(Team.A);
+                gameWinner.setDominationFactor(VictoryCondition.DOMINATION_WIN);
+                return;
+            }
+            else if(homeStationB) {
+                gameWinner.setWinner(Team.B);
+                gameWinner.setDominationFactor(VictoryCondition.DOMINATION_WIN);
+                return;
+            }
+        }
+        if(gameRound >= GameConstants.GAME_LIMIT) {
+            if(valueA > valueB) {
+                gameWinner.setWinner(Team.A);
+                gameWinner.setDominationFactor(VictoryCondition.VALUE_WIN);
+            }
+            else if(valueB > valueA) {
+                gameWinner.setWinner(Team.B);
+                gameWinner.setDominationFactor(VictoryCondition.VALUE_WIN);
+            }
+            else if(highestMineralTeam != Team.NEUTRAL) {
+                gameWinner.setWinner(highestMineralTeam);
+                gameWinner.setDominationFactor(VictoryCondition.MINERAL_WIN);
+            }
+            else {
+                gameWinner.setWinner(highestIDTeam);
+                gameWinner.setDominationFactor(VictoryCondition.ULT_DEFAULT_WIN);
+            }
+        }
+    }
+>>>>>>> 51d479186e74756258290265a3717a17dc41e453
     private void updateQuadTree() {
         quad.clear();
         allActors.clear();
@@ -187,10 +264,13 @@ public class GameWorld {
     public void removeActor(Actor actor) {
         castDirector.addToRemovedActors(actor);
     }
+<<<<<<< HEAD
 /**
  * Gets Game Speed. 
  * @return gameSpeed
  */    
+=======
+>>>>>>> 51d479186e74756258290265a3717a17dc41e453
     public int getGameSpeed() {
         return this.gameSpeed;
     }
@@ -208,10 +288,19 @@ public class GameWorld {
     public int getGameRound() {
         return gameRound;
     }
+<<<<<<< HEAD
 /**
  * Runs method updateQuadtree.
  * @return quad
  */
+=======
+    public GameWinner getGameWinner() {
+        return gameWinner;
+    }
+    public Team getGameWinningTeam() {
+        return gameWinner.getWinner();
+    }
+>>>>>>> 51d479186e74756258290265a3717a17dc41e453
     public QuadTree getUpdatedQuad() {
         updateQuadTree();
         return quad;

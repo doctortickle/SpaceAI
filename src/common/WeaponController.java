@@ -100,7 +100,7 @@ public strictfp class WeaponController {
         if(actor.isCommandable()) {
             actor.setHealth(weapon.getType().getUnitDamage());
         }
-        else if(actor.isEnvironment()) {
+        else if(actor.isEnvironment() || actor.isStructure()) {
             actor.setHealth(weapon.getType().getEnvironmentDamage());
         }
         weapon.setSpent(true);
@@ -124,7 +124,7 @@ public strictfp class WeaponController {
                 if(actorHit.isCommandable()) {
                     actorHit.setHealth(weapon.getType().getUnitDamage());
                 }
-                else if(actorHit.isEnvironment()) {
+                else if(actorHit.isEnvironment() || actorHit.isStructure()) {
                     actorHit.setHealth(weapon.getType().getEnvironmentDamage());
                 }
             }
@@ -149,7 +149,7 @@ public strictfp class WeaponController {
                 if(actorHit.isCommandable()) {
                     actorHit.setHealth(weapon.getType().getUnitDamage());
                 }
-                else if(actorHit.isEnvironment()) {
+                else if(actorHit.isEnvironment() || actorHit.isStructure()) {
                     actorHit.setHealth(weapon.getType().getEnvironmentDamage());
                 }
             }

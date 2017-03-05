@@ -90,7 +90,7 @@ public class GameWorld {
     }
     private void initializeEnvironment() {
         createInitialEnvironment();
-        
+        mirrorEnvironment();
     }
     private void createInitialEnvironment() {
         addEnvironment(EnvironmentType.LARGE_PLANET, new Location(200, 200));

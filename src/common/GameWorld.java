@@ -93,7 +93,7 @@ public class GameWorld {
         mirrorEnvironment();
     }
     private void createInitialEnvironment() {
-        addEnvironment(EnvironmentType.LARGE_PLANET, new Location(200, 200));
+        addEnvironment(EnvironmentType.LARGE_PLANET, new Location(100, 100));
     }
     private void mirrorEnvironment() {
         for(Actor actor : castDirector.getToBeAdded()) {

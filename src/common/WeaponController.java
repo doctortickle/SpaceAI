@@ -51,7 +51,7 @@ public strictfp class WeaponController {
     }
     private boolean checkBoundaries(Location location) {
         if(location.getY() >= topBoundary - weapon.getType().getWeaponRadius()) { return false; }
-        if(location.getY() <= bottomBoundary + weapon.getType().getWeaponRadius()) { return false; }
+        if(location.getY() <= bottomBoundary + weapon.getType().getWeaponRadius()) { return false; } 
         if(location.getX() >= rightBoundary - weapon.getType().getWeaponRadius()) { return false; }
         if(location.getX() <= leftBoundary + weapon.getType().getWeaponRadius()) { return false; }
         return true;

@@ -95,8 +95,8 @@ public class GameWorld {
         return uniqueID++;
     }
     private void checkForGameWinner() {
-        Boolean homeStationA = false;
-        Boolean homeStationB = false;
+        boolean homeStationA = false;
+        boolean homeStationB = false;
         int highestID = 0;
         int valueA = 0;
         int valueB = 0;

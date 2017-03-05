@@ -90,18 +90,19 @@ public class GameWorld {
     }
     private void initializeEnvironment() {
         createInitialEnvironment();
-        //mirrorEnvironment();
         
     }
     private void createInitialEnvironment() {
         addEnvironment(EnvironmentType.LARGE_PLANET, new Location(200, 200));
-        addEnvironment(EnvironmentType.LARGE_PLANET, new Location(-200, -200));
     }
     private void mirrorEnvironment() {
-        for(Environment environment : castDirector.getCurrentEnvironment()) {
-            double mirrorLocationX = -(environment.getLocation().getX());
-            double mirrorLocationY = -(environment.getLocation().getY());
-            addEnvironment(environment.getType(),new Location(mirrorLocationX, mirrorLocationY));
+        for(Actor actor : castDirector.getToBeAdded()) {
+            if(actor instanceof Environment) {
+                Environment environment = (Environment) actor;
+                double mirrorLocationX = -(environment.getLocation().getX());
+                double mirrorLocationY = -(environment.getLocation().getY());
+                addEnvironment(environment.getType(),new Location(mirrorLocationX, mirrorLocationY));
+            }
         }
     }
  /**

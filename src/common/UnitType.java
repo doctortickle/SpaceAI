@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 dr4ur
+ * Copyright (C) 2017 Russell Software
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ import javafx.scene.image.Image;
  * Details the attributes of the various types of units available in Space AI. 
  * All of these unit types can be directly commanded by the player.
  * @author Dylan Russell
- * @author Myles Russell
  * @version 1.0
  * @see Unit
  */

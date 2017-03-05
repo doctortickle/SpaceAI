@@ -24,6 +24,7 @@ import player.AICommandB;
  * @author Dylan Russell
  * @author Myles Russell
  * @version 1.0
+ * @see UnitType
  */
 public final class Unit extends Actor {
 

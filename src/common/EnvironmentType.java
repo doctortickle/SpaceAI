@@ -118,35 +118,35 @@ public strictfp enum EnvironmentType {
     
     /**
      * Returns the maximum (not current) health of a given EnvironmentType.
-     * @return the maximum (not current) health of a given EnvironmentType.
+     * @return int maximum (not current) health of a given EnvironmentType.
      */
     public int getMaxHealth() {
         return maxHealth;
     }
     /**
      * Returns the body radius of a given EnvironmentType.
-     * @return the body radius of a given EnvironmentType.
+     * @return int body radius of a given EnvironmentType.
      */
     public int getBodyRadius() {
         return bodyRadius;
     }
     /**
      * Returns the maximum (not current) number of StructureTypes that can be hosted on a given EnvironmentType.
-     * @return the maximum (not current) number of StructureTypes that can be hosted on a given EnvironmentType.
+     * @return int maximum (not current) number of StructureTypes that can be hosted on a given EnvironmentType.
      */
     public int getStructureCap() {
         return structureCap;
     }
     /**
      * Returns the maximum (not current) minerals available to be harvested or mined on a given EnvironmentType.
-     * @return the maximum (not current) minerals available to be harvested or mined on a given EnvironmentType.
+     * @return int maximum (not current) minerals available to be harvested or mined on a given EnvironmentType.
      */
     public int getMineralMax() {
         return mineralMax;
     }
     /**
      * Returns the rotational velocity of a given EnvironmentType.
-     * @return the rotational velocity of a given EnvironmentType.
+     * @return double rotational velocity of a given EnvironmentType.
      */
     public double getRotationV() {
         return rotationV;

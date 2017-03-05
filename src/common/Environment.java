@@ -104,6 +104,7 @@ public final class Environment extends Actor{
     @Override
     void update() {
         // update method goes here.
+        ec.rotateImage();
     }
 
     @Override

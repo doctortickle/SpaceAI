@@ -41,7 +41,7 @@ public strictfp class EnvironmentController {
     // ******** ENVIRONMENT UPDATES *********
     // *********************************
 
-    private void rotateImage(Environment environment) {
+    void rotateImage() {
         environment.getSpriteFrame().setRotate(45);
-        }   
+    }   
 }

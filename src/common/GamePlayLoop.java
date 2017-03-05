@@ -52,14 +52,13 @@ public class GamePlayLoop extends AnimationTimer {
             }     
         }
         if(spaceAI.getPause()) {
-            System.out.println("Game Paused");
+            System.out.println("Game is paused.");
         }
         if(!checkForWinner()) {
             System.out.println("Team " + gameWorld.getGameWinner().getWinner() + " wins due to " + gameWorld.getGameWinner().getDominationFactor());
             stop();
         }
     }
-    
     private void setGameSpeed() {
         gameSpeed = gameWorld.getGameSpeed();
         System.out.println("Game speed is set at " + 5/gameSpeed + "x normal speed.");

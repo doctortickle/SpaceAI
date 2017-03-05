@@ -94,6 +94,9 @@ public class GameWorld {
     private synchronized int getUniqueID() {
         return uniqueID++;
     }
+/**
+ * Establishes parameters for Game Winner to occur, and sets the Game Winner class via the Victory Condition.
+ */
     private void checkForGameWinner() {
         Boolean homeStationA = false;
         Boolean homeStationB = false;

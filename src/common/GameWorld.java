@@ -94,11 +94,6 @@ public class GameWorld {
     private synchronized int getUniqueID() {
         return uniqueID++;
     }
-<<<<<<< HEAD
- /**
- * Updates game world with current unit information from the Casting Director class..
- */
-=======
     private void checkForGameWinner() {
         Boolean homeStationA = false;
         Boolean homeStationB = false;
@@ -168,7 +163,9 @@ public class GameWorld {
             }
         }
     }
->>>>>>> 51d479186e74756258290265a3717a17dc41e453
+ /**
+ * Updates game world with current unit information from the Casting Director class..
+ */
     private void updateQuadTree() {
         quad.clear();
         allActors.clear();
@@ -264,13 +261,10 @@ public class GameWorld {
     public void removeActor(Actor actor) {
         castDirector.addToRemovedActors(actor);
     }
-<<<<<<< HEAD
 /**
  * Gets Game Speed. 
  * @return gameSpeed
  */    
-=======
->>>>>>> 51d479186e74756258290265a3717a17dc41e453
     public int getGameSpeed() {
         return this.gameSpeed;
     }
@@ -288,19 +282,16 @@ public class GameWorld {
     public int getGameRound() {
         return gameRound;
     }
-<<<<<<< HEAD
-/**
- * Runs method updateQuadtree.
- * @return quad
- */
-=======
     public GameWinner getGameWinner() {
         return gameWinner;
     }
     public Team getGameWinningTeam() {
         return gameWinner.getWinner();
     }
->>>>>>> 51d479186e74756258290265a3717a17dc41e453
+/**
+ * Runs method updateQuadtree.
+ * @return quad
+ */
     public QuadTree getUpdatedQuad() {
         updateQuadTree();
         return quad;

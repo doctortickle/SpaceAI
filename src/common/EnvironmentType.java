@@ -64,7 +64,7 @@ public strictfp enum EnvironmentType {
      */
     LARGE_PLANET    (30000, 50,     4,      0,      (Math.PI)/12,
     /*              maxHP   Rad     Cap     MinMax      RotV    */
-                    new Image("/TestImage.png", 50, 50, true, false, true));
+                    new Image("/LARGE_PLANET.png", 200, 200, true, false, true));
     
     /**
      * The maximum (not current) health of a given EnvironmentType.

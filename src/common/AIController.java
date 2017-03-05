@@ -245,50 +245,6 @@ public strictfp class AIController {
         return unit.getType().canRefuel();
     }
     
-    /// *************************************
-    // ****** WEAPON QUERY METHODS *******
-    // *************************************
-    
-    public final int getID(Weapon weapon) {
-        return weapon.getID();
-    }
-    public final Team getTeam(Weapon weapon) {
-        return weapon.getTeam();
-    }
-    public final Location getLocation(Weapon weapon) {
-        return weapon.getLocation();
-    }
-    public final WeaponType getType(Weapon weapon) {
-        return weapon.getType();
-    }
-    public final Direction getDirection(Weapon weapon) {
-        return weapon.getDirection();
-    }
-    public final int getRadius(Weapon weapon) {
-        return weapon.getRadius();
-    }
-    public final int getUnitDamage(Weapon weapon) {
-        return weapon.getType().getUnitDamage();
-    }
-    public final int getEnvironmentDamage(Weapon weapon) {
-        return weapon.getType().getEnvironmentDamage();
-    }
-    public final int getBodyRadius(Weapon weapon) {
-        return weapon.getType().getWeaponRadius();
-    }
-    public final int getExplosionRadius(Weapon weapon) {
-        return weapon.getType().getExplosionRadius();
-    }
-    public final int getDetectionRadius(Weapon weapon) {
-        return weapon.getType().getDetectionRadius();
-    }
-    public final int getLaunchSpeed(Weapon weapon) {
-        return weapon.getType().getLaunchSpeed();
-    }
-    public final int getReloadTime(Weapon weapon) {
-        return weapon.getType().getReloadTime();
-    }
-    
     // *************************************
     // ****** GENERAL SENSOR METHODS *******
     // *************************************

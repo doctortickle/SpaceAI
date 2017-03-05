@@ -248,7 +248,6 @@ public class GameWorld {
  * Adds environment to the CastingDirector castDirector class.
  * @param type         defines the type of environment to be added 
  * @param location     defines the location of environment to be added
- * @param team         defines the team of the environment to be added
  */
     public void addEnvironment(EnvironmentType type, Location location){
         Environment environment = new Environment(spaceAI, type, getUniqueID(), location);

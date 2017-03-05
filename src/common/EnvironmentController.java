@@ -22,7 +22,9 @@ package common;
  */
 public strictfp class EnvironmentController {
     private Environment environment;
+    private EnvironmentType environmentType;
     private GameWorld gameWorld;
+    private SpaceAI spaceAI;
     private final double leftBoundary;
     private final double rightBoundary;
     private final double bottomBoundary;
@@ -30,10 +32,20 @@ public strictfp class EnvironmentController {
     
     public EnvironmentController(Environment environment, GameWorld gameWorld) {
         this.environment = environment;
+        this.environmentType = environmentType;
         this.gameWorld = gameWorld;
+        this.spaceAI = spaceAI;
         this.leftBoundary = GameConstants.MIN_X_COORDINATE;
         this.rightBoundary = GameConstants.MAX_X_COORDINATE;
         this.bottomBoundary = GameConstants.MIN_Y_COORDINATE;
         this.topBoundary = GameConstants.MAX_Y_COORDINATE;
     }
+    
+    // *********************************
+    // ******** ENVIRONMENT UPDATES *********
+    // *********************************
+
+    private void rotateImage(Environment environment) {
+        environment.getSpriteFrame().setRotate(45);
+        }   
 }

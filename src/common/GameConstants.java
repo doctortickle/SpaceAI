@@ -31,8 +31,9 @@ public strictfp interface GameConstants {
     // ****** ANIMATION CONSTANTS ******
     // *********************************
     
-    final double PIXEL_TO_COORDINATE = 1d/2d;
-    final double COORDINATE_TO_PIXEL = 2d/1d;
+    final double SIZE_FACTOR = 2d; // Bigger size factor = bigger units and a smaller map.
+    final double PIXEL_TO_COORDINATE = 1d/SIZE_FACTOR;
+    final double COORDINATE_TO_PIXEL = SIZE_FACTOR/1d;
     final int FRAMES_PER_ROUND_9 = 1;
     final int FRAMES_PER_ROUND_8 = 2;
     final int FRAMES_PER_ROUND_7 = 3;
@@ -45,8 +46,7 @@ public strictfp interface GameConstants {
     final double    WINDOW_WIDTH = 1400, WINDOW_HEIGHT = 800, 
                     CENTER_WIDTH = 900, CENTER_HEIGHT = 700;
     final int WEAPON_CLEAR_COUNTDOWN = 3;
-    final int SIZE_FACTOR = 5;
-    
+
     // *********************************
     // ****** GAMEWORLD CONSTANTS ******
     // *********************************

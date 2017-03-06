@@ -43,7 +43,7 @@ public strictfp enum UnitType {
                 0,      // refuelRate
                 0,      // harvestingRadius
                 0,      // harvestingRate
-                new Image("/FIGHTER.png", 20, 20, true, false, true)  // spriteImage
+                new Image("/FIGHTER.png", 5*GameConstants.COORDINATE_TO_PIXEL*2, 5*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * A unit specializing in dealing damage to structures and environments. Can use planet bombardment.
@@ -62,7 +62,7 @@ public strictfp enum UnitType {
                 0,      // refuelRate
                 0,      // harvestingRadius
                 0,      // harvestingRate 
-                new Image("/SIEGE.png", 32, 32, true, false, true)  // spriteImage
+                new Image("/SIEGE.png", 8*GameConstants.COORDINATE_TO_PIXEL*2, 8*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * A unit specializing in dealing damage to other ships. Can deploy mines and small bombs.
@@ -81,7 +81,7 @@ public strictfp enum UnitType {
                 0,      // refuelRate
                 0,      // harvestingRadius
                 0,      // harvestingRate
-                new Image("/DESTROYER.png", 40, 40, true, false, true)  // spriteImage
+                new Image("/DESTROYER.png", 10*GameConstants.COORDINATE_TO_PIXEL*2, 10*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * A slow-moving and expensive, but powerful, unit. Can deploy all possible weapons.
@@ -100,7 +100,7 @@ public strictfp enum UnitType {
                 0,      // refuelRate
                 0,      // harvestingRadius
                 0,      // harvestingRate
-                new Image("/CAPITAL.png", 80, 80, true, false, true)  // spriteImage
+                new Image("/CAPITAL.png", 20*GameConstants.COORDINATE_TO_PIXEL*2, 20*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * A unit specializing in gathering minerals from asteroids and meteors. Can build mining facilities.
@@ -119,7 +119,7 @@ public strictfp enum UnitType {
                 0,      // refuelRate
                 6,      // harvestingRadius
                 20,      // harvestingRate
-                new Image("/HARVESTER.png", 20, 20, true, false, true)  // spriteImage
+                new Image("/HARVESTER.png", 5*GameConstants.COORDINATE_TO_PIXEL*2, 5*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * A unit specializing in refueling friendly ships. Can build fuel stations.
@@ -138,7 +138,7 @@ public strictfp enum UnitType {
                 5,      // refuelRate
                 0,      // harvestingRadius
                 0,      // harvestingRate
-                new Image("/REFUELER.png", 20, 20, true, false, true)  // spriteImage
+                new Image("/REFUELER.png", 5*GameConstants.COORDINATE_TO_PIXEL*2, 5*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * The primary construction unit. Can construct all docks.
@@ -157,7 +157,7 @@ public strictfp enum UnitType {
                 0,      // refuelRate
                 0,      // harvestingRadius
                 0,      // harvestingRate
-                new Image("/BUILDER.png", 20, 20, true, false, true)  // spriteImage
+                new Image("/BUILDER.png", 5*GameConstants.COORDINATE_TO_PIXEL*2, 5*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * The primary and most important structure. Both teams begin with a home station. 
@@ -173,7 +173,7 @@ public strictfp enum UnitType {
                     10,     // refuelRate
                     0,      // harvestingRadius    
                     10,     // harvestingRate
-                    new Image("/HOME_STATION.png", 40, 40, true, false, true)  // spriteImage
+                    new Image("/HOME_STATION.png", 10*GameConstants.COORDINATE_TO_PIXEL*2, 10*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * The cheapest and least versatile space dock. Can build fighters, harvesters, and refuelers.
@@ -188,7 +188,7 @@ public strictfp enum UnitType {
                     0,      // refuelRate
                     0,      // harvestingRadius
                     0,      // harvestingRate
-                    new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                    new Image("/TestImage.png", 5*GameConstants.COORDINATE_TO_PIXEL*2, 5*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * A superior space dock. Can build fighters, siege, destroyers, harvesters, and refuelers.
@@ -203,7 +203,7 @@ public strictfp enum UnitType {
                     0,      // refuelRate
                     0,      // harvestingRadius
                     0,      // harvestingRate
-                    new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                    new Image("/TestImage.png", 8*GameConstants.COORDINATE_TO_PIXEL*2, 8*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * The most expensive and powerful space dock. Can build all units (except builders), including the mighty capital ship.
@@ -218,7 +218,7 @@ public strictfp enum UnitType {
                     0,      // refuelRate
                     0,      // harvestingRadius
                     0,      // harvestingRate
-                    new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                    new Image("/TestImage.png", 15*GameConstants.COORDINATE_TO_PIXEL*2, 15*GameConstants.COORDINATE_TO_PIXEL*20, true, false, true)  // spriteImage
     ),
     /**
      * A structure that can continually harvest minerals from meteors.
@@ -233,7 +233,7 @@ public strictfp enum UnitType {
                     0,      // refuelRate
                     6,      // harvestingRadius
                     10,     // harvestingRate
-                    new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                    new Image("/TestImage.png", 5*GameConstants.COORDINATE_TO_PIXEL*2, 5*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * A structure that can continually refuel friendly ships in a given radius.
@@ -248,7 +248,7 @@ public strictfp enum UnitType {
                     10,     // refuelRate
                     0,      // harvestingRadius
                     0,      // harvestingRate
-                    new Image("/TestImage.png", 50, 50, true, false, true)  // spriteImage
+                    new Image("/TestImage.png", 5*GameConstants.COORDINATE_TO_PIXEL*2, 5*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     );
     
     /**

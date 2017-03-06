@@ -320,6 +320,14 @@ public strictfp enum UnitType {
      */
     private final int harvestingRate;
     /**
+     * True if a UnitType is a ship.
+     */
+    private final boolean ship;
+    /**
+     * True if a UnitType is a structure.
+     */
+    private final boolean structure;
+    /**
      * The bytecode usage limit per turn for a given UnitType.
      */
     private final int bytecodeLimit;
@@ -379,6 +387,8 @@ public strictfp enum UnitType {
         this.refuelRate = refuelRate;
         this.harvestingRadius = harvestingRadius;
         this.harvestingRate = harvestingRate;
+        this.ship = true;
+        this.structure = false;
         this.bytecodeLimit = 10000;
         this.spriteImage = spriteImage;
     }
@@ -401,6 +411,8 @@ public strictfp enum UnitType {
         this.refuelRate = refuelRate;
         this.harvestingRadius = harvestingRadius;
         this.harvestingRate = harvestingRate;
+        this.ship = false;
+        this.structure = true;
         this.bytecodeLimit = 10000;
         this.spriteImage = spriteImage;
     }
@@ -628,6 +640,22 @@ public strictfp enum UnitType {
      */
     public int getHarvestingRate() {
         return harvestingRate;
+    }
+    /**
+     * Returns whether or not this UnitType is a ship.
+     * @return true if UnitType is a ship.
+     * @see #ship
+     */
+    public boolean isShip() {
+        return ship;
+    }
+    /**
+     * Returns whether or not this UnitType is a structure.
+     * @return true if UnitType is a structure.
+     * @see #structure
+     */
+    public boolean isStructure() {
+        return structure;
     }
     /**
      * Returns the bytecode limit per turn for a given UnitType.

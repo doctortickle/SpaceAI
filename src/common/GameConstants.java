@@ -31,7 +31,7 @@ public strictfp interface GameConstants {
     // ****** ANIMATION CONSTANTS ******
     // *********************************
     
-    final double SIZE_FACTOR = 2d; // Bigger size factor = bigger units and a smaller map.
+    final double SIZE_FACTOR = 2d; // Bigger size factor = bigger units and a smaller map. Image sprites go up to SIZE_FACTOR 3.
     final double PIXEL_TO_COORDINATE = 1d/SIZE_FACTOR;
     final double COORDINATE_TO_PIXEL = SIZE_FACTOR/1d;
     final int FRAMES_PER_ROUND_9 = 1;
@@ -66,6 +66,7 @@ public strictfp interface GameConstants {
     final int STARTING_MINERAL_COUNT = 10000;
     final Location TEAM_A_HOME_STATION = new Location(0,100);
     final Location TEAM_B_HOME_STATION = new Location(0,-100);
-    final int GAME_LIMIT = 5000;
-    
+    final int MIN_DOCK_BUILD_DISTANCE = 5;
+    final int MAX_DOCK_BUILD_DISTANCE = 10;
+    final int GAME_LIMIT = 5000; 
 }

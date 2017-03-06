@@ -84,7 +84,7 @@ public class AICommandB {
         ac.move(Direction.getRandom());
         int dockCount = 0;
         if(dockCount == 0) {
-            ac.build(UnitType.CAPITAL_DOCK, Direction.EAST);
+            ac.buildShip(UnitType.CAPITAL_DOCK, Direction.EAST);
             dockCount++;
         }
     }
@@ -107,7 +107,7 @@ public class AICommandB {
     private static void runHomeStation() {
         // This code will be run every round.
         if(builderCount == 0) {
-            ac.build(UnitType.BUILDER, Direction.EAST);
+            ac.buildShip(UnitType.BUILDER, Direction.EAST);
             builderCount++;
         }
     }
@@ -130,7 +130,7 @@ public class AICommandB {
     private static void runCapitalDock() {
         // This code will be run every round.
         if(capitalCount == 0) {
-            ac.build(UnitType.CAPITAL, Direction.NORTH);
+            ac.buildShip(UnitType.CAPITAL, Direction.NORTH);
         }
     }
     // *********************************

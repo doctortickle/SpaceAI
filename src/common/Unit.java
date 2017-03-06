@@ -37,7 +37,7 @@ public final class Unit extends Actor {
      */
     private int fuel;
     /**
-     * Tracks the cooldown (# of turns) required to build another unit.
+     * Tracks the cooldown (# of turns) required to buildShip another unit.
      */
     private int buildCooldown;
     /**
@@ -191,16 +191,16 @@ public final class Unit extends Actor {
         }
     }
     /**
-     * Returns the current build cooldown for this unit.
-     * @return int current build cooldown for this unit
+     * Returns the current buildShip cooldown for this unit.
+     * @return int current buildShip cooldown for this unit
      * @see #buildCooldown
      */
     int getBuildCooldown() {
         return buildCooldown;
     }
     /**
-     * Set the build cooldown of this unit to the parameter i.
-     * @param i build cooldown to be applied to this unit.
+     * Set the buildShip cooldown of this unit to the parameter i.
+     * @param i buildShip cooldown to be applied to this unit.
      * @see #buildCooldown
      */
     void setBuildCooldown(int i) {
@@ -317,41 +317,11 @@ public final class Unit extends Actor {
     }
     @Override
     public boolean isShip() {
-        switch(type) {
-            case FIGHTER : return true;
-            case SIEGE : return true;
-            case DESTROYER : return true;
-            case CAPITAL : return true;
-            case BUILDER : return true;
-            case HARVESTER : return true;
-            case REFUELER : return true;
-            case HOME_STATION: return false;
-            case SMALL_DOCK: return false;
-            case LARGE_DOCK: return false;
-            case CAPITAL_DOCK: return false;
-            case MINING_FACILITY: return false;
-            case FUEL_STATION: return false;
-            default : return false;
-        }
+        return getType().isShip();
     }
     @Override
     public boolean isStructure() {
-        switch(type) {
-            case FIGHTER : return false;
-            case SIEGE : return false;
-            case DESTROYER : return false;
-            case CAPITAL : return false;
-            case BUILDER : return false;
-            case HARVESTER : return false;
-            case REFUELER : return false;
-            case HOME_STATION: return true;
-            case SMALL_DOCK: return true;
-            case LARGE_DOCK: return true;
-            case CAPITAL_DOCK: return true;
-            case MINING_FACILITY: return true;
-            case FUEL_STATION: return true;
-            default : return false;
-        }
+        return getType().isStructure();
     }  
     @Override
     boolean collide(Actor actor) {

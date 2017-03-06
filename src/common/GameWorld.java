@@ -39,11 +39,11 @@ public class GameWorld {
     private GhostCircle ghostCircle;
     private GameWinner gameWinner;
 
-/**
- * Instantiates the GameWorld class and sets the starting value of class variables.
- * @param spaceAI        an instance of the SpaceAI class that facilitates game animation.
- * @param castDirector   an instance of the CastingDirector class that communicates current unit count and status  
- */
+    /**
+     * Instantiates the GameWorld class and sets the starting value of class variables.
+     * @param spaceAI        an instance of the SpaceAI class that facilitates game animation.
+     * @param castDirector   an instance of the CastingDirector class that communicates current unit count and status  
+     */
     public GameWorld(SpaceAI spaceAI, CastingDirector castDirector) {
         this.spaceAI = spaceAI;
         this.castDirector = castDirector;
@@ -53,10 +53,10 @@ public class GameWorld {
         this.ghostCircle = null;
         this.gameWinner = new GameWinner();
     }
-
-/**
- * Begins and updates game rounds and unit losses.    
- */
+    
+    /**
+     * Begins and updates game rounds and unit losses.    
+     */
     public void update() {
         gameRound++;
         if(gameRound==1) {
@@ -73,48 +73,56 @@ public class GameWorld {
         }
     }
 
- /**
- * Initializes values for units during the first game round.
- */
+    /**
+     * Initializes values for units during the first game round.
+     */
     private void initializeStartingUnits() {
         this.teamAHomeStation = GameConstants.TEAM_A_HOME_STATION;
         this.teamBHomeStation = GameConstants.TEAM_B_HOME_STATION;
         addUnit(UnitType.HOME_STATION, teamAHomeStation, Team.A);
         addUnit(UnitType.HOME_STATION, teamBHomeStation, Team.B);
     }
- /**
- * Initializes mineral count values for units during the first game round.
- */
+    /**
+     * Initializes mineral count values for units during the first game round.
+     */
     private void initializeStartingMineralCounts() {
         this.teamAMineralCount = this.teamBMineralCount = GameConstants.STARTING_MINERAL_COUNT;
     }
+    /**
+     * Initialize the starting environment for the map.
+     */
     private void initializeEnvironment() {
         createInitialEnvironment();
         mirrorEnvironment();
     }
+    /**
+     * Add the environment objects to the map. 
+     */
     private void createInitialEnvironment() {
         addEnvironment(EnvironmentType.LARGE_PLANET, new Location(100, 100));
     }
+    /**
+     * Mirror the environment objects on the map.
+     */
     private void mirrorEnvironment() {
-        for(Actor actor : castDirector.getToBeAdded()) {
-            if(actor instanceof Environment) {
-                Environment environment = (Environment) actor;
-                double mirrorLocationX = -(environment.getLocation().getX());
-                double mirrorLocationY = -(environment.getLocation().getY());
-                addEnvironment(environment.getType(),new Location(mirrorLocationX, mirrorLocationY));
-            }
-        }
+        List<Actor> toBeMirrored = new ArrayList<>();
+        toBeMirrored.addAll(castDirector.getToBeAdded());
+        toBeMirrored.stream().filter((actor) -> (actor instanceof Environment)).map((actor) -> (Environment) actor).forEachOrdered((environment) -> {
+            double mirrorLocationX = -(environment.getLocation().getX());
+            double mirrorLocationY = -(environment.getLocation().getY());
+            addEnvironment(environment.getType(),new Location(mirrorLocationX, mirrorLocationY));
+        });
     }
- /**
- * Provides unique identification number.
- * @return   increments uniqueID 
- */
+    /**
+     * Provides unique identification number.
+     * @return   increments uniqueID 
+     */
     private synchronized int getUniqueID() {
         return uniqueID++;
     }
-/**
- * Establishes parameters for Game Winner to occur, and sets the Game Winner class via the Victory Condition.
- */
+    /**
+     * Establishes parameters for Game Winner to occur, and sets the Game Winner class via the Victory Condition.
+     */
     private void checkForGameWinner() {
         boolean homeStationA = false;
         boolean homeStationB = false;
@@ -184,9 +192,9 @@ public class GameWorld {
             }
         }
     }
- /**
- * Updates game world with current unit information from the Casting Director class..
- */
+    /**
+     * Updates game world with current unit information from the Casting Director class..
+     */
     private void updateQuadTree() {
         quad.clear();
         allActors.clear();
@@ -198,11 +206,11 @@ public class GameWorld {
         }      
 
     }
- /**
- * This method sorts current actor lists in order to determine actors that are weapons. Once 
- * sorted, method checks for weapons that have collided, been spent, or exploded and prints
- * current status of weapon. 
- */
+    /**
+     * This method sorts current actor lists in order to determine actors that are weapons. Once 
+     * sorted, method checks for weapons that have collided, been spent, or exploded and prints
+     * current status of weapon. 
+     */
     private void checkWeaponCollisions() {
         List<Actor> returnActors = new ArrayList();
         for (int i = 0; i < allActors.size(); i++) {
@@ -230,10 +238,10 @@ public class GameWorld {
             }  
         }
     }
-/**
- * Clears actors, units and weapons, from the CastingDirector castDirector class if unit is dead 
- * or weapon is spent, exploded, or countdown is cleared.
- */
+    /**
+     * Clears actors, units and weapons, from the CastingDirector castDirector class if unit is dead 
+     * or weapon is spent, exploded, or countdown is cleared.
+     */
     private void clearDepletedActors() {
        List<Unit> checkUnits = castDirector.getCurrentUnits();
        checkUnits.stream().filter((unit) -> (unit.isDead())).forEachOrdered((unit) -> {
@@ -244,90 +252,90 @@ public class GameWorld {
            removeActor(weapon);
         });
     }
- /**
- * Adds unit to the CastingDirector castDirector class.
- * @param type         defines the type of unit to be added 
- * @param location     defines the location of unit to be added
- * @param team         defines the team of the unit to be added
- */
+    /**
+     * Adds unit to the CastingDirector castDirector class.
+     * @param type         defines the type of unit to be added 
+     * @param location     defines the location of unit to be added
+     * @param team         defines the team of the unit to be added
+     */
     public void addUnit(UnitType type, Location location, Team team){
         Unit unit = new Unit(spaceAI, type, getUniqueID(), location, team);
         castDirector.addToBeAdded(unit);
     }
- /**
- * Adds weapon to the CastingDirector castDirector class.
- * @param type         defines the type of weapon to be added 
- * @param location     defines the location of weapon to be added
- * @param team         defines the team of the weapon to be added
- * @param direction    defines the direction of the weapon to be added
- */
+    /**
+     * Adds weapon to the CastingDirector castDirector class.
+     * @param type         defines the type of weapon to be added 
+     * @param location     defines the location of weapon to be added
+     * @param team         defines the team of the weapon to be added
+     * @param direction    defines the direction of the weapon to be added
+     */
     public void addWeapon(WeaponType type, Location location, Team team, Direction direction){
         Weapon weapon = new Weapon(spaceAI, type, getUniqueID(), location, team, direction);
         castDirector.addToBeAdded(weapon);
     }
- /**
- * Adds environment to the CastingDirector castDirector class.
- * @param type         defines the type of environment to be added 
- * @param location     defines the location of environment to be added
- */
+    /**
+     * Adds environment to the CastingDirector castDirector class.
+     * @param type         defines the type of environment to be added 
+     * @param location     defines the location of environment to be added
+     */
     public void addEnvironment(EnvironmentType type, Location location){
         Environment environment = new Environment(spaceAI, type, getUniqueID(), location);
         castDirector.addToBeAdded(environment);
     }
-/**    
- * Removes actor from the CastingDirector castDirector class.
- * @param actor         defines the actor to be removed 
- */
+    /**    
+     * Removes actor from the CastingDirector castDirector class.
+     * @param actor         defines the actor to be removed 
+     */
     public void removeActor(Actor actor) {
         castDirector.addToRemovedActors(actor);
     }
-/**
- * Gets Game Speed. 
- * @return gameSpeed
- */    
+    /**
+     * Gets Game Speed. 
+     * @return gameSpeed
+     */    
     public int getGameSpeed() {
         return this.gameSpeed;
     }
-/**
- * Sets the Game Speed.
- * @param gameSpeed    defines the speed of the game by the frame per seconds in the Game Constants class.
- */
+    /**
+     * Sets the Game Speed.
+     * @param gameSpeed    defines the speed of the game by the frame per seconds in the Game Constants class.
+     */
     public void setGameSpeed(int gameSpeed) {
         this.gameSpeed = gameSpeed;
     }
-/**
- * Gets the Game Round.
- * @return gameRound
- */
+    /**
+     * Gets the Game Round.
+     * @return gameRound
+     */
     public int getGameRound() {
         return gameRound;
     }
-/**
- * Gets the Game Winner.
- * @return gameWinner
- */
+    /**
+     * Gets the Game Winner.
+     * @return gameWinner
+     */
     public GameWinner getGameWinner() {
         return gameWinner;
     }
-/**
- * Gets the Game Winning Team.
- * @return gameWinner.getWinner()
- */
+    /**
+     * Gets the Game Winning Team.
+     * @return gameWinner.getWinner()
+     */
     public Team getGameWinningTeam() {
         return gameWinner.getWinner();
     }
-/**
- * Runs method updateQuadtree.
- * @return quad
- */
+    /**
+     * Runs method updateQuadtree.
+     * @return quad
+     */
     public QuadTree getUpdatedQuad() {
         updateQuadTree();
         return quad;
     }
-/**
- * Gets mineral count for the requested Team.
- * @param team   defines the team
- */
+    /**
+     * Gets mineral count for the requested Team.
+     * @param team   defines the team
+     */
     public int getMineralCount(Team team) {
         switch(team) {
             case A : {return teamAMineralCount;}
@@ -335,11 +343,11 @@ public class GameWorld {
             default : {System.out.println("ERROR IN GET MINERAL COUNT"); return 0;}
         }
     }
-/**
- * Decreases mineral count.
- * @param i         the amount to be decreased
- * @param team      defines the team's mineral count to decrease
- */
+    /**
+     * Decreases mineral count.
+     * @param i         the amount to be decreased
+     * @param team      defines the team's mineral count to decrease
+     */
     public void decreaseMineralCount(int i, Team team) {
         switch(team) {
             case A : {this.teamAMineralCount -= i; break;}
@@ -347,11 +355,11 @@ public class GameWorld {
             default : {System.out.println("ERROR IN DECREASE MINERAL COUNT");}
         }
    }
-/**
- * Increases mineral count. 
- * @param i         the amount to be increased
- * @param team      defines the team's mineral count to increase
- */
+    /**
+     * Increases mineral count. 
+     * @param i         the amount to be increased
+     * @param team      defines the team's mineral count to increase
+     */
     public void increaseMineralCount(int i, Team team) {
         switch(team) {
             case A : {this.teamAMineralCount += i; break;}
@@ -359,11 +367,11 @@ public class GameWorld {
             default : {System.out.println("ERROR IN INCREASE MINERAL COUNT");}
         }
     }
-/**
- * Obtains the initial home station location.
- * @param team    defines the team's home location
- * @return 
- */
+    /**
+     * Obtains the initial home station location.
+     * @param team    defines the team's home location
+     * @return 
+     */
     public Location getInitialHomeStationLocation(Team team) {
         switch(team) {
             case A : {return teamAHomeStation;}
@@ -371,12 +379,12 @@ public class GameWorld {
             default : {System.out.println("ERROR IN INITIAL HOME STATION LOCATION"); return new Location(0,0); }
         }
     }
-/**
- * Passes the location variable into the GhostCircle class into the QuadTree class to obtain Actors radius and 
- * check if the location variable is occupied by an actor.
- * @param location      the desired location the player would like to check is or is not occupied
- * @return false
- */
+    /**
+     * Passes the location variable into the GhostCircle class into the QuadTree class to obtain Actors radius and 
+     * check if the location variable is occupied by an actor.
+     * @param location      the desired location the player would like to check is or is not occupied
+     * @return false
+     */
     public boolean checkIfLocationIsEmpty(Location location) {
         ghostCircle = new GhostCircle(0,location);
         quad.insert(ghostCircle);
@@ -395,13 +403,13 @@ public class GameWorld {
         updateQuadTree();
         return true;
     }
-/**
- * Passes the location variable into the GhostCircle class into the QuadTree class to obtain Actors radius and 
- * check if the location variable is occupied by an actor.
- * @param location      the desired location the player would like to check is or is not occupied
- * @param radius        the desired radius the player would like to check is or is not occupied
- * @return 
- */
+    /**
+     * Passes the location variable into the GhostCircle class into the QuadTree class to obtain Actors radius and 
+     * check if the location variable is occupied by an actor.
+     * @param location      the desired location the player would like to check is or is not occupied
+     * @param radius        the desired radius the player would like to check is or is not occupied
+     * @return 
+     */
     public boolean checkIfLocationIsEmpty(Location location, int radius) {
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -420,14 +428,14 @@ public class GameWorld {
         updateQuadTree();
         return true;
     }
-/**
- * Passes the location variable into the GhostCircle class into the QuadTree class to obtain Actors radius and 
- * check if the location variable is occupied by an actor.
- * @param location      the desired location the player would like to check is or is not occupied
- * @param radius        the desired radius the player would like to check is or is not occupied
- * @param ID            the desired ID the player would like to check is or is not occupying the desired location     
- * @return 
- */
+    /**
+     * Passes the location variable into the GhostCircle class into the QuadTree class to obtain Actors radius and 
+     * check if the location variable is occupied by an actor.
+     * @param location      the desired location the player would like to check is or is not occupied
+     * @param radius        the desired radius the player would like to check is or is not occupied
+     * @param ID            the desired ID the player would like to check is or is not occupying the desired location     
+     * @return 
+     */
     public boolean checkIfLocationIsEmpty(Location location, int radius, int ID) { // Checks if location is empty except for the unit represented by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -446,12 +454,12 @@ public class GameWorld {
         updateQuadTree();
         return true;
     }
-/**
- * Queries and returns any actor operating in the ghostCircle radius of the AI.
- * @param location      defines the location of the Actor who's location will be queried
- * @param radius        defines the radius size of the Actor who's radius will be queried
- * @return returnCollisions
- */
+    /**
+     * Queries and returns any actor operating in the ghostCircle radius of the AI.
+     * @param location      defines the location of the Actor who's location will be queried
+     * @param radius        defines the radius size of the Actor who's radius will be queried
+     * @return returnCollisions
+     */
     public List returnActorsInCircle(Location location, int radius) { // Returns all actors in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -470,13 +478,13 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
-/**
- * Queries and returns any actor operating in the ghostCircle radius of the AI.
- * @param location      defines the location of the Actor who's location will be queried
- * @param radius        defines the radius size of the Actor who's radius will be queried
- * @param ID            defines the ID of the actor that will be excluded from the method's query
- * @return returnCollisions
- */
+    /**
+     * Queries and returns any actor operating in the ghostCircle radius of the AI.
+     * @param location      defines the location of the Actor who's location will be queried
+     * @param radius        defines the radius size of the Actor who's radius will be queried
+     * @param ID            defines the ID of the actor that will be excluded from the method's query
+     * @return returnCollisions
+     */
     public List returnActorsInCircle(Location location, int radius, int ID) { // Returns all actors in circle. Returns actors in circle except for the unit represented by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -496,12 +504,12 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
-/**
- * Queries and returns any unit operating in the ghostCircle radius of the AI.
- * @param location      defines the location of the unit who's location will be queried
- * @param radius        defines the radius size of the unit who's radius will be queried
- * @return returnCollisions
- */
+    /**
+     * Queries and returns any unit operating in the ghostCircle radius of the AI.
+     * @param location      defines the location of the unit who's location will be queried
+     * @param radius        defines the radius size of the unit who's radius will be queried
+     * @return returnCollisions
+     */
     public List returnUnitsInCircle(Location location, int radius) { // Returns all units in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -521,13 +529,13 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
-/**
- * Queries and returns any unit operating in the ghostCircle radius of the AI.
- * @param location      defines the location of the unit who's location will be queried
- * @param radius        defines the radius size of the unit who's radius will be queried
- * @param ID            defines the ID of the unit that will be excluded from the method's query
- * @return returnCollisions
- */
+    /**
+     * Queries and returns any unit operating in the ghostCircle radius of the AI.
+     * @param location      defines the location of the unit who's location will be queried
+     * @param radius        defines the radius size of the unit who's radius will be queried
+     * @param ID            defines the ID of the unit that will be excluded from the method's query
+     * @return returnCollisions
+     */
     public List returnUnitsInCircle(Location location, int radius, int ID) { // Returns all units in circle except the unit indicated by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -548,12 +556,12 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }    
-/**
- * Queries and returns anything other than weapons operating in the ghostCircle radius of the AI.
- * @param location      defines the location of all actors, excluding Weapons, who's location will be queried
- * @param radius        defines the radius size of all actors, excluding Weapons, who's radius will be queried
- * @return returnCollisions
- */
+    /**
+     * Queries and returns anything other than weapons operating in the ghostCircle radius of the AI.
+     * @param location      defines the location of all actors, excluding Weapons, who's location will be queried
+     * @param radius        defines the radius size of all actors, excluding Weapons, who's radius will be queried
+     * @return returnCollisions
+     */
     public List returnNonWeaponsInCircle(Location location, int radius) { // Does not return weapons.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -573,13 +581,13 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
-/**
- * Queries and returns anything other than weapons operating in the ghostCircle radius of the AI.
- * @param location      defines the location of all actors, excluding Weapons, who's location will be queried
- * @param radius        defines the radius size of all actors, excluding Weapons, who's radius will be queried
- * @param ID            defines the ID of the unit that will be excluded from the method's query 
- * @return returnCollisions
- */
+    /**
+     * Queries and returns anything other than weapons operating in the ghostCircle radius of the AI.
+     * @param location      defines the location of all actors, excluding Weapons, who's location will be queried
+     * @param radius        defines the radius size of all actors, excluding Weapons, who's radius will be queried
+     * @param ID            defines the ID of the unit that will be excluded from the method's query 
+     * @return returnCollisions
+     */
     public List returnNonWeaponsInCircle(Location location, int radius, int ID) { // Does not return weapons. Returns actors in circle except for the unit represented by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -600,12 +608,12 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
-/**
- * Queries and returns any weapon operating in the ghostCircle radius of the AI.
- * @param location      defines the location of the weapon who's location will be queried
- * @param radius        defines the radius size of the weapon who's radius will be queried
- * @return returnCollisions
- */
+    /**
+     * Queries and returns any weapon operating in the ghostCircle radius of the AI.
+     * @param location      defines the location of the weapon who's location will be queried
+     * @param radius        defines the radius size of the weapon who's radius will be queried
+     * @return returnCollisions
+     */
     public List returnWeaponsInCircle(Location location, int radius) { // Returns all weapons in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -626,11 +634,11 @@ public class GameWorld {
         return returnCollisions;
     }
     /**
- * Queries and returns any environment variable operating in the ghostCircle radius of the AI.
- * @param location      defines the location of the environment variable who's location will be queried
- * @param radius        defines the radius size of the environment variable who's radius will be queried
- * @return returnCollisions
- */
+    * Queries and returns any environment variable operating in the ghostCircle radius of the AI.
+    * @param location      defines the location of the environment variable who's location will be queried
+    * @param radius        defines the radius size of the environment variable who's radius will be queried
+    * @return returnCollisions
+    */
     public List returnEnvironmentInCircle(Location location, int radius) { // Returns all environment in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
@@ -650,22 +658,22 @@ public class GameWorld {
         updateQuadTree();
         return returnCollisions;
     }
-/**
- * Gets Unit Count for queried team.
- * @param team      defines the team to be passed to obtain the Unit Count
- * @return count
- */
+    /**
+     * Gets Unit Count for queried team.
+     * @param team      defines the team to be passed to obtain the Unit Count
+     * @return count
+     */
     public int getUnitCount(Team team) {
         int count = 0;
         count = castDirector.getCurrentUnits().stream().filter((unit) -> (unit.getTeam() == team)).map((_item) -> 1).reduce(count, Integer::sum);
         return count;
     }
-/**
- * Gets Unit Count for queried team.
- * @param team      defines the team to be passed to obtain the Unit Count
- * @param type      defines the type to be passed to obtain the Unit Count
- * @return count
- */
+    /**
+     * Gets Unit Count for queried team.
+     * @param team      defines the team to be passed to obtain the Unit Count
+     * @param type      defines the type to be passed to obtain the Unit Count
+     * @return count
+     */
     public int getUnitCount(Team team, UnitType type) {
         int count = 0;
         count = castDirector.getCurrentUnits().stream().filter((unit) -> (unit.getTeam() == team && unit.getType() == type)).map((_item) -> 1).reduce(count, Integer::sum);

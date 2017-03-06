@@ -104,9 +104,17 @@ public strictfp class AIController {
                 && checkBoundaries(location)
                 && !checkForCollision(location);
     }
-    private boolean assertCanBuild(UnitType type) {
+    private boolean assertCanBuildShip(UnitType type) {
         return Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
+            && type.isShip()
             && getMineralCount()-type.getMineralCost() >= 0;
+    }
+    private boolean assertCanConstructStructure(UnitType type, Location location, Environment environment) {
+        return Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
+            && type.isStructure()
+            && getMineralCount()-type.getMineralCost() >= 0
+            && environment.getStructureCount() >= environment.getType().getStructureCap()
+            && ;
     }
     private boolean assertCanFire(WeaponType type) {
         return unit.getType().canAttack() && Arrays.asList(unit.getType().getArsenal()).contains(type);
@@ -414,12 +422,18 @@ public strictfp class AIController {
         return assertCanMove(getLocation().add(unit.getType().getFlightRadius(), direction))
                 && isReadyToMove();
     }
-    public boolean canBuild(UnitType type, Direction direction) {
-        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-        return assertCanBuild(type) 
+    public boolean canBuildShip(UnitType type, Location location) { // location WAS direction. Confirm this works.
+        //Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        return assertCanBuildShip(type) 
                 && assertLocationIsEmpty(location, type.getBodyRadius())
                 && assertOnScreen(location, type.getBodyRadius())
                 && isReadyToBuild(); 
+    }
+    public boolean canConstructStructure(UnitType type, Location location, Environment environment) {
+        return assertCanConstructStructure(type, location, environment)
+                && assertLocationIsEmpty(location, type.getBodyRadius())
+                && assertOnScreen(location, type.getBodyRadius())
+                && isReadyToBuild();
     }
     public boolean canFire(WeaponType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
@@ -455,15 +469,24 @@ public strictfp class AIController {
                 move(movePoint);   
         }
     }
-    public final void build(UnitType type, Direction direction) {
+    public final void buildShip(UnitType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-        if(canBuild(type, direction)) {
+        if(canBuildShip(type, location)) {
                 gameWorld.addUnit(type, location, getTeam());
                 unit.setBuildCooldown(type.getSpawnCooldown());
                 gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
         }
         else {
             System.out.println("Can not build.");
+        }
+    }
+    public final void construct(UnitType type, Direction direction, Environment environment) {
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        if(canConstructStructure(type, location, environment)) {
+            
+        }
+        else {
+            System.out.println("Can not construct.");
         }
     }
     public final void fire(WeaponType type, Direction direction) {

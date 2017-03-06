@@ -65,7 +65,7 @@ public strictfp enum EnvironmentType {
     LARGE_PLANET    (30000,    0,     50,     4,      0,      (Math.PI)/12,
     /*              maxHP   trvSpd    Rad     Cap     MinMax      RotV    */
                     new Image("/LARGE_PLANET.png", 200, 200, true, false, true));
-    
+
     /**
      * The maximum (not current) health of a given EnvironmentType.
      */

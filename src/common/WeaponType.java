@@ -30,37 +30,37 @@ public strictfp enum WeaponType {
      */
     SMALL_LASER         (10,         2,      0,      0,      1,  1,      1,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/SMALL_LASER.png", 8, 8, true, false, true)),
+                    new Image("/SMALL_LASER.png", 2*GameConstants.COORDINATE_TO_PIXEL*2, 2*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)),
     /**
      * An upgraded laser variant; more powerful, but twice as slow. Can be fired by a DESTROYER and a CAPITAL ship.
      */
     LARGE_LASER         (7,          4,      0,      0,      3,  3,      3,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/TestImage.png", 50, 50, true, false, true)),
+                    new Image("/TestImage.png", 4*GameConstants.COORDINATE_TO_PIXEL*2, 4*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)),
     /**
      * A projectile that explodes on impact with an Actor and does damage to adjacent Actors. Can be fired by a DESTROYER and a CAPITAL ship.
      */
     SMALL_BOMB          (6,          4,      10,      0,      10, 10,     5,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/SMALL_BOMB.png", 16, 16, true, false, true)),
+                    new Image("/SMALL_BOMB.png", 4*GameConstants.COORDINATE_TO_PIXEL*2, 4*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)),
     /**
      * A heavy bomb variant; more powerful, a greater explosion radius, and twice as slow. Can be fired only by a CAPITAL ship.
      */
     LARGE_BOMB          (4,          7,      15,     0,      20, 20,     10,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/LARGE_BOMB.png", 28, 28, true, false, true)),
+                    new Image("/LARGE_BOMB.png", 7*GameConstants.COORDINATE_TO_PIXEL*2, 7*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)),
     /**
      * A deployable mine that will explode when an enemy unit enters its detection radius. Can be deployed by a DESTROYER and a CAPITAL ship.
      */
     MINE                (0,          4,      13,     7,      15, 15,     20,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/TestImage.png", 50, 50, true, false, true)),
+                    new Image("/TestImage.png", 4*GameConstants.COORDINATE_TO_PIXEL*2, 4*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)),
     /**
      * A powerful blast that will deal increased damage to structures and EnvironmentType objects. Can be fired by SIEGE and CAPITAL ships.
      */
     PLANET_BOMBARDMENT  (4,          7,      0,      0,      20, 50,     10,
     /*              launchSpd   weaponRad   exRad   detRad  dam strDam  relTime   */
-                    new Image("/TestImage.png", 50, 50, true, false, true));
+                    new Image("/TestImage.png", 7*GameConstants.COORDINATE_TO_PIXEL*2, 7*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true));
     
     /**
      * The speed of a WeaponType.

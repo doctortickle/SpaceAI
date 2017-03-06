@@ -27,6 +27,7 @@ public strictfp class EnvironmentController {
     private final double rightBoundary;
     private final double bottomBoundary;
     private final double topBoundary;
+    int n;
     
     public EnvironmentController(Environment environment, GameWorld gameWorld) {
         this.environment = environment;
@@ -35,6 +36,7 @@ public strictfp class EnvironmentController {
         this.rightBoundary = GameConstants.MAX_X_COORDINATE;
         this.bottomBoundary = GameConstants.MIN_Y_COORDINATE;
         this.topBoundary = GameConstants.MAX_Y_COORDINATE;
+        this.n = 0;
     }
     
     // *********************************
@@ -42,6 +44,7 @@ public strictfp class EnvironmentController {
     // *********************************
 
     void rotateImage() {
-        environment.getSpriteFrame().setRotate(45);
+        environment.getSpriteFrame().setRotate(n);
+        n += 45;
     }   
 }

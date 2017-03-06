@@ -45,5 +45,35 @@ public strictfp class EnvironmentController {
         double n = environment.getSpriteFrame().getRotate();
         n += environment.getType().getRotationV();
         environment.getSpriteFrame().setRotate(n);
-    }   
+    }       
+        
+    // ***********************************
+    // ******MOVE - WeaponController******
+    // ***********************************
+    
+ // Planets can be destroyed
+ // Meteors deal damage to ship equivalent to the amount of health left in the meteor
+ //        
+        
+    private boolean checkBoundaries(Location location) {
+        if(location.getY() >= topBoundary - environment.getType().getBodyRadius()) { return false; }
+        if(location.getY() <= bottomBoundary + environment.getType().getBodyRadius()) { return false; } 
+        if(location.getX() >= rightBoundary - environment.getType().getBodyRadius()) { return false; }
+        if(location.getX() <= leftBoundary + environment.getType().getBodyRadius()) { return false; }
+        return true;
+    }           
+    public final void move(Direction direction) {
+        Location movePoint = environment.getLocation().add(environment.getType().gettravelSpeed(), direction);
+        if  (checkBoundaries(movePoint)) {
+            updateSpriteAndLocation(movePoint);   
+        }
+        else if (!checkBoundaries(movePoint)) {
+            environment.setDestroy(true);
+        }
+    }
+    private void updateSpriteAndLocation(Location location) {
+        environment.updateLocation(location.getX(), location.getY());
+        environment.getSpriteFrame().setTranslateX(location.getPixelX());
+        environment.getSpriteFrame().setTranslateY(location.getPixelY());
+    }
 }

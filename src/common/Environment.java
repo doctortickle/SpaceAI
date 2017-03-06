@@ -38,6 +38,10 @@ public final class Environment extends Actor{
      * The current number of StructureType structures on this environment object.
      */
     private int structureCount;
+    /**
+     * True if this environment has gone off map or been destroyed.
+     */
+    private boolean destroy;    
     private final EnvironmentController ec;
     
     @Override
@@ -65,12 +69,14 @@ public final class Environment extends Actor{
         return false;
     }
     
+    
 
     Environment(SpaceAI spaceAI, EnvironmentType type, int ID, Location location) {
         super(ID, type.getMaxHealth(), type.getBodyRadius(), location, Team.NEUTRAL, type.getSpriteImage());
         this.type = type;
         this.mineralCount = type.getMineralMax();
         this.structureCount = 0;
+        this.destroy = false;
         this.ec = new EnvironmentController(this, spaceAI.getGameWorld());
     }
        
@@ -100,7 +106,14 @@ public final class Environment extends Actor{
     public int getStructureCount() {
         return structureCount;
     }
-
+    /**
+     * Sets the boolean for Destroy.
+     * @param destroy boolean value to be assigned to destroy.
+     * @see destroy
+     */
+    void setDestroy(boolean destroy) {
+        this.destroy = destroy;
+    }
     @Override
     void update() {
         // update method goes here.

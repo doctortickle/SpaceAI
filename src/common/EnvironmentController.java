@@ -80,7 +80,6 @@ public strictfp class EnvironmentController {
     boolean collide(Actor actor) {
         return environment.getLocation().distanceTo(actor.getLocation()) < environment.getType().getBodyRadius() + actor.getRadius();
     }
-    
     void damageApplication(Actor actor) {
         actor.decreaseHealth(environment.getHealth());
         environment.setDestroyed(true);

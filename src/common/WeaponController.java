@@ -98,10 +98,10 @@ public strictfp class WeaponController {
     }
     private void laserDamageApplication(Actor actor) {
         if(actor.isCommandable()) {
-            actor.setHealth(weapon.getType().getUnitDamage());
+            actor.decreaseHealth(weapon.getType().getUnitDamage());
         }
         else if(actor.isEnvironment() || actor.isStructure()) {
-            actor.setHealth(weapon.getType().getEnvironmentDamage());
+            actor.decreaseHealth(weapon.getType().getEnvironmentDamage());
         }
         weapon.setSpent(true);
         weapon.setExploded(true);
@@ -122,10 +122,10 @@ public strictfp class WeaponController {
             List<Actor> actorsHit = gameWorld.returnNonWeaponsInCircle(weapon.getLocation(), weapon.getType().getExplosionRadius());
             for(Actor actorHit : actorsHit) {
                 if(actorHit.isCommandable()) {
-                    actorHit.setHealth(weapon.getType().getUnitDamage());
+                    actorHit.decreaseHealth(weapon.getType().getUnitDamage());
                 }
                 else if(actorHit.isEnvironment() || actorHit.isStructure()) {
-                    actorHit.setHealth(weapon.getType().getEnvironmentDamage());
+                    actorHit.decreaseHealth(weapon.getType().getEnvironmentDamage());
                 }
             }
             weapon.setExploded(true);
@@ -147,10 +147,10 @@ public strictfp class WeaponController {
             List<Actor> actorsHit = gameWorld.returnNonWeaponsInCircle(weapon.getLocation(), weapon.getType().getExplosionRadius());
             for(Actor actorHit : actorsHit) {
                 if(actorHit.isCommandable()) {
-                    actorHit.setHealth(weapon.getType().getUnitDamage());
+                    actorHit.decreaseHealth(weapon.getType().getUnitDamage());
                 }
                 else if(actorHit.isEnvironment() || actorHit.isStructure()) {
-                    actorHit.setHealth(weapon.getType().getEnvironmentDamage());
+                    actorHit.decreaseHealth(weapon.getType().getEnvironmentDamage());
                 }
             }
             weapon.setExploded(true);

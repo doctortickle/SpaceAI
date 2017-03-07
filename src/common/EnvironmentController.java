@@ -53,24 +53,38 @@ public strictfp class EnvironmentController {
         if(location.getX() <= leftBoundary + environment.getType().getBodyRadius()) { return false; }
         return true;
     }           
-    public final void move(Direction direction) {
-        Location movePoint = environment.getLocation().add(environment.getType().gettravelSpeed(), direction);
-        if  (checkBoundaries(movePoint)) {
-            updateSpriteAndLocation(movePoint);   
+    public final void move() {
+        if(environment.getType().getTravelSpeed() > 0) {
+            Location movePoint = environment.getLocation().add(environment.getType().getTravelSpeed(), environment.getDirection());
+            if  (checkBoundaries(movePoint)) {
+                updateSpriteAndLocation(movePoint);   
+            }
+            else if (!checkBoundaries(movePoint)) {
+                updateSpriteAndLocation(returnOpposite());
+            }  
         }
-        else if (!checkBoundaries(movePoint)) {
-            environment.setDestroyed(true);
-        }
+    }
+    private Location returnOpposite() {
+        return new Location(-environment.getLocation().getX(), -environment.getLocation().getY());
     }
     void rotateImage() {
         double n = environment.getSpriteFrame().getRotate();
         n += environment.getType().getRotationV();
         environment.getSpriteFrame().setRotate(n);
     }       
-
- // Planets can be destroyed
- // Meteors deal damage to ship equivalent to the amount of health left in the meteor
- //        
+  
+    // *********************************
+    // ***** COLLISION AND DAMAGE ******
+    // *********************************
     
-
+    boolean collide(Actor actor) {
+        return environment.getLocation().distanceTo(actor.getLocation()) < environment.getType().getBodyRadius() + actor.getRadius();
+    }
+    
+    void damageApplication(Actor actor) {
+        actor.decreaseHealth(environment.getHealth());
+        environment.setDestroyed(true);
+        environment.decreaseHealth(environment.getHealth());
+    }
+    
 }

@@ -223,7 +223,7 @@ public strictfp enum UnitType {
     /**
      * A structure that can continually harvest minerals from meteors.
      */
-    MINING_FACILITY(new EnvironmentType[] {EnvironmentType.SMALL_METEOR, EnvironmentType.LARGE_METEOR},   // spawnLocations
+    MINING_FACILITY(new EnvironmentType[] {EnvironmentType.SMALL_ASTEROID, EnvironmentType.LARGE_ASTEROID},   // spawnLocations
                     100,    // spawnCooldown
                     500,    // maxHealth
                     500,    // mineralCost
@@ -483,7 +483,7 @@ public strictfp enum UnitType {
                || this == HOME_STATION;
     }
     /**
-     * Determines if the UnitType can harvest directly from a SMALL_ASTEROID, LARGE_ASTEROID, SMALL_METEOR, or LARGE_METEOR.
+     * Determines if the UnitType can harvest directly from a SMALL_METEOR, LARGE_METEOR, SMALL_ASTEROID, or LARGE_ASTEROID.
      * Returns true for HARVESTER and MINING_FACILITY.
      * @return true if the UnitType is a HARVESTER or a MINING_FACILITY.
      * @see #HARVESTER

@@ -69,6 +69,7 @@ public class GameWorld {
             System.out.println("Game Round : " + gameRound);
             updateQuadTree();
             checkWeaponCollisions();
+            checkEnvironmentCollisions();
             clearDepletedActors();
         }
     }
@@ -208,29 +209,47 @@ public class GameWorld {
     }
     /**
      * This method sorts current actor lists in order to determine actors that are weapons. Once 
-     * sorted, method checks for weapons that have collided, been spent, or exploded and prints
-     * current status of weapon. 
+     * sorted, method checks for weapons that have collided, been spent, or exploded.
      */
-    private void checkWeaponCollisions() {
+    private void checkWeaponCollisions() { // switch to using castDirector.getCurrentWeapons().
         List<Actor> returnActors = new ArrayList();
-        for (int i = 0; i < allActors.size(); i++) {
-            if(allActors.get(i).isWeapon()) {
-                Weapon weapon = (Weapon) allActors.get(i);
+        for (int i = 0; i < castDirector.getCurrentWeapons().size(); i++) {
+            if(castDirector.getCurrentWeapons().get(i).isWeapon()) {
+                Weapon weapon = (Weapon) castDirector.getCurrentWeapons().get(i);
                 if(!weapon.isSpent()){
                     returnActors.clear();
-                    returnActors = quad.retrieve(returnActors, allActors.get(i));
-                    System.out.println("\nWeapon " + allActors.get(i).getID() + " may collide with : ");
+                    returnActors = quad.retrieve(returnActors, weapon);
+                    System.out.println("\nWeapon " + weapon.getID() + " may collide with : ");
                     for (int x = 0; x < returnActors.size(); x++) {
                         if(!(returnActors.get(x).isWeapon())) {
                             System.out.print(returnActors.get(x).getID() + ", ");
-                            if(allActors.get(i).collide(returnActors.get(x))) {
-                                System.out.println("\nWeapon " + weapon.getID() + " spent status : " + weapon.isSpent());
-                                System.out.println("\nWeapon " + weapon.getID() + " exploded status : " + weapon.isExploded());
-                                System.out.println("Impact!");
+                            if(weapon.collide(returnActors.get(x))) {
                                 weapon.damageApplication(returnActors.get(x));
-                                System.out.println("\nWeapon " + weapon.getID() + " collied with unit : " + returnActors.get(x).getID());
-                                System.out.println("\nWeapon " + weapon.getID() + " spent status : " + weapon.isSpent());
-                                System.out.println("\nWeapon " + weapon.getID() + " exploded status : " + weapon.isExploded());
+                            }
+                        }
+                    }
+                }
+            }  
+        }
+    }
+    /**
+     * This method sorts current actor lists in order to determine actors that are weapons. Once 
+     * sorted, method checks for weapons that have collided, been spent, or exploded.
+     */
+    private void checkEnvironmentCollisions() { //switch to using castDirector.getCurrentEnvironment().
+        List<Actor> returnActors = new ArrayList();
+        for (int i = 0; i < castDirector.getCurrentEnvironment().size(); i++) {
+            if(castDirector.getCurrentEnvironment().get(i).isEnvironment()) {
+                Environment environment = (Environment) castDirector.getCurrentEnvironment().get(i);
+                if(!environment.isDestroyed() && environment.getType().getTravelSpeed() > 0){
+                    returnActors.clear();
+                    returnActors = quad.retrieve(returnActors, environment);
+                    System.out.println("\nEnvironment " + environment.getID() + " may collide with : ");
+                    for (int x = 0; x < returnActors.size(); x++) {
+                        if(!(returnActors.get(x).isWeapon())) {
+                            System.out.print(returnActors.get(x).getID() + ", ");
+                            if(environment.collide(returnActors.get(x))) {
+                                environment.damageApplication(returnActors.get(x));
                             }
                         }
                     }
@@ -251,6 +270,10 @@ public class GameWorld {
        checkWeapons.stream().filter((weapon) -> (weapon.isSpent() && weapon.isExploded() && weapon.getClearCountdown() >= GameConstants.WEAPON_CLEAR_COUNTDOWN)).forEachOrdered((weapon) -> {
            removeActor(weapon);
         });
+       List<Environment> checkEnvironment = castDirector.getCurrentEnvironment();
+       checkEnvironment.stream().filter((environment) -> (environment.isDestroyed())).forEachOrdered((environment) -> {
+          removeActor(environment); 
+       });
     }
     /**
      * Adds unit to castDirector.

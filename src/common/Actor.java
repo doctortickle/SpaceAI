@@ -45,7 +45,7 @@ public abstract class Actor {
         return health;
     }
     
-    void setHealth(int damage) {
+    void decreaseHealth(int damage) {
         this.health -= damage;
     }
 

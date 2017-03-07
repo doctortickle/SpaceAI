@@ -16,14 +16,11 @@
  */
 package common;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author Dylan Russell
  * 
- * Stores basic information about an EnvironmentType object.
+ * Stores basic information about an Environment object.
  */
 public final class Environment extends Actor{
     
@@ -36,9 +33,16 @@ public final class Environment extends Actor{
      */
     private int mineralCount;
     /**
+     * The direction of travel of this environment object.
+     */
+    private Direction direction;
+    /**
      * True if this environment has gone off map or been destroyed.
      */
-    private boolean destroyed;    
+    private boolean destroyed; 
+    /**
+     * Assigns an EnvironmentController to this environment.
+     */
     private final EnvironmentController ec;
     
     @Override
@@ -70,6 +74,7 @@ public final class Environment extends Actor{
         super(ID, type.getMaxHealth(), type.getBodyRadius(), location, Team.NEUTRAL, type.getSpriteImage());
         this.type = type;
         this.mineralCount = type.getMineralMax();
+        this.direction = Direction.getRandom();
         this.destroyed = false;
         this.ec = new EnvironmentController(this, spaceAI.getGameWorld());
     }      
@@ -87,10 +92,34 @@ public final class Environment extends Actor{
     public int getMineralCount() {
         return mineralCount;
     }
+    /**
+     * Returns direction of travel of this environment object.
+     * @return Direction of travel of this environment object
+     */
+    public Direction getDirection() {
+        return direction;               
+    }
+    /**
+     * Set direction of travel for this environment object
+     * @param direction direction of travel to be assigned.
+     */
+    void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+    /**
+     * Decreases the current mineral count of this environment object by decrement.
+     * @param decrement int to decrease the current mineral count by.
+     * @see #mineralCount
+     */
     void decreaseMineralCount(int decrement) {
         this.mineralCount -= decrement;
     }
-    boolean getDestroyed() {
+    /**
+     * Returns the boolean for destroyed.
+     * @return true if environment is destroyed.
+     * @see #destroyed
+     */
+    boolean isDestroyed() {
         return this.destroyed;
     }
     /**
@@ -103,11 +132,19 @@ public final class Environment extends Actor{
     }
     @Override
     void update() {
-        ec.rotateImage();
+        if(this.getHealth() <= 0) {
+            destroyed = true;
+        }
+        if(!destroyed) {
+            ec.rotateImage();
+            ec.move();
+        }
     }
-
     @Override
-    boolean collide(Actor object) {
-        return false;
+    boolean collide(Actor actor) {
+        return ec.collide(actor);
+    }
+    void damageApplication(Actor actor) {
+        ec.damageApplication(actor);
     }
 }

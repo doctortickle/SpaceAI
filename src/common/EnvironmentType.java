@@ -30,27 +30,27 @@ import javafx.scene.image.Image;
 public strictfp enum EnvironmentType {
     
     /**
-     * A small meteor, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
+     * A small asteroid, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
      */
-    SMALL_METEOR    (1000,    4,      10,      5000,   (Math.PI)/6,
+    SMALL_ASTEROID    (1000,    0,      10,      5000,   (Math.PI)/6,
     /*              maxHP   trvSpd    Rad     MinMax      RotV    */
                     new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
-     * A large meteor, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
+     * A large asteroid, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
      */
-    LARGE_METEOR    (3000,    4,     20,      12000,  (Math.PI)/9,
+    LARGE_ASTEROID    (3000,    0,     20,      12000,  (Math.PI)/9,
     /*              maxHP   trvSpd    Rad     MinMax      RotV    */
                     new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
-     * A small asteroid, capable of being harvested by a HARVESTER.
+     * A small meteor, capable of being harvested by a HARVESTER.
      */
-    SMALL_ASTEROID  (700,     3,      3,      500,    (Math.PI)/6,
+    SMALL_METEOR  (700,       3,      3,      500,    (Math.PI)/6,
     /*              maxHP   trvSpd    Rad    MinMax      RotV    */
                     new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
-     * A large asteroid, capable of being harvested by a HARVESTER.
+     * A large meteor, capable of being harvested by a HARVESTER.
      */
-    LARGE_ASTEROID  (1500,    2,       6,     1000,   (Math.PI)/9,
+    LARGE_METEOR  (1500,      2,       6,     1000,   (Math.PI)/9,
     /*              maxHP   trvSpd    Rad    MinMax      RotV    */
                     new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
@@ -117,11 +117,11 @@ public strictfp enum EnvironmentType {
         return maxHealth;
     }
     /**
-     * Returns the maximum (not current) travel speed of a given EnvironmentType.
-     * @return int maximum (not current) travel speed of a given EnvironmentType.
+     * Returns the travel speed of a given EnvironmentType.
+     * @return int travel speed of a given EnvironmentType.
      */
-    public int gettravelSpeed() {
-        return maxHealth;
+    public int getTravelSpeed() {
+        return travelSpeed;
     }
     /**
      * Returns the body radius of a given EnvironmentType.

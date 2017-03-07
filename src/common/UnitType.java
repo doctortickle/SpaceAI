@@ -148,7 +148,7 @@ public strictfp enum UnitType {
                 10,     // maxHealth
                 50,     // mineralCost
                 5,      // bodyRadius
-                10,     // enemySensoryRadius
+                20,     // enemySensoryRadius
                 15,     // incomingDetectionRadius
                 5,      // flightRadius
                 1000,   // fuelMax
@@ -218,7 +218,7 @@ public strictfp enum UnitType {
                     0,      // refuelRate
                     0,      // harvestingRadius
                     0,      // harvestingRate
-                    new Image("/TestImage.png", 15*GameConstants.COORDINATE_TO_PIXEL*2, 15*GameConstants.COORDINATE_TO_PIXEL*20, true, false, true)  // spriteImage
+                    new Image("/TestImage.png", 15*GameConstants.COORDINATE_TO_PIXEL*2, 15*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
     /**
      * A structure that can continually harvest minerals from meteors.
@@ -238,7 +238,7 @@ public strictfp enum UnitType {
     /**
      * A structure that can continually refuel friendly ships in a given radius.
      */
-    FUEL_STATION(new EnvironmentType[] {EnvironmentType.SMALL_METEOR, EnvironmentType.LARGE_METEOR},   // spawnLocations
+    FUEL_STATION(   null,   // spawnLocations
                     100,    // spawnCooldown
                     200,    // maxHealth
                     100,    // mineralCost

@@ -17,6 +17,7 @@
 package common;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 //test
@@ -47,21 +48,7 @@ public strictfp class AIController {
     // *********************************
     // ******** INTERNAL METHODS *******
     // *********************************
-    
-    private boolean assertOnScreen(Location location) {
-        if(location.getY() >= topBoundary - unit.getRadius()) { return false; }
-        if(location.getY() <= bottomBoundary + unit.getRadius()) { return false; }
-        if(location.getX() >= rightBoundary - unit.getRadius()) { return false; }
-        if(location.getX() <= leftBoundary + unit.getRadius()) { return false; }
-        return true;
-    }
-    private boolean assertOnScreen(Location location, int radius) {
-        Location check1 = location.add(radius,Direction.NORTH);
-        Location check2 = location.add(radius,Direction.EAST);
-        Location check3 = location.add(radius,Direction.SOUTH);
-        Location check4 = location.add(radius,Direction.WEST);
-        return assertOnScreen(check1) && assertOnScreen(check2) && assertOnScreen(check3) && assertOnScreen(check4);
-    }
+
     private void updateSpriteAndLocation(Location location) {
         unit.updateLocation(location.getX(), location.getY());
         unit.getSpriteFrame().setTranslateX(location.getPixelX());
@@ -80,6 +67,34 @@ public strictfp class AIController {
         if(location.getX() >= rightBoundary - unit.getRadius()) { return false; }
         if(location.getX() <= leftBoundary + unit.getRadius()) { return false; }
         return true;
+    }
+    private Environment findNearestEnvironment() {
+        List<Environment> nearestEnvironments = senseEnvironment();
+        double closestDistance = Double.MAX_VALUE;
+        Environment closestEnvironment = null;
+        if(nearestEnvironments.size() > 0) {
+            for(Environment environment : nearestEnvironments) {
+                if(environment.getLocation().distanceTo(unit.getLocation()) < closestDistance) {
+                    closestDistance = environment.getLocation().distanceTo(unit.getLocation());
+                    closestEnvironment = environment;
+                }
+            }
+        }
+        return closestEnvironment;
+    }
+    private boolean assertOnScreen(Location location) {
+        if(location.getY() >= topBoundary - unit.getRadius()) { return false; }
+        if(location.getY() <= bottomBoundary + unit.getRadius()) { return false; }
+        if(location.getX() >= rightBoundary - unit.getRadius()) { return false; }
+        if(location.getX() <= leftBoundary + unit.getRadius()) { return false; }
+        return true;
+    }
+    private boolean assertOnScreen(Location location, int radius) {
+        Location check1 = location.add(radius,Direction.NORTH);
+        Location check2 = location.add(radius,Direction.EAST);
+        Location check3 = location.add(radius,Direction.SOUTH);
+        Location check4 = location.add(radius,Direction.WEST);
+        return assertOnScreen(check1) && assertOnScreen(check2) && assertOnScreen(check3) && assertOnScreen(check4);
     }
     private boolean assertCanSenseLocation(Location location) {
         return assertOnScreen(location) && getLocation().distanceTo(location) <= getSensorRadius();
@@ -109,12 +124,26 @@ public strictfp class AIController {
             && type.isShip()
             && getMineralCount()-type.getMineralCost() >= 0;
     }
-    private boolean assertCanConstructStructure(UnitType type, Location location, Environment environment) {
+    private boolean assertNeedsEnvironment(UnitType type) {
+        return type == UnitType.SMALL_DOCK || type == UnitType.LARGE_DOCK || type == UnitType.CAPITAL_DOCK || type == UnitType.MINING_FACILITY;
+    }
+    private boolean assertCorrectEnvironment(UnitType type, Environment environment) {
+        return Arrays.asList(type.getSpawnLocations()).contains(environment.getType());
+    }
+    private boolean assertCanConstruct(UnitType type, Location location, Environment environment) {
         return Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
             && type.isStructure()
+            && assertNeedsEnvironment(type)
+            && assertCorrectEnvironment(type, environment)
             && getMineralCount()-type.getMineralCost() >= 0
-            && environment.getStructureCount() >= environment.getType().getStructureCap()
-            && ;
+            && location.distanceTo(environment.getLocation()) - (environment.getType().getBodyRadius() + type.getBodyRadius()) > GameConstants.MIN_ENV_BUILD_DISTANCE
+            && location.distanceTo(environment.getLocation()) - (environment.getType().getBodyRadius() + type.getBodyRadius()) < GameConstants.MAX_ENV_BUILD_DISTANCE;
+    }
+    private boolean assertCanConstruct(UnitType type, Location location) {
+        return Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
+            && type.isStructure()
+            && !assertNeedsEnvironment(type)
+            && getMineralCount()-type.getMineralCost() >= 0;
     }
     private boolean assertCanFire(WeaponType type) {
         return unit.getType().canAttack() && Arrays.asList(unit.getType().getArsenal()).contains(type);
@@ -318,7 +347,7 @@ public strictfp class AIController {
     public List<Actor> senseActors() {
         return gameWorld.returnActorsInCircle(unit.getLocation(), unit.getType().getSensorRadius());
     }
-    public List<Unit> senseActors(int range) {
+    public List<Actor> senseActors(int range) {
         if(range > unit.getType().getSensorRadius()) {
             range = unit.getType().getSensorRadius();
         }
@@ -422,18 +451,26 @@ public strictfp class AIController {
         return assertCanMove(getLocation().add(unit.getType().getFlightRadius(), direction))
                 && isReadyToMove();
     }
-    public boolean canBuildShip(UnitType type, Location location) { // location WAS direction. Confirm this works.
-        //Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+    public boolean canBuildShip(UnitType type, Direction direction) { // location WAS direction. Confirm this works.
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
         return assertCanBuildShip(type) 
                 && assertLocationIsEmpty(location, type.getBodyRadius())
                 && assertOnScreen(location, type.getBodyRadius())
                 && isReadyToBuild(); 
     }
-    public boolean canConstructStructure(UnitType type, Location location, Environment environment) {
-        return assertCanConstructStructure(type, location, environment)
+    public boolean canConstruct(UnitType type, Direction direction,  Environment environment) {
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        return assertCanConstruct(type, location, environment)
                 && assertLocationIsEmpty(location, type.getBodyRadius())
                 && assertOnScreen(location, type.getBodyRadius())
                 && isReadyToBuild();
+    }
+    public boolean canConstruct(UnitType type, Direction direction) {
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        return assertCanConstruct(type, location)
+            && assertLocationIsEmpty(location, type.getBodyRadius())
+            && assertOnScreen(location, type.getBodyRadius())
+            && isReadyToBuild();
     }
     public boolean canFire(WeaponType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
@@ -471,7 +508,7 @@ public strictfp class AIController {
     }
     public final void buildShip(UnitType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-        if(canBuildShip(type, location)) {
+        if(canBuildShip(type, direction)) {
                 gameWorld.addUnit(type, location, getTeam());
                 unit.setBuildCooldown(type.getSpawnCooldown());
                 gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
@@ -482,11 +519,38 @@ public strictfp class AIController {
     }
     public final void construct(UnitType type, Direction direction, Environment environment) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-        if(canConstructStructure(type, location, environment)) {
-            
+        if(canConstruct(type, direction, environment)) {
+            gameWorld.addUnit(type, location, getTeam());
+            unit.setBuildCooldown(type.getSpawnCooldown());
+            gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
         }
         else {
             System.out.println("Can not construct.");
+        }
+    }
+    public final void construct(UnitType type, Direction direction) {
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        if(assertNeedsEnvironment(type)) {
+            Environment environment = findNearestEnvironment();
+            if(environment != null 
+               && canConstruct(type, direction, environment)) {
+                    gameWorld.addUnit(type, location, getTeam());
+                    unit.setBuildCooldown(type.getSpawnCooldown());
+                    gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
+            }
+            else {
+                System.out.println("Can not construct.");
+            }
+        }
+        else {
+            if(canConstruct(type, direction)) {
+                gameWorld.addUnit(type, location, getTeam());
+                unit.setBuildCooldown(type.getSpawnCooldown());
+                gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
+            }
+            else {
+                System.out.println("Can not construct.");
+            }
         }
     }
     public final void fire(WeaponType type, Direction direction) {

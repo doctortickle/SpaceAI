@@ -38,7 +38,7 @@ public strictfp class EnvironmentController {
     }
     
     // *********************************
-    // ******** ENVIRONMENT UPDATES *********
+    // ***** ENVIRONMENT UPDATES *******
     // *********************************
 
     void rotateImage() {
@@ -68,7 +68,7 @@ public strictfp class EnvironmentController {
             updateSpriteAndLocation(movePoint);   
         }
         else if (!checkBoundaries(movePoint)) {
-            environment.setDestroy(true);
+            environment.setDestroyed(true);
         }
     }
     private void updateSpriteAndLocation(Location location) {

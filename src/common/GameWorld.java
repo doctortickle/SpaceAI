@@ -253,13 +253,20 @@ public class GameWorld {
         });
     }
     /**
-     * Adds unit to the CastingDirector castDirector class.
+     * Adds unit to castDirector.
      * @param type         defines the type of unit to be added 
      * @param location     defines the location of unit to be added
      * @param team         defines the team of the unit to be added
      */
     public void addUnit(UnitType type, Location location, Team team){
         Unit unit = new Unit(spaceAI, type, getUniqueID(), location, team);
+        castDirector.addToBeAdded(unit);
+    }
+    /**
+     * Adds unit to castDirector.
+     * @param unit          unit to be added
+     */
+    public void addUnit(Unit unit) {
         castDirector.addToBeAdded(unit);
     }
     /**

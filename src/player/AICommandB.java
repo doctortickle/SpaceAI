@@ -84,7 +84,7 @@ public class AICommandB {
         ac.move(Direction.getRandom());
         int dockCount = 0;
         if(dockCount == 0) {
-            ac.buildShip(UnitType.CAPITAL_DOCK, Direction.EAST);
+            ac.construct(UnitType.CAPITAL_DOCK, Direction.EAST);
             dockCount++;
         }
     }

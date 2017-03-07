@@ -88,11 +88,7 @@ public class AICommandA {
     private static void runBuilder() {
         // This code will be run every round.
         ac.move(Direction.getRandom());
-        int dockCount = 0;
-        if(dockCount == 0) {
-            ac.buildShip(UnitType.CAPITAL_DOCK, Direction.EAST);
-            dockCount++;
-        }
+        ac.construct(UnitType.CAPITAL_DOCK, Direction.SOUTH);
     }
     // *********************************
     // ********** HARVESTER ************
@@ -112,11 +108,10 @@ public class AICommandA {
     static int fighterCount = 0;
     private static void runHomeStation() {
         // This code will be run every round.
-        if(fighterCount < 5) {
-            if(ac.canBuildShip(UnitType.FIGHTER, Direction.SOUTH)) {
-                ac.buildShip(UnitType.FIGHTER, Direction.SOUTH);
+        if(fighterCount < 1) {
+            if(ac.canBuildShip(UnitType.BUILDER, Direction.SOUTH)) {
+                ac.buildShip(UnitType.BUILDER, Direction.SOUTH);
                 fighterCount++;
-                System.out.println(fighterCount);
             }
         }
     }

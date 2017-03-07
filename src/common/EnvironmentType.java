@@ -32,38 +32,38 @@ public strictfp enum EnvironmentType {
     /**
      * A small meteor, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
      */
-    SMALL_METEOR    (1000,    4,      10,     1,      5000,   (Math.PI)/6,
-    /*              maxHP   trvSpd    Rad     Cap     MinMax      RotV    */
+    SMALL_METEOR    (1000,    4,      10,      5000,   (Math.PI)/6,
+    /*              maxHP   trvSpd    Rad     MinMax      RotV    */
                     new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A large meteor, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
      */
-    LARGE_METEOR    (3000,    4,     20,     1,      12000,  (Math.PI)/9,
-    /*              maxHP   trvSpd   Rad     Cap     MinMax      RotV    */
+    LARGE_METEOR    (3000,    4,     20,      12000,  (Math.PI)/9,
+    /*              maxHP   trvSpd    Rad     MinMax      RotV    */
                     new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A small asteroid, capable of being harvested by a HARVESTER.
      */
-    SMALL_ASTEROID  (700,     3,      3,      0,      500,    (Math.PI)/6,
-    /*              maxHP  trvSpd    Rad     Cap     MinMax      RotV    */
+    SMALL_ASTEROID  (700,     3,      3,      500,    (Math.PI)/6,
+    /*              maxHP   trvSpd    Rad    MinMax      RotV    */
                     new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A large asteroid, capable of being harvested by a HARVESTER.
      */
-    LARGE_ASTEROID  (1500,    2,       6,      0,      1000,   (Math.PI)/9,
-    /*              maxHP   trvSpd    Rad     Cap     MinMax      RotV    */
+    LARGE_ASTEROID  (1500,    2,       6,     1000,   (Math.PI)/9,
+    /*              maxHP   trvSpd    Rad    MinMax      RotV    */
                     new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A small planet, capable of hosting a SMALL_DOCK, LARGE_DOCK, or CAPITAL_DOCK. Maximum capacity of 2.
      */
-    SMALL_PLANET    (10000,    0,     30,     2,      0,      (Math.PI)/9,
-    /*              maxHP   trvSpd    Rad     Cap     MinMax      RotV    */
+    SMALL_PLANET    (10000,    0,     30,      0,      (Math.PI)/9,
+    /*              maxHP   trvSpd    Rad    MinMax      RotV    */
                     new Image("/TestImage.png", 50, 50, true, false, true)),
     /**
      * A large planet, capable of hosting a SMALL_DOCK, LARGE_DOCK, or CAPITAL_DOCK. Maximum capacity of 2.
      */
-    LARGE_PLANET    (30000,    0,     50,     4,      0,      (Math.PI)/12,
-    /*              maxHP   trvSpd    Rad     Cap     MinMax      RotV    */
+    LARGE_PLANET    (30000,    0,     50,      0,      (Math.PI)/12,
+    /*              maxHP   trvSpd    Rad    MinMax      RotV    */
                     new Image("/LARGE_PLANET.png", 200, 200, true, false, true));
 
     /**
@@ -78,10 +78,6 @@ public strictfp enum EnvironmentType {
      * The body radius of a given EnvironmentType.
      */
     private final int bodyRadius;
-    /**
-     * The maximum (not current) number of StructureTypes a given EnvironmentType can host.
-     */
-    private final int structureCap;
     /**
      * The maximum (not current) number of minerals available to be harvested or mined on a given EnvironmentType.
      */
@@ -102,20 +98,12 @@ public strictfp enum EnvironmentType {
     public boolean canBeMined() {
         return mineralMax > 0;
     }
-    /**
-     * Returns true if a given EnvironmentType has the ability to host a StructureType.
-     * @return true if a given EnvironmentType has the ability to host a StructureType.
-     */
-    public boolean canBuildOn() {
-        return structureCap > 0;
-    }
 
-    private EnvironmentType(int maxHealth, int travelSpeed, int bodyRadius, int structureCap, 
+    private EnvironmentType(int maxHealth, int travelSpeed, int bodyRadius,
             int mineralMax, double rotationV, Image spriteImage) {
         this.maxHealth      = maxHealth;
         this.travelSpeed    = travelSpeed;
         this.bodyRadius     = bodyRadius;
-        this.structureCap   = structureCap;
         this.mineralMax     = mineralMax;
         this.rotationV      = rotationV;
         this.spriteImage    = spriteImage;
@@ -141,13 +129,6 @@ public strictfp enum EnvironmentType {
      */
     public int getBodyRadius() {
         return bodyRadius;
-    }
-    /**
-     * Returns the maximum (not current) number of StructureTypes that can be hosted on a given EnvironmentType.
-     * @return int maximum (not current) number of StructureTypes that can be hosted on a given EnvironmentType.
-     */
-    public int getStructureCap() {
-        return structureCap;
     }
     /**
      * Returns the maximum (not current) minerals available to be harvested or mined on a given EnvironmentType.

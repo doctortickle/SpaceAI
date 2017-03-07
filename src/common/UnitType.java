@@ -117,7 +117,7 @@ public strictfp enum UnitType {
                 1,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
-                6,      // harvestingRadius
+                GameConstants.MAX_ENV_BUILD_DISTANCE +1,      // harvestingRadius
                 20,      // harvestingRate
                 new Image("/HARVESTER.png", 5*GameConstants.COORDINATE_TO_PIXEL*2, 5*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),

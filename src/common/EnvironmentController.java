@@ -41,20 +41,11 @@ public strictfp class EnvironmentController {
     // ***** ENVIRONMENT UPDATES *******
     // *********************************
 
-    void rotateImage() {
-        double n = environment.getSpriteFrame().getRotate();
-        n += environment.getType().getRotationV();
-        environment.getSpriteFrame().setRotate(n);
-    }       
-        
-    // ***********************************
-    // ******MOVE - WeaponController******
-    // ***********************************
-    
- // Planets can be destroyed
- // Meteors deal damage to ship equivalent to the amount of health left in the meteor
- //        
-        
+    private void updateSpriteAndLocation(Location location) {
+        environment.updateLocation(location.getX(), location.getY());
+        environment.getSpriteFrame().setTranslateX(location.getPixelX());
+        environment.getSpriteFrame().setTranslateY(location.getPixelY());
+    }      
     private boolean checkBoundaries(Location location) {
         if(location.getY() >= topBoundary - environment.getType().getBodyRadius()) { return false; }
         if(location.getY() <= bottomBoundary + environment.getType().getBodyRadius()) { return false; } 
@@ -71,9 +62,15 @@ public strictfp class EnvironmentController {
             environment.setDestroyed(true);
         }
     }
-    private void updateSpriteAndLocation(Location location) {
-        environment.updateLocation(location.getX(), location.getY());
-        environment.getSpriteFrame().setTranslateX(location.getPixelX());
-        environment.getSpriteFrame().setTranslateY(location.getPixelY());
-    }
+    void rotateImage() {
+        double n = environment.getSpriteFrame().getRotate();
+        n += environment.getType().getRotationV();
+        environment.getSpriteFrame().setRotate(n);
+    }       
+
+ // Planets can be destroyed
+ // Meteors deal damage to ship equivalent to the amount of health left in the meteor
+ //        
+    
+
 }

@@ -58,6 +58,10 @@ public strictfp class AIController {
         unit.setHasMoved(true);
         unit.decreaseFuel(unit.getType().getFuelBurnRate());
     }
+    private void setDead() {
+        unit.setDead(true);
+        unit.setStalled(true);
+    }
     private boolean checkForCollision(Location location) {
         return !gameWorld.checkIfLocationIsEmpty(location, unit.getRadius(), unit.getID());
     }
@@ -587,5 +591,8 @@ public strictfp class AIController {
                 target.increaseFuel(unit.getType().getRefuelRate());
                 unit.setHasRefueled(true);
         }
+    }
+    public final void selfDestruct() {
+        setDead();
     }
 }

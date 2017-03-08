@@ -101,6 +101,8 @@ public class GameWorld {
      */
     private void createInitialEnvironment() {
         addEnvironment(EnvironmentType.LARGE_PLANET, new Location(100, 100));
+        addEnvironment(EnvironmentType.SMALL_METEOR, new Location(50, 50));
+        addEnvironment(EnvironmentType.SMALL_METEOR, new Location(5, 5));
     }
     /**
      * Mirror the environment objects on the map.
@@ -246,9 +248,10 @@ public class GameWorld {
                     returnActors = quad.retrieve(returnActors, environment);
                     System.out.println("\nEnvironment " + environment.getID() + " may collide with : ");
                     for (int x = 0; x < returnActors.size(); x++) {
-                        if(!(returnActors.get(x).isWeapon())) {
+                        if(!(returnActors.get(x).isWeapon()) && returnActors.get(x).getID() != environment.getID()) {
                             System.out.print(returnActors.get(x).getID() + ", ");
                             if(environment.collide(returnActors.get(x))) {
+                                System.out.println("Hit");
                                 environment.damageApplication(returnActors.get(x));
                             }
                         }

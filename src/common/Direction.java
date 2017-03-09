@@ -50,6 +50,9 @@ public strictfp class Direction {
     public double getRadians() {
         return this.radians;
     }
+    double getDegrees() {
+        return this.radians*(180/Math.PI);
+    }
     
     private static Direction getNorth() {
         return new Direction(0,1);

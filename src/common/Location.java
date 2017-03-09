@@ -34,8 +34,8 @@ public strictfp class Location {
     private double pixelY;
     
     public Location(double x, double y) {
-        this.x = x == Float.NaN ? 0 : x;
-        this.y = y == Float.NaN ? 0 : y;
+        this.x = x == Double.NaN ? 0 : x;
+        this.y = y == Double.NaN ? 0 : y;
         this.pixelX = coordinateToPixel(x);
         this.pixelY = -coordinateToPixel(y);
     }

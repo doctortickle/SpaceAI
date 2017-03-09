@@ -50,9 +50,27 @@ public strictfp class AIController {
     // *********************************
 
     private void updateSpriteAndLocation(Location location) {
+        setSpriteFrameRotation(location);
         unit.updateLocation(location.getX(), location.getY());
         unit.getSpriteFrame().setTranslateX(location.getPixelX());
         unit.getSpriteFrame().setTranslateY(location.getPixelY());
+    }
+    private void setSpriteFrameRotation(Location location) {
+        Direction direction = unit.getLocation().directionTo(location);
+        if(unit.isShip()) {
+            if(location.getX() > unit.getLocation().getX()) {
+               unit.getSpriteFrame().setRotate(direction.getDegrees()); 
+            }
+            else if(location.getX() < unit.getLocation().getX()) {
+                unit.getSpriteFrame().setRotate(direction.getDegrees()-90);
+            }
+            else if(location.getY() > unit.getLocation().getY()){
+                unit.getSpriteFrame().setRotate(180);
+            }
+            else{
+                unit.getSpriteFrame().setRotate(0);
+            }
+        }
     }
     private void updateUnitMovementInfo() {
         unit.setHasMoved(true);
@@ -62,6 +80,7 @@ public strictfp class AIController {
         unit.setDead(true);
         unit.setStalled(true);
     }
+
     private boolean checkForCollision(Location location) {
         return !gameWorld.checkIfLocationIsEmpty(location, unit.getRadius(), unit.getID());
     }
@@ -119,7 +138,10 @@ public strictfp class AIController {
         return assertOnScreen(center) && getLocation().distanceTo(center) + radius <= getSensorRadius();
     }
     private boolean assertCanMove(Location location) {
-        return getLocation().distanceTo(location) <= unit.getType().getFlightRadius()
+        return getLocation().distanceTo(location) <= unit.getType().getFlightRadius();
+    }
+    private boolean assertValidMoveLocation(Location location) {
+        return !unit.getLocation().equals(location) 
                 && checkBoundaries(location)
                 && !checkForCollision(location);
     }
@@ -448,12 +470,16 @@ public strictfp class AIController {
         return !unit.getHasHarvested() && unit.getType().canHarvest();
     }
     public boolean canMove(Location location) {
-        return assertCanMove(location)
-                && isReadyToMove();
+        return  isReadyToMove()
+                && assertCanMove(location)
+                && assertValidMoveLocation(location);
+                
     }
     public boolean canMove(Direction direction) {
-        return assertCanMove(getLocation().add(unit.getType().getFlightRadius(), direction))
-                && isReadyToMove();
+        Location location = getLocation().add(unit.getType().getFlightRadius(), direction);
+        return  isReadyToMove()
+                && assertCanMove(location)
+                && assertValidMoveLocation(location);
     }
     public boolean canBuildShip(UnitType type, Direction direction) { // location WAS direction. Confirm this works.
         Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
@@ -499,8 +525,10 @@ public strictfp class AIController {
         if (canMove(location) ) {
                 updateSpriteAndLocation(location);
                 updateUnitMovementInfo();
-        } else {
+                
+        } else if(assertValidMoveLocation(location)){
                 Direction moveDirection = getLocation().directionTo(location);
+                System.out.println("Direction = " + moveDirection.getDegrees());
                 move(moveDirection);
         }
     }

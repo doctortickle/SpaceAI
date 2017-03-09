@@ -56,12 +56,10 @@ public class AICommandA {
     // *********************************
     private static void runFighter() {
         // This code will be run every round.
-        ac.getLocation();
-        ac.move(new Location(50,50));
+        System.out.print("Start: " + ac.getLocation().getX() + ", " + ac.getLocation().getY());
+        ac.move(new Location(0,-50));
+        System.out.print("/nEnd: " + ac.getLocation().getX() + ", " + ac.getLocation().getY());
         //ac.fire(WeaponType.SMALL_LASER,ac.getLocation().directionTo(ac.getInitialHomeStationLocation(ac.getTeam().opponent())));
-        for(Unit unit : ac.senseUnits()) {
-            unit.getHealth();
-        }
     }
     // *********************************
     // ************ SIEGE **************
@@ -109,8 +107,8 @@ public class AICommandA {
     private static void runHomeStation() {
         // This code will be run every round.
         if(fighterCount < 1) {
-            if(ac.canBuildShip(UnitType.BUILDER, Direction.SOUTH)) {
-                ac.buildShip(UnitType.BUILDER, Direction.SOUTH);
+            if(ac.canBuildShip(UnitType.FIGHTER, Direction.SOUTH)) {
+                ac.buildShip(UnitType.FIGHTER, Direction.SOUTH);
                 fighterCount++;
             }
         }

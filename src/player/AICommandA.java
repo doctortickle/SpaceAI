@@ -54,10 +54,41 @@ public class AICommandA {
     // *********************************
     // ************ FIGHTER ************
     // *********************************
+    static boolean reachedOne = false;
+    static boolean reachedTwo = false;
+    static boolean reachedThree = false;
+    static boolean reachedFour = false;
     private static void runFighter() {
         // This code will be run every round.
         System.out.print("Start: " + ac.getLocation().getX() + ", " + ac.getLocation().getY());
-        ac.move(new Location(0,-50));
+        Location one = new Location(0,50);
+        Location two = new Location(0,-50);
+        Location three = new Location(-50,50);
+        Location four = new Location(50,-50);
+        if(ac.canMove(ac.getLocation().directionTo(one)) && !reachedOne) {
+            ac.move(one);
+            if(ac.getLocation().equals(one)){
+                reachedOne = true;
+            }
+        }
+        if(ac.canMove(ac.getLocation().directionTo(two)) && !reachedTwo) {
+            ac.move(two);
+            if(ac.getLocation().equals(two)){
+                reachedTwo = true;
+            }
+        }
+        if(ac.canMove(ac.getLocation().directionTo(three)) && !reachedThree) {
+            ac.move(three);
+            if(ac.getLocation().equals(three)){
+                reachedThree = true;
+            }
+        }
+        if(ac.canMove(ac.getLocation().directionTo(four)) && !reachedFour) {
+            ac.move(four);
+            if(ac.getLocation().equals(four)){
+                reachedFour = true;
+            }
+        }
         System.out.print("/nEnd: " + ac.getLocation().getX() + ", " + ac.getLocation().getY());
         //ac.fire(WeaponType.SMALL_LASER,ac.getLocation().directionTo(ac.getInitialHomeStationLocation(ac.getTeam().opponent())));
     }

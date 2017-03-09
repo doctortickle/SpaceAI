@@ -16,6 +16,7 @@
  */
 package common;
 
+import static common.DecimalUtils.round;
 import static common.GameConstants.COORDINATE_TO_PIXEL;
 import static common.GameConstants.PIXEL_TO_COORDINATE;
 
@@ -109,8 +110,8 @@ public strictfp class Location {
         return new Direction(dx, dy);
     }
     public final Location add(float distance, Direction direction) {
-        double dx = Math.cos(direction.getRadians()) * distance;
-        double dy = Math.sin(direction.getRadians()) * distance;
+        double dx = round(Math.cos(direction.getRadians()) * distance, 3);
+        double dy = round(Math.sin(direction.getRadians()) * distance, 3);
         double xn = this.x + dx;
         double yn = this.y + dy;
         return new Location(xn,yn);

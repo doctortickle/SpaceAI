@@ -20,6 +20,7 @@
 package common;
 
 import java.util.Random;
+import static common.DecimalUtils.round;
 
 /**
  *
@@ -51,7 +52,7 @@ public strictfp class Direction {
         return this.radians;
     }
     double getDegrees() {
-        return this.radians*(180/Math.PI);
+        return round(this.radians*(180/Math.PI), 2);
     }
     
     private static Direction getNorth() {

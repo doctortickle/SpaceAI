@@ -138,12 +138,12 @@ public strictfp class AIController {
         return assertOnScreen(center) && getLocation().distanceTo(center) + radius <= getSensorRadius();
     }
     private boolean assertCanMove(Location location) {
-        return getLocation().distanceTo(location) <= unit.getType().getFlightRadius();
+        return getLocation().distanceTo(location) <= unit.getType().getFlightRadius()
+               && !checkForCollision(location);
     }
     private boolean assertValidMoveLocation(Location location) {
         return !unit.getLocation().equals(location) 
-                && checkBoundaries(location)
-                && !checkForCollision(location);
+                && checkBoundaries(location);
     }
     private boolean assertCanBuildShip(UnitType type) {
         return Arrays.asList(unit.getType().getSpawnUnits()).contains(type)

@@ -87,7 +87,7 @@ public class AICommandB {
         List<Environment> nearbyEnvironment = ac.senseEnvironment();
         if(nearbyEnvironment.size() > 0) {
             System.out.println("distance from planet " + ac.getLocation().distanceTo(nearbyEnvironment.get(0).getLocation()));
-            ac.orbit(nearbyEnvironment.get(0));
+            ac.orbitClockwise(nearbyEnvironment.get(0));
         }
         else {
             ac.move(Direction.WEST);

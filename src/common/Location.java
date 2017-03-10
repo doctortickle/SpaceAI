@@ -109,11 +109,18 @@ public strictfp class Location {
         double dy = location.getY() - this.getY();
         return new Direction(dx, dy);
     }
-    public final Location add(float distance, Direction direction) {
-        double dx = round(Math.cos(direction.getRadians()) * distance, 3);
-        double dy = round(Math.sin(direction.getRadians()) * distance, 3);
+    public final Location add(double distance, Direction direction) {
+        double dx = Math.cos(direction.getRadians()) * distance;
+        double dy = Math.sin(direction.getRadians()) * distance;
         double xn = this.x + dx;
         double yn = this.y + dy;
+        return new Location(xn,yn);
+    }
+    public final Location substract(double distance, Direction direction) {
+        double dx = Math.cos(direction.getRadians()) * distance;
+        double dy = Math.sin(direction.getRadians()) * distance;
+        double xn = this.x - dx;
+        double yn = this.y - dy;
         return new Location(xn,yn);
     }
     

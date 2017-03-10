@@ -51,7 +51,7 @@ public strictfp class Direction {
         if (dx == 0 && dy == 0) {
             dy = 1;
         }
-        this.radians = reduce(Math.atan2(dy, dx));
+        this.radians = reduce((double) Math.atan2(dy, dx));
         this.degrees = calcDegrees(this.radians);
     }
     public Direction(Location start, Location finish) {

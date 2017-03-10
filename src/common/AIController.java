@@ -49,7 +49,7 @@ public strictfp class AIController {
     // *********************************
 
     private void updateSpriteAndLocation(Location location) {
-        setSpriteFrameRotation(location);
+        //setSpriteFrameRotation(location);
         unit.updateLocation(location.getX(), location.getY());
         unit.getSpriteFrame().setTranslateX(location.getPixelX());
         unit.getSpriteFrame().setTranslateY(location.getPixelY());
@@ -99,6 +99,17 @@ public strictfp class AIController {
             }
         }
         return closestEnvironment;
+    }
+    private Direction courseCorrect(Direction direction, Environment environment) {
+        double currentDistance = getLocation().distanceTo(environment.getLocation());
+        Location movePoint = getLocation().add(getType().getFlightRadius(), direction);
+        double projectedDistance = movePoint.distanceTo(environment.getLocation());
+        double delta = projectedDistance - currentDistance;
+        if(projectedDistance > 0) {
+            Location correctedPoint = movePoint.add(delta, movePoint.directionTo(environment.getLocation()));
+            direction = getLocation().directionTo(correctedPoint);
+        }
+        return direction;
     }
     private boolean assertOnScreen(Location location) {
         if(location.getY() >= topBoundary - unit.getRadius()) { return false; }
@@ -179,6 +190,7 @@ public strictfp class AIController {
                  && environment.getMineralCount() > 0 
                  && unit.getType().canHarvest();
     }
+
     
     // *********************************
     // **** GAMEWORLD QUERY METHODS ****
@@ -532,11 +544,12 @@ public strictfp class AIController {
                 move(movePoint);   
         }
     }
-    public final void orbit(Environment environment) {
-        Direction direction = unit.getLocation().directionTo(environment.getLocation());
-        System.out.println("direction radians = " + direction.getDegrees());
-        direction = direction.getOrthogonalLeft();
-        System.out.println("direction orthogonal = " + direction.getDegrees());
+    public final void orbitClockwise(Environment environment) {
+        Direction direction = courseCorrect(unit.getLocation().directionTo(environment.getLocation()).getOrthogonalLeft(), environment);
+        move(direction);
+    }
+    public final void orbitCounterClockwise(Environment environment) {
+        Direction direction = courseCorrect(unit.getLocation().directionTo(environment.getLocation()).getOrthogonalRight(), environment);
         move(direction);
     }
     public final void buildShip(UnitType type, Direction direction) {

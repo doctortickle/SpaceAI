@@ -74,7 +74,7 @@ public final class Environment extends Actor{
         super(ID, type.getMaxHealth(), type.getBodyRadius(), location, Team.NEUTRAL, type.getSpriteImage());
         this.type = type;
         this.mineralCount = type.getMineralMax();
-        this.direction = Direction.getRandom();
+        this.direction = Direction.getRandomDirection();
         this.destroyed = false;
         this.ec = new EnvironmentController(this, spaceAI.getGameWorld());
     }      

@@ -18,8 +18,10 @@ package player;
 
 import common.AIController;
 import common.Direction;
+import common.Environment;
 import common.UnitType;
 import common.WeaponType;
+import java.util.List;
 
 /**
  *
@@ -29,7 +31,7 @@ public class AICommandB {
     
     static AIController ac;
     
-    public static void run(AIController ac) {
+    public void run(AIController ac) {
         
         AICommandB.ac = ac;
 
@@ -52,82 +54,86 @@ public class AICommandB {
     // *********************************
     // ************ FIGHTER ************
     // *********************************
-    private static void runFighter() {
+    private void runFighter() {
         // This code will be run every round.
         ac.getLocation();
-        ac.move(Direction.getRandom());
+        ac.move(Direction.getRandomDirection());
     }
     // *********************************
     // ************ SIEGE **************
     // *********************************
-    private static void runSiege() {
+    private void runSiege() {
         // This code will be run every round.
     }
     // *********************************
     // *********** DESTROYER ***********
     // *********************************
-    private static void runDestroyer() {
+    private void runDestroyer() {
         // This code will be run every round.
     }
     // *********************************
     // ************ CAPITAL ************
     // *********************************
-    private static void runCapital() {
+    private void runCapital() {
         // This code will be run every round.
         ac.fire(WeaponType.LARGE_BOMB, ac.getLocation().directionTo(ac.getInitialHomeStationLocation(ac.getTeam().opponent())));
     }
     // *********************************
     // ************ BUILDER ************
     // *********************************
-    private static void runBuilder() {
+    int dockCount = 0;
+    private void runBuilder() {
         // This code will be run every round.
-        ac.move(Direction.getRandom());
-        int dockCount = 0;
-        if(dockCount == 0) {
-            ac.construct(UnitType.CAPITAL_DOCK, Direction.EAST);
-            dockCount++;
+        List<Environment> nearbyEnvironment = ac.senseEnvironment();
+        if(nearbyEnvironment.size() > 0) {
+            System.out.println("distance from planet " + ac.getLocation().distanceTo(nearbyEnvironment.get(0).getLocation()));
+            ac.orbit(nearbyEnvironment.get(0));
+        }
+        else {
+            ac.move(Direction.WEST);
         }
     }
+    
     // *********************************
     // ********** HARVESTER ************
     // *********************************
-    private static void runHarvester() {
+    private void runHarvester() {
         // This code will be run every round.
     }
     // *********************************
     // *********** REFUELER ************
     // *********************************
-    private static void runRefueler() {
+    private void runRefueler() {
         // This code will be run every round.
     } 
     // *********************************
     // ********* HOME STATION **********
     // *********************************
-    private static int builderCount;
-    private static void runHomeStation() {
+    private int builderCount;
+    private void runHomeStation() {
         // This code will be run every round.
         if(builderCount == 0) {
-            ac.buildShip(UnitType.BUILDER, Direction.EAST);
+            ac.buildShip(UnitType.BUILDER, Direction.NORTH);
             builderCount++;
         }
     }
     // *********************************
     // ********** SMALL DOCK ***********
     // *********************************
-    private static void runSmallDock() {
+    private void runSmallDock() {
         // This code will be run every round.
     }
     // *********************************
     // ********* LARGE DOCK ************
     // *********************************
-    private static void runLargeDock() {
+    private void runLargeDock() {
         // This code will be run every round.
     }
     // *********************************
     // ********* CAPITAL DOCK **********
     // *********************************
-    private static int capitalCount;
-    private static void runCapitalDock() {
+    private int capitalCount;
+    private void runCapitalDock() {
         // This code will be run every round.
         if(capitalCount == 0) {
             ac.buildShip(UnitType.CAPITAL, Direction.NORTH);
@@ -136,13 +142,13 @@ public class AICommandB {
     // *********************************
     // ******* MINING FACILITY *********
     // *********************************
-    private static void runMiningFacility() {
+    private void runMiningFacility() {
         // This code will be run every round.
     }
     // *********************************
     // ******** FUEL STATION ***********
     // *********************************
-    private static void runFuelStation() {
+    private void runFuelStation() {
         // This code will be run every round.
     }  
 }

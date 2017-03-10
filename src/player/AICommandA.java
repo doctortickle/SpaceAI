@@ -19,7 +19,6 @@ package player;
 import common.AIController;
 import common.Direction;
 import common.Location;
-import common.Unit;
 import common.UnitType;
 
 
@@ -31,7 +30,7 @@ public class AICommandA {
     
     static AIController ac;
     
-    public static void run(AIController ac) {
+    public void run(AIController ac) {
         
         AICommandA.ac = ac;
         
@@ -54,13 +53,12 @@ public class AICommandA {
     // *********************************
     // ************ FIGHTER ************
     // *********************************
-    static boolean reachedOne = false;
-    static boolean reachedTwo = false;
-    static boolean reachedThree = false;
-    static boolean reachedFour = false;
-    private static void runFighter() {
+    boolean reachedOne = false;
+    boolean reachedTwo = false;
+    boolean reachedThree = false;
+    boolean reachedFour = false;
+    private void runFighter() {
         // This code will be run every round.
-        System.out.print("Start: " + ac.getLocation().getX() + ", " + ac.getLocation().getY());
         Location one = new Location(0,50);
         Location two = new Location(0,-50);
         Location three = new Location(-50,50);
@@ -89,53 +87,51 @@ public class AICommandA {
                 reachedFour = true;
             }
         }
-        System.out.print("/nEnd: " + ac.getLocation().getX() + ", " + ac.getLocation().getY());
-        //ac.fire(WeaponType.SMALL_LASER,ac.getLocation().directionTo(ac.getInitialHomeStationLocation(ac.getTeam().opponent())));
     }
     // *********************************
     // ************ SIEGE **************
     // *********************************
-    private static void runSiege() {
+    private void runSiege() {
         // This code will be run every round.
     }
     // *********************************
     // *********** DESTROYER ***********
     // *********************************
-    private static void runDestroyer() {
+    private void runDestroyer() {
         // This code will be run every round.
     }
     // *********************************
     // ************ CAPITAL ************
     // *********************************
-    private static void runCapital() {
+    private void runCapital() {
         // This code will be run every round.
-        ac.move(Direction.getRandom());
+        ac.move(Direction.getRandomDirection());
     }
     // *********************************
     // ************ BUILDER ************
     // *********************************
-    private static void runBuilder() {
+    private void runBuilder() {
         // This code will be run every round.
-        ac.move(Direction.getRandom());
+        ac.move(Direction.getRandomDirection());
         ac.construct(UnitType.CAPITAL_DOCK, Direction.SOUTH);
     }
     // *********************************
     // ********** HARVESTER ************
     // *********************************
-    private static void runHarvester() {
+    private void runHarvester() {
         // This code will be run every round.
     }
     // *********************************
     // *********** REFUELER ************
     // *********************************
-    private static void runRefueler() {
+    private void runRefueler() {
         // This code will be run every round.
     } 
     // *********************************
     // ********* HOME STATION **********
     // *********************************
-    static int fighterCount = 0;
-    private static void runHomeStation() {
+    int fighterCount = 0;
+    private void runHomeStation() {
         // This code will be run every round.
         if(fighterCount < 1) {
             if(ac.canBuildShip(UnitType.FIGHTER, Direction.SOUTH)) {
@@ -147,20 +143,20 @@ public class AICommandA {
     // *********************************
     // ********** SMALL DOCK ***********
     // *********************************
-    private static void runSmallDock() {
+    private void runSmallDock() {
         // This code will be run every round.
     }
     // *********************************
     // ********* LARGE DOCK ************
     // *********************************
-    private static void runLargeDock() {
+    private void runLargeDock() {
         // This code will be run every round.
     }
     // *********************************
     // ********* CAPITAL DOCK **********
     // *********************************
-    private static int capitalCount;
-    private static void runCapitalDock() {
+    private int capitalCount;
+    private void runCapitalDock() {
         // This code will be run every round.
         if(capitalCount == 0) {
             ac.buildShip(UnitType.CAPITAL, Direction.NORTH);
@@ -169,13 +165,13 @@ public class AICommandA {
     // *********************************
     // ******* MINING FACILITY *********
     // *********************************
-    private static void runMiningFacility() {
+    private void runMiningFacility() {
         // This code will be run every round.
     }
     // *********************************
     // ******** FUEL STATION ***********
     // *********************************
-    private static void runFuelStation() {
+    private void runFuelStation() {
         // This code will be run every round.
     }  
 }

@@ -221,10 +221,8 @@ public class GameWorld {
                 if(!weapon.isSpent()){
                     returnActors.clear();
                     returnActors = quad.retrieve(returnActors, weapon);
-                    System.out.println("\nWeapon " + weapon.getID() + " may collide with : ");
                     for (int x = 0; x < returnActors.size(); x++) {
                         if(!(returnActors.get(x).isWeapon())) {
-                            System.out.print(returnActors.get(x).getID() + ", ");
                             if(weapon.collide(returnActors.get(x))) {
                                 weapon.damageApplication(returnActors.get(x));
                             }
@@ -246,12 +244,9 @@ public class GameWorld {
                 if(!environment.isDestroyed() && environment.getType().getTravelSpeed() > 0){
                     returnActors.clear();
                     returnActors = quad.retrieve(returnActors, environment);
-                    System.out.println("\nEnvironment " + environment.getID() + " may collide with : ");
                     for (int x = 0; x < returnActors.size(); x++) {
                         if(!(returnActors.get(x).isWeapon()) && returnActors.get(x).getID() != environment.getID()) {
-                            System.out.print(returnActors.get(x).getID() + ", ");
                             if(environment.collide(returnActors.get(x))) {
-                                System.out.println("Hit");
                                 environment.damageApplication(returnActors.get(x));
                             }
                         }

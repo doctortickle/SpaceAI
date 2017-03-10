@@ -17,7 +17,6 @@
 package common;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 //test
@@ -58,16 +57,13 @@ public strictfp class AIController {
     private void setSpriteFrameRotation(Location location) {
         Direction direction = unit.getLocation().directionTo(location);
         if(unit.isShip()) {
-            if(location.getX() > unit.getLocation().getX()) {
-               unit.getSpriteFrame().setRotate(direction.getDegrees()); 
-            }
-            else if(location.getX() < unit.getLocation().getX()) {
-                unit.getSpriteFrame().setRotate(direction.getDegrees()-90);
+            if(location.getX() != unit.getLocation().getX()) {
+                unit.getSpriteFrame().setRotate(direction.getDegrees());
             }
             else if(location.getY() > unit.getLocation().getY()){
                 unit.getSpriteFrame().setRotate(180);
             }
-            else{
+            else {
                 unit.getSpriteFrame().setRotate(0);
             }
         }
@@ -80,7 +76,6 @@ public strictfp class AIController {
         unit.setDead(true);
         unit.setStalled(true);
     }
-
     private boolean checkForCollision(Location location) {
         return !gameWorld.checkIfLocationIsEmpty(location, unit.getRadius(), unit.getID());
     }
@@ -528,7 +523,6 @@ public strictfp class AIController {
                 
         } else if(assertValidMoveLocation(location)){
                 Direction moveDirection = getLocation().directionTo(location);
-                System.out.println("Direction = " + moveDirection.getDegrees());
                 move(moveDirection);
         }
     }
@@ -537,6 +531,13 @@ public strictfp class AIController {
         if  (canMove(movePoint)) {
                 move(movePoint);   
         }
+    }
+    public final void orbit(Environment environment) {
+        Direction direction = unit.getLocation().directionTo(environment.getLocation());
+        System.out.println("direction radians = " + direction.getDegrees());
+        direction = direction.getOrthogonalLeft();
+        System.out.println("direction orthogonal = " + direction.getDegrees());
+        move(direction);
     }
     public final void buildShip(UnitType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);

@@ -68,6 +68,8 @@ public final class Unit extends Actor {
      * Holds the AIController for this unit.
      */
     private final AIController ac;
+    private final AICommandA playerA;
+    private final AICommandB playerB;
     
     /**
      * Creates a new unit object.
@@ -89,6 +91,8 @@ public final class Unit extends Actor {
         this.dead = false;
         this.stalled = false;
         this.ac = new AIController(this, spaceAI.getGameWorld());
+        this.playerA = new AICommandA();
+        this.playerB = new AICommandB();
     }
 
     @Override
@@ -146,10 +150,10 @@ public final class Unit extends Actor {
      */
     private void runAICommand() {
         if(this.getTeam()==Team.A) {
-            AICommandA.run(ac);
+            playerA.run(ac);
         }
         if(this.getTeam()==Team.B) {
-            AICommandB.run(ac);
+            playerB.run(ac);
         }
     }
     /**

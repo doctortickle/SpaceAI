@@ -67,6 +67,6 @@ public strictfp interface GameConstants {
     final Location TEAM_A_HOME_STATION = new Location(0,100);
     final Location TEAM_B_HOME_STATION = new Location(0,-100);
     final int MIN_ENV_BUILD_DISTANCE = 1;
-    final int MAX_ENV_BUILD_DISTANCE = 10;
+    final int MAX_ENV_BUILD_DISTANCE = 30;
     final int GAME_LIMIT = 5000; 
 }

@@ -100,16 +100,20 @@ public strictfp class AIController {
         }
         return closestEnvironment;
     }
-    private Direction courseCorrect(Direction direction, Environment environment) {
+    private Location courseCorrect(Direction direction, Environment environment) {
         double currentDistance = getLocation().distanceTo(environment.getLocation());
         Location movePoint = getLocation().add(getType().getFlightRadius(), direction);
         double projectedDistance = movePoint.distanceTo(environment.getLocation());
         double delta = projectedDistance - currentDistance;
         if(projectedDistance > 0) {
             Location correctedPoint = movePoint.add(delta, movePoint.directionTo(environment.getLocation()));
-            direction = getLocation().directionTo(correctedPoint);
+            return correctedPoint;
         }
-        return direction;
+        if(projectedDistance < 0) {
+            Location correctedPoint = movePoint.subtract(delta, movePoint.directionTo(environment.getLocation()));
+            return correctedPoint;
+        }
+        return movePoint;
     }
     private boolean assertOnScreen(Location location) {
         if(location.getY() >= topBoundary - unit.getRadius()) { return false; }
@@ -486,6 +490,13 @@ public strictfp class AIController {
                 && isReadyToBuild();
     }
     public boolean canConstruct(UnitType type, Direction direction) {
+        if(assertNeedsEnvironment(type)) {
+            Environment environment = findNearestEnvironment();
+            if(environment != null) {
+                return canConstruct(type, direction, environment);
+            }
+            return false;
+        }
         Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
         return assertCanConstruct(type, location)
             && assertLocationIsEmpty(location, type.getBodyRadius())
@@ -527,13 +538,21 @@ public strictfp class AIController {
                 move(movePoint);   
         }
     }
+    public final void move(Direction direction, double distance) {
+        Location movePoint = getLocation().add(distance, direction);
+        if  (canMove(movePoint)) {
+                move(movePoint);   
+        }
+    }
     public final void orbitClockwise(Environment environment) {
-        Direction direction = courseCorrect(unit.getLocation().directionTo(environment.getLocation()).getOrthogonalLeft(), environment);
-        move(direction);
+        Direction direction = unit.getLocation().directionTo(environment.getLocation()).getOrthogonalLeft();
+        Location movePoint = courseCorrect(direction, environment);
+        move(movePoint);
     }
     public final void orbitCounterClockwise(Environment environment) {
-        Direction direction = courseCorrect(unit.getLocation().directionTo(environment.getLocation()).getOrthogonalRight(), environment);
-        move(direction);
+        Direction direction = unit.getLocation().directionTo(environment.getLocation()).getOrthogonalRight();
+        Location movePoint = courseCorrect(direction, environment);
+        move(movePoint);
     }
     public final void buildShip(UnitType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);

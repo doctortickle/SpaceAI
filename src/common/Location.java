@@ -100,8 +100,7 @@ public strictfp class Location {
     public final double distanceTo(Location location) {
         double dx = this.getX() - location.getX();
         double dy = this.getY() - location.getY();
-        double distance = Math.sqrt(dx * dx + dy * dy);
-        distance = (double)Math.round(distance * 1000d) / 1000d;
+        double distance = round(Math.sqrt(dx * dx + dy * dy),14);
         return distance;
     }
     public final Direction directionTo(Location location) {
@@ -116,7 +115,7 @@ public strictfp class Location {
         double yn = this.y + dy;
         return new Location(xn,yn);
     }
-    public final Location substract(double distance, Direction direction) {
+    public final Location subtract(double distance, Direction direction) {
         double dx = Math.cos(direction.getRadians()) * distance;
         double dy = Math.sin(direction.getRadians()) * distance;
         double xn = this.x - dx;

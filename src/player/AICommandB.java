@@ -86,8 +86,16 @@ public class AICommandB {
         // This code will be run every round.
         List<Environment> nearbyEnvironment = ac.senseEnvironment();
         if(nearbyEnvironment.size() > 0) {
-            System.out.println("distance from planet " + ac.getLocation().distanceTo(nearbyEnvironment.get(0).getLocation()));
-            ac.orbitClockwise(nearbyEnvironment.get(0));
+            if(ac.getLocation().distanceTo(nearbyEnvironment.get(0).getLocation()) < nearbyEnvironment.get(0).getRadius()+ ac.getBodyRadius() + 1) {
+                System.out.println("distance from planet " + ac.getLocation().distanceTo(nearbyEnvironment.get(0).getLocation()));
+                ac.orbitClockwise(nearbyEnvironment.get(0));
+                if(ac.canConstruct(UnitType.CAPITAL_DOCK, Direction.WEST)) {
+                    ac.construct(UnitType.CAPITAL_DOCK, Direction.WEST);
+                }
+            }
+            else {
+                ac.move(Direction.WEST, 1);
+            }
         }
         else {
             ac.move(Direction.WEST);

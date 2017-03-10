@@ -211,24 +211,7 @@ public strictfp class AIController {
     public final Location getInitialHomeStationLocation(Team team) {
         return gameWorld.getInitialHomeStationLocation(team);
     }
-    
-    // *********************************
-    // ****** ACTOR QUERY METHODS ******
-    // *********************************
-    
-    public final int getID(Actor actor) {
-        return actor.getID();
-    }
-    public final Team getTeam(Actor actor) {
-        return actor.getTeam();
-    }
-    public final int getHealth(Actor actor) {
-        return actor.getHealth();
-    }
-    public final Location getLocation(Actor actor) {
-        return actor.getLocation();
-    }
-    
+       
     // *********************************
     // ****** UNIT QUERY METHODS *******
     // *********************************

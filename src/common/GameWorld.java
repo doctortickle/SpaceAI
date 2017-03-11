@@ -101,8 +101,11 @@ public class GameWorld {
      */
     private void createInitialEnvironment() {
         addEnvironment(EnvironmentType.LARGE_PLANET, new Location(100, 100));
-        //addEnvironment(EnvironmentType.SMALL_METEOR, new Location(50, 50));
-        //addEnvironment(EnvironmentType.SMALL_METEOR, new Location(5, 5));
+        addEnvironment(EnvironmentType.SMALL_METEOR, new Location(50, 50));
+        addEnvironment(EnvironmentType.SMALL_METEOR, new Location(5, 5));
+        addEnvironment(EnvironmentType.LARGE_ASTEROID, new Location(100, -100));
+        addEnvironment(EnvironmentType.LARGE_ASTEROID, new Location(70, -70));
+        addEnvironment(EnvironmentType.LARGE_ASTEROID, new Location(175, 0));
     }
     /**
      * Mirror the environment objects on the map.

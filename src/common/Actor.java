@@ -49,7 +49,7 @@ public abstract class Actor {
         this.health -= damage;
     }
 
-    public int getRadius() {
+    int getRadius() {
         return radius;
     }
 

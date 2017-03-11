@@ -18,8 +18,10 @@ package player;
 
 import common.AIController;
 import common.Direction;
+import common.Environment;
 import common.Location;
 import common.UnitType;
+import java.util.List;
 
 
 /**
@@ -112,8 +114,23 @@ public class AICommandA {
     // *********************************
     private void runBuilder() {
         // This code will be run every round.
-        ac.move(Direction.getRandomDirection());
-        ac.construct(UnitType.CAPITAL_DOCK, Direction.SOUTH);
+        List<Environment> nearbyEnvironment = ac.senseEnvironment();
+        if(nearbyEnvironment.size() > 0) {
+            Environment environment = nearbyEnvironment.get(0);
+            if(ac.getLocation().distanceTo(environment.getLocation()) < environment.getType().getBodyRadius()+ ac.getBodyRadius() + ac.getFlightRadius() + 1) {
+                ac.orbitClockwise(environment);
+                System.out.println("Distance = " + ac.getLocation().distanceTo(environment.getLocation()));
+                if(ac.canConstruct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite()) ) {
+                    ac.construct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite());
+                }
+            }
+            else {
+                ac.move(ac.getLocation().directionTo(environment.getLocation()));
+            }
+        }
+        else {
+            ac.move(Direction.WEST);
+        }
     }
     // *********************************
     // ********** HARVESTER ************
@@ -130,13 +147,13 @@ public class AICommandA {
     // *********************************
     // ********* HOME STATION **********
     // *********************************
-    int fighterCount = 0;
+    int builderCount = 0;
     private void runHomeStation() {
         // This code will be run every round.
-        if(fighterCount < 1) {
-            if(ac.canConstruct(UnitType.FIGHTER, Direction.SOUTH)) {
-                ac.construct(UnitType.FIGHTER, Direction.SOUTH);
-                fighterCount++;
+        if(builderCount < 1) {
+            if(ac.canConstruct(UnitType.BUILDER, Direction.SOUTH)) {
+                ac.construct(UnitType.BUILDER, Direction.SOUTH);
+                builderCount++;
             }
         }
     }

@@ -86,19 +86,19 @@ public class AICommandB {
         // This code will be run every round.
         List<Environment> nearbyEnvironment = ac.senseEnvironment();
         if(nearbyEnvironment.size() > 0) {
-            if(ac.getLocation().distanceTo(nearbyEnvironment.get(0).getLocation()) < nearbyEnvironment.get(0).getRadius()+ ac.getBodyRadius() + 2) {
-                System.out.println("distance from planet " + ac.getLocation().distanceTo(nearbyEnvironment.get(0).getLocation()));
-                ac.orbitClockwise(nearbyEnvironment.get(0));
-                if(ac.canConstruct(UnitType.CAPITAL_DOCK, ac.getLocation().directionTo(nearbyEnvironment.get(0).getLocation()).opposite())) {
-                    ac.construct(UnitType.CAPITAL_DOCK, ac.getLocation().directionTo(nearbyEnvironment.get(0).getLocation()).opposite());
+            Environment environment = nearbyEnvironment.get(0);
+            if(ac.getLocation().distanceTo(environment.getLocation()) < environment.getType().getBodyRadius()+ ac.getBodyRadius() + ac.getFlightRadius() + 1) {
+                ac.orbitClockwise(environment);
+                if(ac.canConstruct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite()) ) {
+                    ac.construct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite());
                 }
             }
             else {
-                ac.move(Direction.WEST, 1);
+                ac.move(ac.getLocation().directionTo(environment.getLocation()));
             }
         }
         else {
-            ac.move(Direction.WEST);
+            ac.move(Direction.getRandomDirection());
         }
     }
     
@@ -120,10 +120,10 @@ public class AICommandB {
     private int builderCount;
     private void runHomeStation() {
         // This code will be run every round.
-        if(builderCount == 0) {
-            ac.construct(UnitType.BUILDER, Direction.NORTH);
-            builderCount++;
-        }
+            if(ac.canConstruct(UnitType.BUILDER, Direction.SOUTH) && builderCount < 5) {
+                ac.construct(UnitType.BUILDER, Direction.SOUTH);
+                builderCount++;
+            }
     }
     // *********************************
     // ********** SMALL DOCK ***********

@@ -34,7 +34,7 @@ public strictfp enum UnitType {
                 10,     // maxHealth
                 50,     // mineralCost
                 5,      // bodyRadius
-                10,     // enemySensoryRadius
+                10,     // sensorRadius
                 15,     // incomingDetectionRadius
                 5,      // flightRadius
                 1000,   // fuelMax
@@ -53,7 +53,7 @@ public strictfp enum UnitType {
                 50,     // maxHealth
                 300,    // mineralCost
                 8,      // bodyRadius
-                10,     // enemySensoryRadius
+                10,     // sensorRadius
                 10,     // incomingDetectionRadius
                 3,      // flightRadius
                 1000,   // fuelMax
@@ -72,7 +72,7 @@ public strictfp enum UnitType {
                 100,    // maxHealth
                 300,    // mineralCost
                 10,      // bodyRadius
-                15,     // enemySensoryRadius
+                15,     // sensorRadius
                 20,     // incomingDetectionRadius
                 3,      // flightRadius
                 1000,   // fuelMax
@@ -91,7 +91,7 @@ public strictfp enum UnitType {
                 500,    // maxHealth
                 1000,   // mineralCost
                 20,      // bodyRadius
-                20,     // enemySensoryRadius
+                20,     // sensorRadius
                 25,     // incomingDetectionRadius
                 1,      // flightRadius
                 2000,   // fuelMax
@@ -110,7 +110,7 @@ public strictfp enum UnitType {
                 10,     // maxHealth
                 50,     // mineralCost
                 5,      // bodyRadius
-                10,     // enemySensoryRadius
+                10,     // sensorRadius
                 20,     // incomingDetectionRadius
                 5,      // flightRadius
                 1000,   // fuelMax
@@ -129,7 +129,7 @@ public strictfp enum UnitType {
                 10,     // maxHealth
                 50,     // mineralCost
                 5,      // bodyRadius
-                10,     // enemySensoryRadius
+                10,     // sensorRadius
                 15,     // incomingDetectionRadius
                 5,      // flightRadius
                 1000,   // fuelMax
@@ -148,7 +148,7 @@ public strictfp enum UnitType {
                 10,     // maxHealth
                 50,     // mineralCost
                 5,      // bodyRadius
-                20,     // enemySensoryRadius
+                30,     // sensorRadius
                 15,     // incomingDetectionRadius
                 5,      // flightRadius
                 1000,   // fuelMax
@@ -369,7 +369,7 @@ public strictfp enum UnitType {
     }
 
     private UnitType(WeaponType[] arsenal, int spawnCooldown, int maxHealth,
-            int mineralCost, int bodyRadius, int enemySensorRadius, 
+            int mineralCost, int bodyRadius, int sensorRadius, 
             int incomingDetectionRadius, int flightRadius, int fuelMax, 
             int fuelBurnRate, int refuelRadius, int refuelRate, int harvestingRadius, int harvestingRate,  Image spriteImage) {
         this.spawnLocations = null;
@@ -378,7 +378,7 @@ public strictfp enum UnitType {
         this.maxHealth = maxHealth;
         this.mineralCost = mineralCost;
         this.bodyRadius = bodyRadius;
-        this.sensorRadius = enemySensorRadius;
+        this.sensorRadius = sensorRadius;
         this.incomingDetectionRadius = incomingDetectionRadius;
         this.flightRadius = flightRadius;
         this.fuelMax = fuelMax;

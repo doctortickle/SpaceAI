@@ -17,6 +17,7 @@
 package common;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 //test
@@ -87,18 +88,11 @@ public strictfp class AIController {
         return true;
     }
     private Environment findNearestEnvironment() {
-        List<Environment> nearestEnvironments = senseEnvironment();
-        double closestDistance = Double.MAX_VALUE;
-        Environment closestEnvironment = null;
-        if(nearestEnvironments.size() > 0) {
-            for(Environment environment : nearestEnvironments) {
-                if(environment.getLocation().distanceTo(unit.getLocation()) < closestDistance) {
-                    closestDistance = environment.getLocation().distanceTo(unit.getLocation());
-                    closestEnvironment = environment;
-                }
-            }
+        List<Environment> environment = senseEnvironment();
+        if(environment.size() > 0) {
+            return environment.get(0);           
         }
-        return closestEnvironment;
+        return null;
     }
     private Location courseCorrect(Direction direction, Environment environment) {
         double currentDistance = getLocation().distanceTo(environment.getLocation());
@@ -157,10 +151,6 @@ public strictfp class AIController {
     private boolean assertValidMoveLocation(Location location) {
         return !unit.getLocation().equals(location) 
                 && checkBoundaries(location);
-    }
-    private boolean assertCanBuildShip(UnitType type) {
-        return Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
-            && getMineralCount()-type.getMineralCost() >= 0;
     }
     private boolean assertNeedsEnvironment(UnitType type) {
         return type == UnitType.SMALL_DOCK || type == UnitType.LARGE_DOCK || type == UnitType.CAPITAL_DOCK || type == UnitType.MINING_FACILITY;
@@ -366,83 +356,135 @@ public strictfp class AIController {
         return null;       
     }
     public List<Actor> senseActors() {
-        return gameWorld.returnActorsInCircle(unit.getLocation(), unit.getType().getSensorRadius());
+        List<Actor> actorList = gameWorld.returnActorsInCircle(unit.getLocation(), unit.getType().getSensorRadius());
+        actorList.sort(
+            Comparator.comparing(
+                actor -> unit.getLocation().distanceTo(actor.getLocation())));
+        return actorList;
     }
     public List<Actor> senseActors(int range) {
         if(range > unit.getType().getSensorRadius()) {
             range = unit.getType().getSensorRadius();
         }
-        return gameWorld.returnActorsInCircle(unit.getLocation(), range);
+        List<Actor> actorList = gameWorld.returnActorsInCircle(unit.getLocation(), range);
+        actorList.sort(
+            Comparator.comparing(
+                actor -> unit.getLocation().distanceTo(actor.getLocation())));
+        return actorList;
     }
     public List<Unit> senseUnits() {
-        return gameWorld.returnUnitsInCircle(unit.getLocation(), unit.getType().getSensorRadius());
+        List<Unit> unitList = gameWorld.returnUnitsInCircle(unit.getLocation(), unit.getType().getSensorRadius());
+        unitList.sort(
+            Comparator.comparing(
+                unit2 -> unit.getLocation().distanceTo(unit2.getLocation())));
+        return unitList;
     }
     public List<Unit> senseUnits(int range) {
         if(range > unit.getType().getSensorRadius()) {
             range = unit.getType().getSensorRadius();
         }
-        return gameWorld.returnUnitsInCircle(unit.getLocation(), range);
+        List<Unit> unitList = gameWorld.returnUnitsInCircle(unit.getLocation(), range);
+        unitList.sort(
+            Comparator.comparing(
+                unit2 -> unit.getLocation().distanceTo(unit2.getLocation())));
+        return unitList;
     }
     public List<Unit> senseUnits(Team team) {
-        List<Unit> returnUnits = gameWorld.returnUnitsInCircle(unit.getLocation(), unit.getType().getSensorRadius());
-        returnUnits.stream().filter((sUnit) -> (sUnit.getTeam() == team.opponent())).forEachOrdered((sUnit) -> {
-            returnUnits.remove(sUnit);
-        });
-        return returnUnits;
+        List<Unit> unitList = gameWorld.returnUnitsInCircle(unit.getLocation(), unit.getType().getSensorRadius());
+        unitList.stream()
+                .filter((sUnit) -> (sUnit.getTeam() == team.opponent()))
+                .forEachOrdered((sUnit) -> {unitList.remove(sUnit);});
+        unitList.sort(
+            Comparator.comparing(
+                unit2 -> unit.getLocation().distanceTo(unit2.getLocation())));
+        return unitList;
     }
     public List<Unit> senseUnits(int range, Team team) {
         if(range > unit.getType().getSensorRadius()) {
             range = unit.getType().getSensorRadius();
         }
-        List<Unit> returnUnits = gameWorld.returnUnitsInCircle(unit.getLocation(), range);
-        returnUnits.stream().filter((sUnit) -> (sUnit.getTeam() == team.opponent())).forEachOrdered((sUnit) -> {
-            returnUnits.remove(sUnit);
-        });
-        return returnUnits;
+        List<Unit> unitList = gameWorld.returnUnitsInCircle(unit.getLocation(), range);
+        unitList.stream()
+                .filter((sUnit) -> (sUnit.getTeam() == team.opponent()))
+                .forEachOrdered((sUnit) -> {unitList.remove(sUnit);});
+        unitList.sort(
+            Comparator.comparing(
+                unit2 -> unit.getLocation().distanceTo(unit2.getLocation())));
+        return unitList;
     }
     public List<Unit> senseUnitsExceptThisUnit() {
-        return gameWorld.returnUnitsInCircle(unit.getLocation(), unit.getType().getSensorRadius(), unit.getID());
+        List<Unit> unitList = gameWorld.returnUnitsInCircle(unit.getLocation(), unit.getType().getSensorRadius(), unit.getID());
+        unitList.sort(
+            Comparator.comparing(
+                unit2 -> unit.getLocation().distanceTo(unit2.getLocation())));
+        return unitList;
     }
     public List<Unit> senseUnitsExceptThisUnit(int range) {
         if(range > unit.getType().getSensorRadius()) {
             range = unit.getType().getSensorRadius();
         }
-        return gameWorld.returnUnitsInCircle(unit.getLocation(), range, unit.getID());
+        List<Unit> unitList = gameWorld.returnUnitsInCircle(unit.getLocation(), range, unit.getID());
+        unitList.sort(
+            Comparator.comparing(
+                unit2 -> unit.getLocation().distanceTo(unit2.getLocation())));
+        return unitList;
     }
     public List<Unit> senseUnitsExceptThisUnit(Team team) {
-        List<Unit> returnUnits = gameWorld.returnUnitsInCircle(unit.getLocation(), unit.getType().getSensorRadius(), unit.getID());
-        returnUnits.stream().filter((sUnit) -> (sUnit.getTeam() == team.opponent())).forEachOrdered((sUnit) -> {
-            returnUnits.remove(sUnit);
-        });
-        return returnUnits;
+        List<Unit> unitList = gameWorld.returnUnitsInCircle(unit.getLocation(), unit.getType().getSensorRadius(), unit.getID());
+        unitList.stream()
+                .filter((sUnit) -> (sUnit.getTeam() == team.opponent()))
+                .forEachOrdered((sUnit) -> {unitList.remove(sUnit);});
+        unitList.sort(
+            Comparator.comparing(
+                unit2 -> unit.getLocation().distanceTo(unit2.getLocation())));
+        return unitList;
     }
     public List<Unit> senseUnitsExceptThisUnit(int range, Team team) {
         if(range > unit.getType().getSensorRadius()) {
             range = unit.getType().getSensorRadius();
         }
-        List<Unit> returnUnits = gameWorld.returnUnitsInCircle(unit.getLocation(), range, unit.getID());
-        returnUnits.stream().filter((sUnit) -> (sUnit.getTeam() == team.opponent())).forEachOrdered((sUnit) -> {
-            returnUnits.remove(sUnit);
-        });
-        return returnUnits;
+        List<Unit> unitList = gameWorld.returnUnitsInCircle(unit.getLocation(), range, unit.getID());
+        unitList.stream()
+                .filter((sUnit) -> (sUnit.getTeam() == team.opponent()))
+                .forEachOrdered((sUnit) -> {unitList.remove(sUnit);});
+        unitList.sort(
+            Comparator.comparing(
+                unit2 -> unit.getLocation().distanceTo(unit2.getLocation())));
+        return unitList;
     }
     public List<Weapon> senseWeapons() {
-        return gameWorld.returnWeaponsInCircle(unit.getLocation(), unit.getType().getIncomingDetectionRadius());
+        List<Weapon> weaponList = gameWorld.returnWeaponsInCircle(unit.getLocation(), unit.getType().getIncomingDetectionRadius());
+        weaponList.sort(
+            Comparator.comparing(
+                weapon -> unit.getLocation().distanceTo(weapon.getLocation())));
+        return weaponList;
     }
     public List<Weapon> senseWeapons(int range) {
         if(range > unit.getType().getIncomingDetectionRadius()){
             range = unit.getType().getIncomingDetectionRadius();
         }
-        return gameWorld.returnWeaponsInCircle(unit.getLocation(), range);
+        List<Weapon> weaponList = gameWorld.returnWeaponsInCircle(unit.getLocation(), range);
+        weaponList.sort(
+            Comparator.comparing(
+                weapon -> unit.getLocation().distanceTo(weapon.getLocation())));
+        return weaponList;
     }
     public List<Environment> senseEnvironment() {
-        return gameWorld.returnEnvironmentInCircle(unit.getLocation(), unit.getType().getSensorRadius());
+        List<Environment> environmentList = gameWorld.returnEnvironmentInCircle(unit.getLocation(), unit.getType().getSensorRadius());
+        environmentList.sort(
+            Comparator.comparing(
+                environment -> unit.getLocation().distanceTo(environment.getLocation())));
+        return environmentList;
     }
     public List<Environment> senseEnvironment(int range) {
         if(range > unit.getType().getSensorRadius()){
             range = unit.getType().getSensorRadius();
         }
-        return gameWorld.returnEnvironmentInCircle(unit.getLocation(), range);
+        List<Environment> environmentList = gameWorld.returnEnvironmentInCircle(unit.getLocation(), range);
+        environmentList.sort(
+            Comparator.comparing(
+                environment -> unit.getLocation().distanceTo(environment.getLocation())));
+        return environmentList;
     }
     
     // ***********************************

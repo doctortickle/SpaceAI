@@ -134,8 +134,8 @@ public class AICommandA {
     private void runHomeStation() {
         // This code will be run every round.
         if(fighterCount < 1) {
-            if(ac.canBuildShip(UnitType.FIGHTER, Direction.SOUTH)) {
-                ac.buildShip(UnitType.FIGHTER, Direction.SOUTH);
+            if(ac.canConstruct(UnitType.FIGHTER, Direction.SOUTH)) {
+                ac.construct(UnitType.FIGHTER, Direction.SOUTH);
                 fighterCount++;
             }
         }
@@ -159,7 +159,7 @@ public class AICommandA {
     private void runCapitalDock() {
         // This code will be run every round.
         if(capitalCount == 0) {
-            ac.buildShip(UnitType.CAPITAL, Direction.NORTH);
+            ac.construct(UnitType.CAPITAL, Direction.NORTH);
         }
     }
     // *********************************

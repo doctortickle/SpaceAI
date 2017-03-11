@@ -151,13 +151,15 @@ public strictfp class AIController {
         return getLocation().distanceTo(location) <= unit.getType().getFlightRadius()
                && !checkForCollision(location);
     }
+    private boolean assertCanOrbit(Environment environment) {
+        return unit.getLocation().distanceTo(environment.getLocation()) > unit.getRadius() + environment.getRadius() + GameConstants.MIN_ORBIT_DISTANCE;
+    }
     private boolean assertValidMoveLocation(Location location) {
         return !unit.getLocation().equals(location) 
                 && checkBoundaries(location);
     }
     private boolean assertCanBuildShip(UnitType type) {
         return Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
-            && type.isShip()
             && getMineralCount()-type.getMineralCost() >= 0;
     }
     private boolean assertNeedsEnvironment(UnitType type) {
@@ -175,9 +177,8 @@ public strictfp class AIController {
             && location.distanceTo(environment.getLocation()) - (environment.getType().getBodyRadius() + type.getBodyRadius()) > GameConstants.MIN_ENV_BUILD_DISTANCE
             && location.distanceTo(environment.getLocation()) - (environment.getType().getBodyRadius() + type.getBodyRadius()) < GameConstants.MAX_ENV_BUILD_DISTANCE;
     }
-    private boolean assertCanConstruct(UnitType type, Location location) {
+    private boolean assertCanConstruct(UnitType type) {
         return Arrays.asList(unit.getType().getSpawnUnits()).contains(type)
-            && type.isStructure()
             && !assertNeedsEnvironment(type)
             && getMineralCount()-type.getMineralCost() >= 0;
     }
@@ -475,33 +476,33 @@ public strictfp class AIController {
                 && assertCanMove(location)
                 && assertValidMoveLocation(location);
     }
-    public boolean canBuildShip(UnitType type, Direction direction) { // location WAS direction. Confirm this works.
+    /*public boolean canBuildShip(UnitType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
         return assertCanBuildShip(type) 
                 && assertLocationIsEmpty(location, type.getBodyRadius())
                 && assertOnScreen(location, type.getBodyRadius())
                 && isReadyToBuild(); 
-    }
-    public boolean canConstruct(UnitType type, Direction direction,  Environment environment) {
-        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-        return assertCanConstruct(type, location, environment)
-                && assertLocationIsEmpty(location, type.getBodyRadius())
-                && assertOnScreen(location, type.getBodyRadius())
-                && isReadyToBuild();
-    }
+    }*/
     public boolean canConstruct(UnitType type, Direction direction) {
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
         if(assertNeedsEnvironment(type)) {
             Environment environment = findNearestEnvironment();
             if(environment != null) {
-                return canConstruct(type, direction, environment);
+                return assertCanConstruct(type, location, environment)
+                    && assertLocationIsEmpty(location, type.getBodyRadius())
+                    && assertOnScreen(location, type.getBodyRadius())
+                    && isReadyToBuild();
             }
             return false;
         }
-        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-        return assertCanConstruct(type, location)
+        return assertCanConstruct(type)
             && assertLocationIsEmpty(location, type.getBodyRadius())
             && assertOnScreen(location, type.getBodyRadius())
             && isReadyToBuild();
+    }
+    public boolean canOrbit(Environment environment) {
+        return assertCanSensePartOfCircle(environment.getLocation(), environment.getRadius())
+                && assertCanOrbit(environment);
     }
     public boolean canFire(WeaponType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);
@@ -545,17 +546,21 @@ public strictfp class AIController {
         }
     }
     public final void orbitClockwise(Environment environment) {
-        Direction direction = unit.getLocation().directionTo(environment.getLocation()).getOrthogonalLeft();
-        Location movePoint = courseCorrect(direction, environment);
-        move(movePoint);
+        if(canOrbit(environment)) {
+            Direction direction = unit.getLocation().directionTo(environment.getLocation()).getOrthogonalLeft();
+            Location movePoint = courseCorrect(direction, environment);
+            move(movePoint);
+        }
     }
     public final void orbitCounterClockwise(Environment environment) {
-        Direction direction = unit.getLocation().directionTo(environment.getLocation()).getOrthogonalRight();
-        Location movePoint = courseCorrect(direction, environment);
-        move(movePoint);
+        if(canOrbit(environment)) {
+            Direction direction = unit.getLocation().directionTo(environment.getLocation()).getOrthogonalRight();
+            Location movePoint = courseCorrect(direction, environment);
+            move(movePoint);           
+        } 
     }
-    public final void buildShip(UnitType type, Direction direction) {
-        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+    /*public final void buildShip(UnitType type, Direction direction) {
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius() + GameConstants.BUILD_DISTANCE, direction);
         if(canBuildShip(type, direction)) {
                 gameWorld.addUnit(type, location, getTeam());
                 unit.setBuildCooldown(type.getSpawnCooldown());
@@ -566,7 +571,7 @@ public strictfp class AIController {
         }
     }
     public final void construct(UnitType type, Direction direction, Environment environment) {
-        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius() + GameConstants.BUILD_DISTANCE, direction);
         if(canConstruct(type, direction, environment)) {
             gameWorld.addUnit(type, location, getTeam());
             unit.setBuildCooldown(type.getSpawnCooldown());
@@ -575,13 +580,13 @@ public strictfp class AIController {
         else {
             System.out.println("Can not construct.");
         }
-    }
+    }*/
     public final void construct(UnitType type, Direction direction) {
-        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-        if(assertNeedsEnvironment(type)) {
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius() + GameConstants.BUILD_DISTANCE, direction);
+        /*if(assertNeedsEnvironment(type)) {
             Environment environment = findNearestEnvironment();
             if(environment != null 
-               && canConstruct(type, direction, environment)) {
+               && canConstruct(type, direction)) {
                     gameWorld.addUnit(type, location, getTeam());
                     unit.setBuildCooldown(type.getSpawnCooldown());
                     gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
@@ -590,7 +595,7 @@ public strictfp class AIController {
                 System.out.println("Can not construct.");
             }
         }
-        else {
+        else {*/
             if(canConstruct(type, direction)) {
                 gameWorld.addUnit(type, location, getTeam());
                 unit.setBuildCooldown(type.getSpawnCooldown());
@@ -599,7 +604,7 @@ public strictfp class AIController {
             else {
                 System.out.println("Can not construct.");
             }
-        }
+        //}
     }
     public final void fire(WeaponType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);

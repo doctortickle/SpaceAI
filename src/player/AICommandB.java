@@ -86,11 +86,11 @@ public class AICommandB {
         // This code will be run every round.
         List<Environment> nearbyEnvironment = ac.senseEnvironment();
         if(nearbyEnvironment.size() > 0) {
-            if(ac.getLocation().distanceTo(nearbyEnvironment.get(0).getLocation()) < nearbyEnvironment.get(0).getRadius()+ ac.getBodyRadius() + 1) {
+            if(ac.getLocation().distanceTo(nearbyEnvironment.get(0).getLocation()) < nearbyEnvironment.get(0).getRadius()+ ac.getBodyRadius() + 2) {
                 System.out.println("distance from planet " + ac.getLocation().distanceTo(nearbyEnvironment.get(0).getLocation()));
                 ac.orbitClockwise(nearbyEnvironment.get(0));
-                if(ac.canConstruct(UnitType.CAPITAL_DOCK, Direction.WEST)) {
-                    ac.construct(UnitType.CAPITAL_DOCK, Direction.WEST);
+                if(ac.canConstruct(UnitType.CAPITAL_DOCK, ac.getLocation().directionTo(nearbyEnvironment.get(0).getLocation()).opposite())) {
+                    ac.construct(UnitType.CAPITAL_DOCK, ac.getLocation().directionTo(nearbyEnvironment.get(0).getLocation()).opposite());
                 }
             }
             else {
@@ -121,7 +121,7 @@ public class AICommandB {
     private void runHomeStation() {
         // This code will be run every round.
         if(builderCount == 0) {
-            ac.buildShip(UnitType.BUILDER, Direction.NORTH);
+            ac.construct(UnitType.BUILDER, Direction.NORTH);
             builderCount++;
         }
     }
@@ -144,7 +144,7 @@ public class AICommandB {
     private void runCapitalDock() {
         // This code will be run every round.
         if(capitalCount == 0) {
-            ac.buildShip(UnitType.CAPITAL, Direction.NORTH);
+            ac.construct(UnitType.CAPITAL, Direction.NORTH);
         }
     }
     // *********************************

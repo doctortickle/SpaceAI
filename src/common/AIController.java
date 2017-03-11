@@ -476,13 +476,6 @@ public strictfp class AIController {
                 && assertCanMove(location)
                 && assertValidMoveLocation(location);
     }
-    /*public boolean canBuildShip(UnitType type, Direction direction) {
-        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
-        return assertCanBuildShip(type) 
-                && assertLocationIsEmpty(location, type.getBodyRadius())
-                && assertOnScreen(location, type.getBodyRadius())
-                && isReadyToBuild(); 
-    }*/
     public boolean canConstruct(UnitType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
         if(assertNeedsEnvironment(type)) {
@@ -559,20 +552,9 @@ public strictfp class AIController {
             move(movePoint);           
         } 
     }
-    /*public final void buildShip(UnitType type, Direction direction) {
+    public final void construct(UnitType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius() + GameConstants.BUILD_DISTANCE, direction);
-        if(canBuildShip(type, direction)) {
-                gameWorld.addUnit(type, location, getTeam());
-                unit.setBuildCooldown(type.getSpawnCooldown());
-                gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
-        }
-        else {
-            System.out.println("Can not build.");
-        }
-    }
-    public final void construct(UnitType type, Direction direction, Environment environment) {
-        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius() + GameConstants.BUILD_DISTANCE, direction);
-        if(canConstruct(type, direction, environment)) {
+        if(canConstruct(type, direction)) {
             gameWorld.addUnit(type, location, getTeam());
             unit.setBuildCooldown(type.getSpawnCooldown());
             gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
@@ -580,31 +562,6 @@ public strictfp class AIController {
         else {
             System.out.println("Can not construct.");
         }
-    }*/
-    public final void construct(UnitType type, Direction direction) {
-        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius() + GameConstants.BUILD_DISTANCE, direction);
-        /*if(assertNeedsEnvironment(type)) {
-            Environment environment = findNearestEnvironment();
-            if(environment != null 
-               && canConstruct(type, direction)) {
-                    gameWorld.addUnit(type, location, getTeam());
-                    unit.setBuildCooldown(type.getSpawnCooldown());
-                    gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
-            }
-            else {
-                System.out.println("Can not construct.");
-            }
-        }
-        else {*/
-            if(canConstruct(type, direction)) {
-                gameWorld.addUnit(type, location, getTeam());
-                unit.setBuildCooldown(type.getSpawnCooldown());
-                gameWorld.decreaseMineralCount(type.getMineralCost(),getTeam());
-            }
-            else {
-                System.out.println("Can not construct.");
-            }
-        //}
     }
     public final void fire(WeaponType type, Direction direction) {
         Location location = getLocation().add(getType().getBodyRadius() + type.getWeaponRadius(), direction);

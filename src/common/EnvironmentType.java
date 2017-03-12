@@ -91,13 +91,6 @@ public strictfp enum EnvironmentType {
      */
     private final Image spriteImage;
     
-    /**
-     * Returns true if a given EnvironmentType has minerals to be mined or harvested. 
-     * @return true if a given EnvironmentType has minerals to be mined or harvested. 
-     */
-    public boolean canBeMined() {
-        return mineralMax > 0;
-    }
 
     private EnvironmentType(int maxHealth, int travelSpeed, int bodyRadius,
             int mineralMax, double rotationV, Image spriteImage) {
@@ -137,6 +130,14 @@ public strictfp enum EnvironmentType {
     public int getMineralMax() {
         return mineralMax;
     }
+    /**
+     * Returns true if a given EnvironmentType has minerals to be mined or harvested. 
+     * @return true if a given EnvironmentType has minerals to be mined or harvested. 
+     */
+    public boolean isHarvestable() {
+        return mineralMax > 0;
+    }
+
     /**
      * Returns the rotational velocity of a given EnvironmentType.
      * @return double rotational velocity of a given EnvironmentType.

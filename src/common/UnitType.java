@@ -110,14 +110,14 @@ public strictfp enum UnitType {
                 10,     // maxHealth
                 50,     // mineralCost
                 5,      // bodyRadius
-                10,     // sensorRadius
+                30,     // sensorRadius
                 20,     // incomingDetectionRadius
                 5,      // flightRadius
                 1000,   // fuelMax
                 1,      // fuelBurnRate
                 0,      // refuelRadius
                 0,      // refuelRate
-                GameConstants.MAX_ENV_BUILD_DISTANCE +1,      // harvestingRadius
+                GameConstants.MAX_ENV_BUILD_DISTANCE + 1,      // harvestingRadius
                 20,      // harvestingRate
                 new Image("/HARVESTER.png", 5*GameConstants.COORDINATE_TO_PIXEL*2, 5*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
@@ -223,7 +223,7 @@ public strictfp enum UnitType {
     /**
      * A structure that can continually harvest minerals from meteors.
      */
-    MINING_FACILITY(new EnvironmentType[] {EnvironmentType.SMALL_ASTEROID, EnvironmentType.LARGE_ASTEROID},   // spawnLocations
+    HARVESTING_FACILITY(new EnvironmentType[] {EnvironmentType.SMALL_ASTEROID, EnvironmentType.LARGE_ASTEROID},   // spawnLocations
                     100,    // spawnCooldown
                     500,    // maxHealth
                     500,    // mineralCost
@@ -231,7 +231,7 @@ public strictfp enum UnitType {
                     0,      // flightRadius
                     0,      // refuelRadius
                     0,      // refuelRate
-                    6,      // harvestingRadius
+                    20,     // harvestingRadius
                     10,     // harvestingRate
                     new Image("/TestImage.png", 5*GameConstants.COORDINATE_TO_PIXEL*2, 5*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)  // spriteImage
     ),
@@ -312,11 +312,11 @@ public strictfp enum UnitType {
      */
     private final int refuelRate;
     /**
-     *  The radius at which a HARVESTER or MINING_FACILITY can harvest minerals from an appropriate EnvironmentType.
+     *  The radius at which a HARVESTER or HARVESTING_FACILITY can harvest minerals from an appropriate EnvironmentType.
      */
     private final int harvestingRadius;
     /**
-     * The rate at which a HARVESTER or MINING_FACILITY can harvest minerals from an appropriate EnvironmentType.
+     * The rate at which a HARVESTER or HARVESTING_FACILITY can harvest minerals from an appropriate EnvironmentType.
      */
     private final int harvestingRate;
     /**
@@ -349,14 +349,14 @@ public strictfp enum UnitType {
         SMALL_DOCK.spawnSources = new UnitType[] {UnitType.BUILDER};
         LARGE_DOCK.spawnSources = new UnitType[] {UnitType.BUILDER};
         CAPITAL_DOCK.spawnSources = new UnitType[] {UnitType.BUILDER};
-        MINING_FACILITY.spawnSources = new UnitType[] {UnitType.HARVESTER};
+        HARVESTING_FACILITY.spawnSources = new UnitType[] {UnitType.HARVESTER};
         FUEL_STATION.spawnSources = new UnitType[] {UnitType.REFUELER};
         
         FIGHTER.spawnUnits = null;
         SIEGE.spawnUnits = null;
         DESTROYER.spawnUnits = null;
         CAPITAL.spawnUnits = null;
-        HARVESTER.spawnUnits = new UnitType[] {UnitType.MINING_FACILITY};
+        HARVESTER.spawnUnits = new UnitType[] {UnitType.HARVESTING_FACILITY};
         REFUELER.spawnUnits = new UnitType[] {UnitType.REFUELER};
         BUILDER.spawnUnits = new UnitType[] {UnitType.SMALL_DOCK, UnitType.LARGE_DOCK, UnitType.CAPITAL_DOCK};
 
@@ -364,7 +364,7 @@ public strictfp enum UnitType {
         SMALL_DOCK.spawnUnits = new UnitType[] {UnitType.FIGHTER, UnitType.HARVESTER, UnitType.REFUELER};
         LARGE_DOCK.spawnUnits = new UnitType[] {UnitType.FIGHTER, UnitType.SIEGE, UnitType.DESTROYER, UnitType.HARVESTER, UnitType.REFUELER};
         CAPITAL_DOCK.spawnUnits = new UnitType[] {UnitType.FIGHTER, UnitType.SIEGE, UnitType.DESTROYER, UnitType.CAPITAL, UnitType.HARVESTER, UnitType.REFUELER};
-        MINING_FACILITY.spawnUnits = null;
+        HARVESTING_FACILITY.spawnUnits = null;
         FUEL_STATION.spawnUnits = null;
     }
 
@@ -402,7 +402,7 @@ public strictfp enum UnitType {
         this.maxHealth = maxHealth;
         this.mineralCost = mineralCost;
         this.bodyRadius = bodyRadius;
-        this.sensorRadius = 0;
+        this.sensorRadius = harvestingRadius;
         this.incomingDetectionRadius = 0;
         this.flightRadius = flightRadius;
         this.fuelMax = 10000;
@@ -484,13 +484,13 @@ public strictfp enum UnitType {
     }
     /**
      * Determines if the UnitType can harvest directly from a SMALL_METEOR, LARGE_METEOR, SMALL_ASTEROID, or LARGE_ASTEROID.
-     * Returns true for HARVESTER and MINING_FACILITY.
-     * @return true if the UnitType is a HARVESTER or a MINING_FACILITY.
+     * Returns true for HARVESTER and HARVESTING_FACILITY.
+     * @return true if the UnitType is a HARVESTER or a HARVESTING_FACILITY.
      * @see #HARVESTER
-     * @see #MINING_FACILITY
+     * @see #HARVESTING_FACILITY
      */
     public boolean canHarvest() {
-        return this == HARVESTER || this == MINING_FACILITY;
+        return this == HARVESTER || this == HARVESTING_FACILITY;
     }
     /**
      * Determines if the UnitType can refuel another UnitType directly.

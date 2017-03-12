@@ -47,7 +47,7 @@ public class AICommandB {
             case SMALL_DOCK: runSmallDock(); break;
             case LARGE_DOCK: runLargeDock(); break;
             case CAPITAL_DOCK: runCapitalDock(); break;
-            case MINING_FACILITY: runMiningFacility(); break;
+            case HARVESTING_FACILITY: runHarvestingFacility(); break;
             case FUEL_STATION: runFuelStation(); break;
         }    
     }    
@@ -87,7 +87,7 @@ public class AICommandB {
         List<Environment> nearbyEnvironment = ac.senseEnvironment();
         if(nearbyEnvironment.size() > 0) {
             Environment environment = nearbyEnvironment.get(0);
-            if(ac.getLocation().distanceTo(environment.getLocation()) < environment.getType().getBodyRadius()+ ac.getBodyRadius() + ac.getFlightRadius() + 1) {
+            if(ac.canOrbit(environment)) {
                 ac.orbitClockwise(environment);
                 if(ac.canConstruct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite()) ) {
                     ac.construct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite());
@@ -95,6 +95,9 @@ public class AICommandB {
             }
             else {
                 ac.move(ac.getLocation().directionTo(environment.getLocation()));
+            }
+            if(ac.isReadyToMove()) {
+                ac.move(Direction.getRandomDirection());
             }
         }
         else {
@@ -150,7 +153,7 @@ public class AICommandB {
     // *********************************
     // ******* MINING FACILITY *********
     // *********************************
-    private void runMiningFacility() {
+    private void runHarvestingFacility() {
         // This code will be run every round.
     }
     // *********************************

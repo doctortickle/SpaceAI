@@ -93,6 +93,13 @@ public final class Environment extends Actor{
         return mineralCount;
     }
     /**
+     * Returns true if this environment object can be mined and has minerals left to mine.
+     * @return true if this environment object can be mined and has minerals left to mine
+     */
+    public boolean canBeHarvested() {
+        return type.isHarvestable() && getMineralCount() > 0;
+    }
+    /**
      * Returns direction of travel of this environment object.
      * @return Direction of travel of this environment object
      */

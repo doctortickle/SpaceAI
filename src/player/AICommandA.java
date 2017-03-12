@@ -48,7 +48,7 @@ public class AICommandA {
             case SMALL_DOCK: runSmallDock(); break;
             case LARGE_DOCK: runLargeDock(); break;
             case CAPITAL_DOCK: runCapitalDock(); break;
-            case MINING_FACILITY: runMiningFacility(); break;
+            case HARVESTING_FACILITY: runHarvestingFacility(); break;
             case FUEL_STATION: runFuelStation(); break;
         }    
     }    
@@ -112,31 +112,69 @@ public class AICommandA {
     // *********************************
     // ************ BUILDER ************
     // *********************************
+    int dockCount;
     private void runBuilder() {
         // This code will be run every round.
         List<Environment> nearbyEnvironment = ac.senseEnvironment();
         if(nearbyEnvironment.size() > 0) {
             Environment environment = nearbyEnvironment.get(0);
-            if(ac.getLocation().distanceTo(environment.getLocation()) < environment.getType().getBodyRadius()+ ac.getBodyRadius() + ac.getFlightRadius() + 1) {
+            if(ac.canOrbit(environment)) {
                 ac.orbitClockwise(environment);
-                System.out.println("Distance = " + ac.getLocation().distanceTo(environment.getLocation()));
-                if(ac.canConstruct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite()) ) {
+                /*if(ac.canConstruct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite()) && dockCount == 0 ) {
                     ac.construct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite());
+                    dockCount++;
+                }*/
+                if(environment.canBeHarvested()) {
+                    System.out.println("HERE!");
+                    if(ac.canConstruct(UnitType.HARVESTING_FACILITY, ac.getLocation().directionTo(environment.getLocation()))) {
+                        ac.construct(UnitType.HARVESTING_FACILITY, ac.getLocation().directionTo(environment.getLocation()));   
+                    }
                 }
             }
             else {
                 ac.move(ac.getLocation().directionTo(environment.getLocation()));
             }
+            if(ac.isReadyToMove()) {
+                ac.move(Direction.getRandomDirection());
+            }
+
         }
         else {
-            ac.move(Direction.WEST);
-        }
+            ac.move(Direction.getRandomDirection());
+        }        
     }
     // *********************************
     // ********** HARVESTER ************
     // *********************************
     private void runHarvester() {
         // This code will be run every round.
+        List<Environment> nearbyEnvironment = ac.senseEnvironment();
+        if(nearbyEnvironment.size() > 0) {
+            Environment environment = nearbyEnvironment.get(0);
+            if(ac.canOrbit(environment)) {
+                ac.orbitClockwise(environment);
+                /*if(ac.canConstruct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite()) && dockCount == 0 ) {
+                    ac.construct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite());
+                    dockCount++;
+                }*/
+                if(environment.canBeHarvested()) {
+                    System.out.println("HERE!");
+                    if(ac.canConstruct(UnitType.HARVESTING_FACILITY, ac.getLocation().directionTo(environment.getLocation()))) {
+                        ac.construct(UnitType.HARVESTING_FACILITY, ac.getLocation().directionTo(environment.getLocation()));   
+                    }
+                }
+            }
+            else {
+                ac.move(ac.getLocation().directionTo(environment.getLocation()));
+            }
+            if(ac.isReadyToMove()) {
+                ac.move(Direction.getRandomDirection());
+            }
+
+        }
+        else {
+            ac.move(Direction.getRandomDirection());
+        }
     }
     // *********************************
     // *********** REFUELER ************
@@ -150,9 +188,9 @@ public class AICommandA {
     int builderCount = 0;
     private void runHomeStation() {
         // This code will be run every round.
-        if(builderCount < 1) {
-            if(ac.canConstruct(UnitType.BUILDER, Direction.SOUTH)) {
-                ac.construct(UnitType.BUILDER, Direction.SOUTH);
+        if(builderCount < 5) {
+            if(ac.canConstruct(UnitType.HARVESTER, Direction.SOUTH)) {
+                ac.construct(UnitType.HARVESTER, Direction.SOUTH);
                 builderCount++;
             }
         }
@@ -182,8 +220,15 @@ public class AICommandA {
     // *********************************
     // ******* MINING FACILITY *********
     // *********************************
-    private void runMiningFacility() {
+    private void runHarvestingFacility() {
         // This code will be run every round.
+        List<Environment> environmentList = ac.senseEnvironment();
+        if(environmentList.size() > 0) {
+            Environment environment = environmentList.get(0);
+            if(environment.canBeHarvested()) {
+                ac.harvest(environment);
+            }
+        }
     }
     // *********************************
     // ******** FUEL STATION ***********

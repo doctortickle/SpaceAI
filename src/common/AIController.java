@@ -153,7 +153,7 @@ public strictfp class AIController {
                 && checkBoundaries(location);
     }
     private boolean assertNeedsEnvironment(UnitType type) {
-        return type == UnitType.SMALL_DOCK || type == UnitType.LARGE_DOCK || type == UnitType.CAPITAL_DOCK || type == UnitType.MINING_FACILITY;
+        return type == UnitType.SMALL_DOCK || type == UnitType.LARGE_DOCK || type == UnitType.CAPITAL_DOCK || type == UnitType.HARVESTING_FACILITY;
     }
     private boolean assertCorrectEnvironment(UnitType type, Environment environment) {
         return Arrays.asList(type.getSpawnLocations()).contains(environment.getType());
@@ -519,7 +519,7 @@ public strictfp class AIController {
                 && assertValidMoveLocation(location);
     }
     public boolean canConstruct(UnitType type, Direction direction) {
-        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius(), direction);
+        Location location = getLocation().add(getType().getBodyRadius() + type.getBodyRadius() + GameConstants.BUILD_DISTANCE, direction);
         if(assertNeedsEnvironment(type)) {
             Environment environment = findNearestEnvironment();
             if(environment != null) {

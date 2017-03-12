@@ -425,7 +425,6 @@ public class GameWorld {
         for (int x = 0; x < returnActors.size(); x++) {
                 if(ghostCircle.collide(returnActors.get(x))) {
                     if(returnActors.get(x).getID() != ghostCircle.getID() && !returnActors.get(x).isWeapon()) {
-                        System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
                         updateQuadTree();
                         return false;
                     }
@@ -450,7 +449,6 @@ public class GameWorld {
         for (int x = 0; x < returnActors.size(); x++) {
                 if(ghostCircle.collide(returnActors.get(x))) {
                     if(returnActors.get(x).getID() != ghostCircle.getID() && !returnActors.get(x).isWeapon()) {
-                        System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
                         updateQuadTree();
                         return false;
                     }
@@ -476,7 +474,6 @@ public class GameWorld {
         for (int x = 0; x < returnActors.size(); x++) {
                 if(ghostCircle.collide(returnActors.get(x))) {
                     if(returnActors.get(x).getID() != ghostCircle.getID() && returnActors.get(x).getID() != ID && !returnActors.get(x).isWeapon()) {
-                        System.out.println("This location is occupied by unit " + returnActors.get(x).getID());
                         updateQuadTree();
                         return false;
                     }
@@ -501,7 +498,6 @@ public class GameWorld {
         for (int x = 0; x < returnActors.size(); x++) {
             if(ghostCircle.collide(returnActors.get(x))) {
                 if(returnActors.get(x).getID() != ghostCircle.getID()) {
-                    System.out.println("Unit " + returnActors.get(x).getID() + " is in this circle.");
                     returnCollisions.add(returnActors.get(x));
                 }
             }
@@ -527,7 +523,6 @@ public class GameWorld {
             if(ghostCircle.collide(returnActors.get(x))) {
                 if(returnActors.get(x).getID() != ghostCircle.getID()
                     && returnActors.get(x).getID() != ID) {
-                        System.out.println("Actor " + returnActors.get(x).getID() + " is in this circle.");
                         returnCollisions.add(returnActors.get(x));
                 }
             }
@@ -552,7 +547,6 @@ public class GameWorld {
             if(ghostCircle.collide(returnActors.get(x))) {
                 if(returnActors.get(x).getID() != ghostCircle.getID() 
                     && returnActors.get(x).isCommandable()) {
-                        System.out.println("Unit " + returnActors.get(x).getID() + " is in this circle.");
                         returnCollisions.add(returnActors.get(x));
                 }
             }
@@ -579,7 +573,6 @@ public class GameWorld {
                 if(returnActors.get(x).getID() != ghostCircle.getID() 
                     && returnActors.get(x).isCommandable()
                     && returnActors.get(x).getID() != ID) {
-                        System.out.println("Unit " + returnActors.get(x).getID() + " is in this circle.");
                         returnCollisions.add(returnActors.get(x));
                 }
             }
@@ -604,7 +597,6 @@ public class GameWorld {
             if(ghostCircle.collide(returnActors.get(x))) {
                 if(returnActors.get(x).getID() != ghostCircle.getID() 
                     && !returnActors.get(x).isWeapon()) {
-                        System.out.println("Actor " + returnActors.get(x).getID() + " is in this circle.");
                         returnCollisions.add(returnActors.get(x));
                 }
             }
@@ -631,7 +623,6 @@ public class GameWorld {
                 if(returnActors.get(x).getID() != ghostCircle.getID() 
                     && returnActors.get(x).getID() != ID 
                     && !returnActors.get(x).isWeapon()) {
-                        System.out.println("Actor " + returnActors.get(x).getID() + " is in this circle.");
                         returnCollisions.add(returnActors.get(x));
                 }
             }
@@ -656,7 +647,6 @@ public class GameWorld {
             if(ghostCircle.collide(returnActors.get(x))) {
                 if(returnActors.get(x).getID() != ghostCircle.getID() 
                     && returnActors.get(x).isWeapon()) {
-                        System.out.println("Weapon " + returnActors.get(x).getID() + " is in this circle.");
                         returnCollisions.add(returnActors.get(x));
                 }
             }
@@ -681,7 +671,6 @@ public class GameWorld {
             if(ghostCircle.collide(returnActors.get(x))) {
                 if(returnActors.get(x).getID() != ghostCircle.getID() 
                     && returnActors.get(x).isEnvironment()) {
-                        System.out.println("Environment " + returnActors.get(x).getID() + " is in this circle.");
                         returnCollisions.add(returnActors.get(x));
                 }
             }

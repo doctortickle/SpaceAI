@@ -36,7 +36,7 @@ public class GamePlayLoop extends AnimationTimer {
     
     @Override
     public void handle(long now) {
-        if(!spaceAI.getPause() && !checkForWinner()) {
+        if(!checkForWinner()) {
             if(pulse<gameSpeed) {
             pulse++;
             System.out.println(pulse);
@@ -50,9 +50,6 @@ public class GamePlayLoop extends AnimationTimer {
                 spaceAI.update(); //Adds nodes, adds and removes pixels
                 updateActors(); // Runs the space AI Controller
             }     
-        }
-        if(spaceAI.getPause()) {
-            System.out.println("Game is paused.");
         }
         if(checkForWinner()) {
             System.out.println("Team " + gameWorld.getGameWinner().getWinner() + " wins due to " + gameWorld.getGameWinner().getDominationFactor());

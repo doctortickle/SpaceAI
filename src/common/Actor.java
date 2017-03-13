@@ -30,9 +30,7 @@ public abstract class Actor {
         this.team = team;
         this.location  = location;
         this.spriteFrame = new ImageView(spriteImage);
-        if(team != Team.NEUTRAL) {
-            teamColorize(spriteFrame);
-        }
+        teamColorize(spriteFrame);
     }
     
     abstract void update();
@@ -94,18 +92,25 @@ public abstract class Actor {
     
     abstract boolean collide(Actor object);
     
-    private void teamColorize(ImageView spriteFrame) {         
-        Lighting lighting = new Lighting();
-        lighting.setDiffuseConstant(1.0);
-        lighting.setSpecularConstant(5.0);
-        lighting.setSpecularExponent(0.0);
-        lighting.setSurfaceScale(0.0);
+    private void teamColorize(ImageView spriteFrame) {
+        Light.Distant light = new Light.Distant();
+        light.setAzimuth(0.0);
+        light.setElevation(70);
         if(this.team==Team.A){
-            lighting.setLight(new Light.Distant(45, 45, Color.RED));
+            light.setColor(Color.RED);
         }
         if(this.team==Team.B) {
-            lighting.setLight(new Light.Distant(45, 45, Color.BLUE));
+            light.setColor(Color.BLUE);
         }
+        if(this.team==Team.NEUTRAL) {
+            light.setColor(Color.GOLD);
+        }
+
+        Lighting lighting = new Lighting();
+        lighting.setLight(light);
+        lighting.setSurfaceScale(5);
+        lighting.setSpecularExponent(5);
+
         spriteFrame.setEffect(lighting);
         spriteFrame.setCache(true);
         spriteFrame.setCacheHint(CacheHint.SPEED);
@@ -153,6 +158,5 @@ public abstract class Actor {
             return false;
         }
         return true;
-    }
-
+    } 
 }

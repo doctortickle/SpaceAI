@@ -35,6 +35,7 @@ public strictfp class AIController {
     private final double rightBoundary;
     private final double bottomBoundary;
     private final double topBoundary;
+    private final Direction defaultDirection;
 
     AIController(Unit unit, GameWorld gameWorld) {
         this.unit = unit;
@@ -43,6 +44,7 @@ public strictfp class AIController {
         this.rightBoundary = GameConstants.MAX_X_COORDINATE;
         this.bottomBoundary = GameConstants.MIN_Y_COORDINATE;
         this.topBoundary = GameConstants.MAX_Y_COORDINATE;
+        this.defaultDirection = new Direction(0);
     }
 
     // *********************************
@@ -50,7 +52,7 @@ public strictfp class AIController {
     // *********************************
 
     private void updateSpriteAndLocation(Location location) {
-        //setSpriteFrameRotation(location);
+        setSpriteFrameRotation(location);
         unit.updateLocation(location.getX(), location.getY());
         unit.getSpriteFrame().setTranslateX(location.getPixelX());
         unit.getSpriteFrame().setTranslateY(location.getPixelY());
@@ -58,15 +60,8 @@ public strictfp class AIController {
     private void setSpriteFrameRotation(Location location) {
         Direction direction = unit.getLocation().directionTo(location);
         if(unit.isShip()) {
-            if(location.getX() != unit.getLocation().getX()) {
-                unit.getSpriteFrame().setRotate(direction.getDegrees());
-            }
-            else if(location.getY() > unit.getLocation().getY()){
-                unit.getSpriteFrame().setRotate(180);
-            }
-            else {
-                unit.getSpriteFrame().setRotate(0);
-            }
+            double rotate = direction.degreesBetween(defaultDirection);
+            unit.getSpriteFrame().setRotate(rotate);
         }
     }
     private void updateUnitMovementInfo() {
@@ -485,6 +480,18 @@ public strictfp class AIController {
             Comparator.comparing(
                 environment -> unit.getLocation().distanceTo(environment.getLocation())));
         return environmentList;
+    }
+    public Location senseOrbitDistance(Environment environment, double distance) {
+        if(assertCanSensePartOfCircle(environment.getLocation(), environment.getType().getBodyRadius())) {
+            return environment.getLocation().add(environment.getType().getBodyRadius() + distance, environment.getLocation().directionTo(unit.getLocation()));
+        }
+        return null;
+    }
+    public Location senseOrbitDistance(Environment environment, double distance, Direction direction) {
+        if(assertCanSensePartOfCircle(environment.getLocation(), environment.getType().getBodyRadius())) {
+            return environment.getLocation().add(environment.getType().getBodyRadius() + distance, direction);
+        }
+        return null;       
     }
     
     // ***********************************

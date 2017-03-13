@@ -5,6 +5,7 @@
  */
 package common;
 
+import java.util.HashMap;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.beans.value.ChangeListener;
@@ -19,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -37,17 +39,20 @@ public class SpaceAI extends Application {
     private Image splashScreen, instructionLayer, legalLayer, scoresLayer;
     private ImageView splashScreenBackplate, splashScreenTextArea;
     private Button gameButton, helpButton, scoreButton, legalButton;
-    private Label teamAMineralCountLabel, teamBMineralCountLabel, teamAMineralCountName, teamBMineralCountName, sliderName;
+    private Label teamAMineralCountLabel, teamBMineralCountLabel, teamAMineralCountName, teamBMineralCountName, sliderName,
+            IDAttribute, typeAttribute, teamAttribute, healthAttribute, locationAttribute, IDLabel, typeLabel, teamLabel, healthLabel, locationLabel;
     private Slider speedSlider;
     private int teamAMineralCount, teamBMineralCount;
-    private VBox mineralContainer, slideAndLabelContainer, leftBox, rightBox; 
-    private HBox mineralCountContainer, mineralNameContainer, sliderContainer, sliderNameContainer;
-    private Insets mineralContainerPadding,slideAndLabelContainerPadding;  
+    private VBox mineralContainer, slideAndLabelContainer, leftBox, attributeNameBox, changingAttributes; 
+    private HBox mineralCountContainer, mineralNameContainer, rightBox, sliderContainer, sliderNameContainer, unitInfoContainer;
+    private Insets mineralContainerPadding,slideAndLabelContainerPadding, unitInfoPadding;  
     private GamePlayLoop gamePlayLoop;
     private CastingDirector castDirector;
     private boolean pause;
     private String styleSheet;
     private GameWorld gameWorld;
+    private HashMap<ImageView, Actor> spriteFrameMap = new HashMap<> ();
+    private Actor currentSelection = null;
     
     @Override
     public void start(Stage primaryStage) throws ActionException {
@@ -83,6 +88,21 @@ public class SpaceAI extends Application {
         scene.setOnKeyPressed((KeyEvent event) -> {
             if(event.getCode() == KeyCode.SPACE) {
                 pause = !pause;
+                if(pause) {
+                    gamePlayLoop.stop();
+                }
+                if(!pause) {
+                    gamePlayLoop.start();
+                }
+            }
+        });
+        scene.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            if(e.getPickResult().getIntersectedNode() instanceof ImageView) {
+                Actor actor = (Actor) spriteFrameMap.get((ImageView) e.getPickResult().getIntersectedNode());
+                if(pause) {
+                    unitInfoLabelUpdates(actor);
+                }
+                currentSelection = actor;
             }
         });
     }
@@ -168,8 +188,33 @@ public class SpaceAI extends Application {
         root.getLeft().setId("left-node");
     }
     private void createRightNode() {
-        rightBox = new VBox();
+        
+        attributeNameBox = new VBox(5);
+        changingAttributes = new VBox(5);
+        
+        IDAttribute = new Label("ID - ");
+        typeAttribute = new Label("Type - ");
+        teamAttribute = new Label("Team - ");
+        healthAttribute = new Label("Health - ");
+        locationAttribute = new Label("Location - ");
+        attributeNameBox.getChildren().addAll(IDAttribute, typeAttribute, teamAttribute, healthAttribute, locationAttribute);
+        
+        IDLabel = new Label("None selected");
+        typeLabel = new Label("None selected");
+        teamLabel = new Label("None selected");
+        healthLabel = new Label("None selected");
+        locationLabel = new Label("None selected");
+        changingAttributes.getChildren().addAll(IDLabel, typeLabel, teamLabel, healthLabel, locationLabel);
+        
+        unitInfoContainer = new HBox(5);
+        unitInfoPadding = new Insets(5);
+        unitInfoContainer.setPadding(unitInfoPadding);
+        unitInfoContainer.setAlignment(Pos.CENTER);
+        unitInfoContainer.getChildren().addAll(attributeNameBox, changingAttributes);
+        
+        rightBox = new HBox();
         rightBox.setMinWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
+        rightBox.getChildren().addAll(unitInfoContainer);
         
         root.setRight(rightBox);
         BorderPane.setAlignment(rightBox, Pos.CENTER);
@@ -198,11 +243,13 @@ public class SpaceAI extends Application {
         removeGameActorNodes();
         addGameActorNodes();
         updateMineralCountLabels();
+        updateCurrentSelectionLabels();
     } 
     private void addGameActorNodes() {
         for(Actor actor : castDirector.getToBeAdded()) {
             actor.getSpriteFrame().setTranslateX(actor.getLocation().getPixelX());
             actor.getSpriteFrame().setTranslateY(actor.getLocation().getPixelY());
+            spriteFrameMap.put(actor.getSpriteFrame(), actor);
             gameScreen.getChildren().add(actor.getSpriteFrame());
             if(actor instanceof Unit) {
                 castDirector.addCurrentUnit((Unit)actor);
@@ -218,6 +265,7 @@ public class SpaceAI extends Application {
     }
     private void removeGameActorNodes() {
         for(Actor actor : castDirector.getRemovedActors()) {
+            spriteFrameMap.remove(actor.getSpriteFrame(), actor);
             gameScreen.getChildren().remove(actor.getSpriteFrame());
         }
         castDirector.resetRemovedActors();
@@ -230,8 +278,34 @@ public class SpaceAI extends Application {
         teamBMineralCountLabel.setText(Integer.toString(teamBMineralCount));
         System.out.println("Team B mineral count - " + teamBMineralCount);
     }
-    public boolean getPause() {
-        return pause;
+    private void updateCurrentSelectionLabels() {
+        if(currentSelection != null && currentSelection.getHealth() > 0) {
+            unitInfoLabelUpdates(currentSelection);
+        }
+        else {
+            IDLabel.setText("None selected");
+            typeLabel.setText("None selected");
+            teamLabel.setText("None selected");
+            healthLabel.setText("None selected");
+            locationLabel.setText("None selected");
+        }     
+    }
+    private void unitInfoLabelUpdates(Actor actor) {
+        IDLabel.setText(Integer.toString(actor.getID()));
+        if(actor instanceof Unit) {
+            typeLabel.setText((((Unit) actor).getType()).name());
+            healthLabel.setText(Integer.toString(actor.getHealth())); 
+        }
+        else if(actor instanceof Environment) {
+            typeLabel.setText((((Environment) actor).getType()).name());
+            healthLabel.setText(Integer.toString(actor.getHealth())); 
+        }
+        else if(actor instanceof Weapon) {
+            typeLabel.setText((((Weapon) actor).getType()).name());
+            healthLabel.setText("Not applicable"); 
+        }
+        teamLabel.setText(actor.getTeam().name()); 
+        locationLabel.setText(actor.getLocation().getX()+ ", " + actor.getLocation().getY());
     }
     public GameWorld getGameWorld() {
         return gameWorld;

@@ -5,6 +5,7 @@
  */
 package common;
 
+import static common.DecimalUtils.round;
 import java.util.HashMap;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -36,9 +37,6 @@ public class SpaceAI extends Application {
     private Scene scene;
     private BorderPane root;
     private StackPane gameScreen;
-    private Image splashScreen, instructionLayer, legalLayer, scoresLayer;
-    private ImageView splashScreenBackplate, splashScreenTextArea;
-    private Button gameButton, helpButton, scoreButton, legalButton;
     private Label teamAMineralCountLabel, teamBMineralCountLabel, teamAMineralCountName, teamBMineralCountName, sliderName,
             IDAttribute, typeAttribute, teamAttribute, healthAttribute, locationAttribute, IDLabel, typeLabel, teamLabel, healthLabel, locationLabel;
     private Slider speedSlider;
@@ -51,8 +49,13 @@ public class SpaceAI extends Application {
     private boolean pause;
     private String styleSheet;
     private GameWorld gameWorld;
-    private HashMap<ImageView, Actor> spriteFrameMap = new HashMap<> ();
-    private Actor currentSelection = null;
+    private final HashMap<ImageView, Actor> spriteFrameMap;
+    private Actor currentSelection;
+
+    public SpaceAI() {
+        this.spriteFrameMap = new HashMap<> ();
+        this.currentSelection = null;
+    }
     
     @Override
     public void start(Stage primaryStage) throws ActionException {
@@ -75,6 +78,7 @@ public class SpaceAI extends Application {
         root.setId("root");
         scene = new Scene(root, GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT);
         primaryStage.setMinWidth(GameConstants.WINDOW_WIDTH);
+        primaryStage.setMaxWidth(GameConstants.WINDOW_WIDTH);
         primaryStage.setMinHeight(GameConstants.WINDOW_HEIGHT+((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2));
         primaryStage.setMaxHeight(GameConstants.WINDOW_HEIGHT+((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2));
         primaryStage.setScene(scene);
@@ -214,6 +218,8 @@ public class SpaceAI extends Application {
         
         rightBox = new HBox();
         rightBox.setMinWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
+        rightBox.setMaxWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
+        rightBox.setMaxHeight(GameConstants.CENTER_HEIGHT);
         rightBox.getChildren().addAll(unitInfoContainer);
         
         root.setRight(rightBox);
@@ -305,10 +311,9 @@ public class SpaceAI extends Application {
             healthLabel.setText("Not applicable"); 
         }
         teamLabel.setText(actor.getTeam().name()); 
-        locationLabel.setText(actor.getLocation().getX()+ ", " + actor.getLocation().getY());
+        locationLabel.setText(round(actor.getLocation().getX(),3)+ ", " + round(actor.getLocation().getY(),3));
     }
-    public GameWorld getGameWorld() {
+    GameWorld getGameWorld() {
         return gameWorld;
-    }
-    
+    } 
 }

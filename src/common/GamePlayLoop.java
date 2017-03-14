@@ -39,7 +39,6 @@ public class GamePlayLoop extends AnimationTimer {
         if(!checkForWinner()) {
             if(pulse<gameSpeed) {
             pulse++;
-            System.out.println(pulse);
             }
             else{
                 pulse = 0;
@@ -61,15 +60,15 @@ public class GamePlayLoop extends AnimationTimer {
         System.out.println("Game speed is set at " + 5/gameSpeed + "x normal speed.");
     }
     private void updateActors() {
-        for(Unit unit : castDirector.getCurrentUnits() ) {
+        castDirector.getCurrentUnits().forEach((unit) -> {
             unit.update();
-        }
-        for(Weapon weapon : castDirector.getCurrentWeapons() ) {
+        });
+        castDirector.getCurrentWeapons().forEach((weapon) -> {
             weapon.update();
-        }
-        for(Environment environment : castDirector.getCurrentEnvironment() ) {
+        });
+        castDirector.getCurrentEnvironment().forEach((environment) -> {
             environment.update();
-        }
+        });
     }
     private boolean checkForWinner() {
         return gameWorld.getGameWinningTeam() != null;

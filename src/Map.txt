@@ -1,0 +1,11 @@
+mapName:default
+sizeFactor:2
+environment:LARGE_PLANET/100.0/100.0
+environment:SMALL_METEOR/50.0/50.0
+environment:SMALL_METEOR/5.0/5.0
+environment:LARGE_ASTEROID/100.0/-100.0
+environment:LARGE_ASTEROID/70.0/-70.0
+environment:LARGE_ASTEROID/175.0/0.0
+homeStationA:0.0/100.0
+homeStationB:0.0/-100.0
+initialMineralCount:1000

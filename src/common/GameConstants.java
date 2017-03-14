@@ -63,9 +63,6 @@ public strictfp interface GameConstants {
     // ****** GAMEPLAY CONSTANTS *******
     // *********************************
     
-    final int STARTING_MINERAL_COUNT = 1000;
-    final Location TEAM_A_HOME_STATION = new Location(0,100);
-    final Location TEAM_B_HOME_STATION = new Location(0,-100);
     final int MIN_ENV_BUILD_DISTANCE = 1;
     final int MAX_ENV_BUILD_DISTANCE = 30;
     final int MIN_ORBIT_DISTANCE = 1;

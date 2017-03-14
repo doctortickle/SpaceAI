@@ -6,6 +6,8 @@
 package common;
 
 import static common.DecimalUtils.round;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -51,6 +53,7 @@ public class SpaceAI extends Application {
     private GameWorld gameWorld;
     private final HashMap<ImageView, Actor> spriteFrameMap;
     private Actor currentSelection;
+    private Map map;
 
     public SpaceAI() {
         this.spriteFrameMap = new HashMap<> ();
@@ -58,11 +61,12 @@ public class SpaceAI extends Application {
     }
     
     @Override
-    public void start(Stage primaryStage) throws ActionException {
+    public void start(Stage primaryStage) throws ActionException, IOException {
         setStage(primaryStage);
         getCSS();
         createSceneEventHandling();
         createCastingDirection();
+        createMap();
         createGameWorld();
         addNodesToBorderPane();
         createStartGameLoop();       
@@ -113,8 +117,12 @@ public class SpaceAI extends Application {
     private void createCastingDirection() {
         castDirector = new CastingDirector();
     }
+    private void createMap() throws IOException {
+        File file = new File("src/Map.txt");
+        this.map = new Map(file);
+    }
     private void createGameWorld() {
-        gameWorld = new GameWorld(this, castDirector);
+        gameWorld = new GameWorld(this, castDirector, map);
     }
     private void createBottomNode() {
         mineralCountContainer = new HBox(150);

@@ -38,13 +38,14 @@ public class GameWorld {
     private List<Actor> allActors;
     private GhostCircle ghostCircle;
     private GameWinner gameWinner;
+    private Map map;
 
     /**
      * Instantiates the GameWorld class and sets the starting value of class variables.
      * @param spaceAI        an instance of the SpaceAI class that facilitates game animation.
      * @param castDirector   an instance of the CastingDirector class that communicates current unit count and status  
      */
-    public GameWorld(SpaceAI spaceAI, CastingDirector castDirector) {
+    public GameWorld(SpaceAI spaceAI, CastingDirector castDirector, Map map) {
         this.spaceAI = spaceAI;
         this.castDirector = castDirector;
         this.gameSpeed = GameConstants.FRAMES_PER_ROUND_5;
@@ -52,6 +53,7 @@ public class GameWorld {
         this.allActors = new ArrayList<>();
         this.ghostCircle = null;
         this.gameWinner = new GameWinner();
+        this.map = map;
     }
     
     /**
@@ -78,8 +80,8 @@ public class GameWorld {
      * Initializes values for units during the first game round.
      */
     private void initializeStartingUnits() {
-        this.teamAHomeStation = GameConstants.TEAM_A_HOME_STATION;
-        this.teamBHomeStation = GameConstants.TEAM_B_HOME_STATION;
+        this.teamAHomeStation = map.getHomeStationAStartPosition();
+        this.teamBHomeStation = map.getHomeStationBStartPosition();
         addUnit(UnitType.HOME_STATION, teamAHomeStation, Team.A);
         addUnit(UnitType.HOME_STATION, teamBHomeStation, Team.B);
     }
@@ -87,7 +89,7 @@ public class GameWorld {
      * Initializes mineral count values for units during the first game round.
      */
     private void initializeStartingMineralCounts() {
-        this.teamAMineralCount = this.teamBMineralCount = GameConstants.STARTING_MINERAL_COUNT;
+        this.teamAMineralCount = this.teamBMineralCount = map.getStartingMineralCount();
     }
     /**
      * Initialize the starting environment for the map.
@@ -100,12 +102,9 @@ public class GameWorld {
      * Add the environment objects to the map. 
      */
     private void createInitialEnvironment() {
-        addEnvironment(EnvironmentType.LARGE_PLANET, new Location(100, 100));
-        addEnvironment(EnvironmentType.SMALL_METEOR, new Location(50, 50));
-        addEnvironment(EnvironmentType.SMALL_METEOR, new Location(5, 5));
-        addEnvironment(EnvironmentType.LARGE_ASTEROID, new Location(100, -100));
-        addEnvironment(EnvironmentType.LARGE_ASTEROID, new Location(70, -70));
-        addEnvironment(EnvironmentType.LARGE_ASTEROID, new Location(175, 0));
+        map.getEnvironmentList().forEach((environment) -> {
+            addEnvironment((EnvironmentType)environment[0], new Location((double)environment[1],(double)environment[2]));
+        });
     }
     /**
      * Mirror the environment objects on the map.

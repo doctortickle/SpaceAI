@@ -159,15 +159,15 @@ public strictfp class WeaponController {
     private void explodeAnimation() {
         Image newImage = null;
         switch(weapon.getType()) {
-            case SMALL_BOMB : newImage = new Image("/SMALL_BOMB_EXPLOSION.png", 
+            case SMALL_BOMB : newImage = new Image("images/SMALL_BOMB_EXPLOSION.png", 
                     weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
                     weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
                     true, false, true); break;
-            case LARGE_BOMB : newImage = new Image("/LARGE_BOMB_EXPLOSION.png", 
+            case LARGE_BOMB : newImage = new Image("images/LARGE_BOMB_EXPLOSION.png", 
                     weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
                     weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
                     true, false, true); break;
-            case MINE : newImage = new Image("/MINE_EXPLOSION.png", 
+            case MINE : newImage = new Image("images/MINE_EXPLOSION.png", 
                     weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
                     weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
                     true, false, true); break;

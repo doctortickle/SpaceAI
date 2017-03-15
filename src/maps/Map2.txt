@@ -1,0 +1,6 @@
+mapName:default2
+sizeFactor:2
+environment:LARGE_PLANET/100.0/100.0
+homeStationA:0.0/100.0
+homeStationB:0.0/-100.0
+initialMineralCount:1000

@@ -56,7 +56,8 @@ public class SpaceAI extends Application {
     private Slider speedSlider;
     private int teamAMineralCount, teamBMineralCount;
     private VBox leftBox, attributeNameBox, changingAttributes, bottomContainer, topContainer, rightContainer; 
-    private HBox mineralCountContainer, mineralNameContainer, sliderContainer, unitInfoContainer;
+    private HBox mineralCountContainer, mineralNameContainer, sliderContainer, unitInfoContainer, mapNameHB, sizeSelectorHB,
+            editorActorSelectorHB;
     private Insets unitInfoPadding, bottomContainerPadding, topContainerPadding;  
     private GamePlayLoop gamePlayLoop;
     private CastingDirector castDirector;
@@ -73,6 +74,7 @@ public class SpaceAI extends Application {
     private File selectedMap;
     private int selectedSize;
     private TextField mapNameField;
+    private EditorActor selectedEditorActor;
     
     @Override
     public void start(Stage primaryStage) throws ActionException, IOException {
@@ -252,7 +254,7 @@ public class SpaceAI extends Application {
                 }
             }
         });
-        scene.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+        gameScreen.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             if(e.getPickResult().getIntersectedNode() instanceof ImageView) {
                 Actor actor = (Actor) spriteFrameMap.get((ImageView) e.getPickResult().getIntersectedNode());
                 if(pause) {
@@ -432,24 +434,46 @@ public class SpaceAI extends Application {
     // *********************************
     
     private void editorMode() {
-        createEditorSceneEventHandling();
         createEditorLeftNode();
         createEditorTopNode();
-    }
-    private void createEditorSceneEventHandling() {
-        
+        createEditorSceneEventHandling();
     }
     private void createEditorLeftNode() {
+        hideMainMenu();
+        createMapNameEntry();
+        createSizeSelection();
+        createEditorActorSelection();
+        createExportButton();
+        createExportErrorLabel();
+        leftBox.getChildren().addAll(mapNameHB, sizeSelectorHB, editorActorSelectorHB, export, exportErrorLabel); 
+    }
+    private void createEditorTopNode() {
+        
+    }
+    private void createEditorSceneEventHandling() {
+        gameScreen.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            selectedEditorActor.getSpriteFrame().setTranslateX(convertXCoordinate(e.getX()));
+            selectedEditorActor.getSpriteFrame().setTranslateY(convertYCoordinate(e.getY()));
+            if(assertOnScreen(selectedEditorActor)) {
+                gameScreen.getChildren().add(selectedEditorActor.getSpriteFrame());
+                System.out.println(selectedEditorActor.getSpriteFrame().getTranslateX() + ", " + selectedEditorActor.getSpriteFrame().getTranslateY());
+                selectedEditorActor = new EditorActor(selectedEditorActor.getType());
+            }
+        });
+    }
+    private void hideMainMenu() {
         play.setVisible(false);
         mapSelector.setVisible(false);
         editor.setVisible(false);
-        //MAP NAME
+    }
+    private void createMapNameEntry() {
         mapNameLabel = new Label("Map Name:");
         mapNameField = new TextField ();
-        HBox mapNameHB = new HBox();
+        mapNameHB = new HBox();
         mapNameHB.getChildren().addAll(mapNameLabel, mapNameField);
         mapNameHB.setSpacing(10);
-        //SIZE SELECTION
+    }
+    private void createSizeSelection() {
         Label sizeSelectorLabel = new Label("Map Size:");
         selectedSize = 2;
         ChoiceBox sizeSelector = new ChoiceBox();
@@ -462,12 +486,38 @@ public class SpaceAI extends Application {
                     case "Small" : selectedSize = 1; break;
                     case "Medium" : selectedSize = 2; break;
                     case "Large" : selectedSize = 3; break;
-                };
+                }
         });
-        HBox sizeSelectorHB = new HBox();
+        sizeSelectorHB = new HBox();
         sizeSelectorHB.getChildren().addAll(sizeSelectorLabel, sizeSelector);
         sizeSelectorHB.setSpacing(10);
-        //EXPORT BUTTON
+    }
+    private void createEditorActorSelection() {
+        Label editorActorSelectorLabel = new Label("Actor Selection:");
+        selectedEditorActor = new EditorActor(UnitType.HOME_STATION);
+        ChoiceBox editorActorSelector = new ChoiceBox();
+        editorActorSelector.setFocusTraversable(false);
+        editorActorSelector.setItems(FXCollections.observableArrayList("Home Station (A)", "Small Asteroid", "Large Asteroid",
+                "Small Meteor", "Large Meteor", "Small Planet", "Large Planet"));
+        editorActorSelector.getSelectionModel().selectFirst();
+        editorActorSelector.getSelectionModel().selectedIndexProperty()
+            .addListener((ObservableValue<? extends Number> observableValue, Number value, Number new_value) -> {
+                switch((String) editorActorSelector.getItems().get((Integer)new_value)) {
+                    case "Home Station (A)" : selectedEditorActor.setType(UnitType.HOME_STATION); break;
+                    case "Small Asteroid" : selectedEditorActor.setType(EnvironmentType.SMALL_ASTEROID); break;
+                    case "Large Asteroid" : selectedEditorActor.setType(EnvironmentType.LARGE_ASTEROID); break;
+                    case "Small Meteor" : selectedEditorActor.setType(EnvironmentType.SMALL_METEOR); break;
+                    case "Large Meteor" : selectedEditorActor.setType(EnvironmentType.LARGE_METEOR); break;
+                    case "Small Planet" : selectedEditorActor.setType(EnvironmentType.SMALL_PLANET); break;
+                    case "Large Planet" : selectedEditorActor.setType(EnvironmentType.LARGE_PLANET); break;
+                }
+                System.out.println(selectedEditorActor.getType());
+        });
+        editorActorSelectorHB = new HBox();
+        editorActorSelectorHB.getChildren().addAll(editorActorSelectorLabel, editorActorSelector);
+        editorActorSelectorHB.setSpacing(10);
+    }
+    private void createExportButton() {
         export = new Button("Export Map");
         export.setFocusTraversable(false);
         export.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
@@ -477,15 +527,23 @@ public class SpaceAI extends Application {
                 Logger.getLogger(SpaceAI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        //EXPORT ERROR MESSAGE
+    }
+    private void createExportErrorLabel() {
         exportErrorLabel = new Label("PLEASE ENTER MAP NAME");
         exportErrorLabel.setVisible(false);
-        
-        leftBox.getChildren().addAll(mapNameHB, sizeSelectorHB, export, exportErrorLabel);
-        
     }
-    private void createEditorTopNode() {
-        
+    private double convertXCoordinate(double coordinate) {
+            return coordinate - GameConstants.CENTER_WIDTH/2;
+    }
+    private double convertYCoordinate(double coordinate) {
+            return coordinate - GameConstants.CENTER_HEIGHT/2;
+    }
+    private boolean assertOnScreen(EditorActor selectedEditorActor) {
+        if(selectedEditorActor.getSpriteFrame().getTranslateY() >= GameConstants.CENTER_HEIGHT/2 - selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
+        if(selectedEditorActor.getSpriteFrame().getTranslateY() <= -GameConstants.CENTER_HEIGHT/2 + selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
+        if(selectedEditorActor.getSpriteFrame().getTranslateX() >= GameConstants.CENTER_WIDTH/2 - selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
+        if(selectedEditorActor.getSpriteFrame().getTranslateX() <= -GameConstants.CENTER_WIDTH/2 + selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
+        return true;
     }
     private void exportMap() throws IOException {
         String mapFileName = mapNameField.getText().replaceAll("\\s","");
@@ -503,4 +561,8 @@ public class SpaceAI extends Application {
             writer.close();  
         }
     }
+    
+    // *********************************
+    // ******** EDITOR ANIMATION *******
+    // *********************************
 }

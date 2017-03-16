@@ -95,27 +95,8 @@ public class GameWorld {
      * Initialize the starting environment for the map.
      */
     private void initializeEnvironment() {
-        createInitialEnvironment();
-        mirrorEnvironment();
-    }
-    /**
-     * Add the environment objects to the map. 
-     */
-    private void createInitialEnvironment() {
         map.getEnvironmentList().forEach((environment) -> {
             addEnvironment((EnvironmentType)environment[0], new Location((double)environment[1],(double)environment[2]));
-        });
-    }
-    /**
-     * Mirror the environment objects on the map.
-     */
-    private void mirrorEnvironment() {
-        List<Actor> toBeMirrored = new ArrayList<>();
-        toBeMirrored.addAll(castDirector.getToBeAdded());
-        toBeMirrored.stream().filter((actor) -> (actor instanceof Environment)).map((actor) -> (Environment) actor).forEachOrdered((environment) -> {
-            double mirrorLocationX = -(environment.getLocation().getX());
-            double mirrorLocationY = -(environment.getLocation().getY());
-            addEnvironment(environment.getType(),new Location(mirrorLocationX, mirrorLocationY));
         });
     }
     /**

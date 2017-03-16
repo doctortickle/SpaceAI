@@ -13,7 +13,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -31,6 +34,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -46,7 +50,7 @@ import javafx.stage.Stage;
  * @author Dylan Russell
  */
 public class SpaceAI extends Application {
-    private boolean startGame, editorMode;
+    private boolean startGame, pause, editorMode, delete, add;
     private Scene scene;
     private BorderPane root;
     private StackPane gameScreen;
@@ -57,24 +61,25 @@ public class SpaceAI extends Application {
     private int teamAMineralCount, teamBMineralCount;
     private VBox leftBox, attributeNameBox, changingAttributes, bottomContainer, topContainer, rightContainer; 
     private HBox mineralCountContainer, mineralNameContainer, sliderContainer, unitInfoContainer, mapNameHB, sizeSelectorHB,
-            editorActorSelectorHB;
+            editorActorSelectorHB, mineralSelectorHB;
     private Insets unitInfoPadding, bottomContainerPadding, topContainerPadding;  
     private GamePlayLoop gamePlayLoop;
     private CastingDirector castDirector;
-    private boolean pause;
     private String styleSheet;
     private GameWorld gameWorld;
-    private HashMap<ImageView, Actor> spriteFrameMap;
     private Actor currentSelection;
     private Map map;
-    private Button play, editor, export;
+    private Button play, editor, export, addButton, deleteButton;
     private ChoiceBox mapSelector;
     private ObservableList<String> mapNames;
     private HashMap<String, File> mapDict;
+    private HashMap<ImageView, Actor> spriteFrameDict;
+    private HashMap<ImageView, EditorActor> spriteFrameDictEditor;
     private File selectedMap;
-    private int selectedSize;
+    private int selectedSize, mineralCount;
     private TextField mapNameField;
     private EditorActor selectedEditorActor;
+    private List<EditorActor> addedEditorActors;
     
     @Override
     public void start(Stage primaryStage) throws ActionException, IOException {
@@ -240,7 +245,7 @@ public class SpaceAI extends Application {
         startGame = true; 
     }
     private void createGameSceneEventHandling() {
-        spriteFrameMap = new HashMap<>();
+        spriteFrameDict = new HashMap<>();
         currentSelection = null;
         
         scene.setOnKeyPressed((KeyEvent event) -> {
@@ -256,7 +261,7 @@ public class SpaceAI extends Application {
         });
         gameScreen.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             if(e.getPickResult().getIntersectedNode() instanceof ImageView) {
-                Actor actor = (Actor) spriteFrameMap.get((ImageView) e.getPickResult().getIntersectedNode());
+                Actor actor = (Actor) spriteFrameDict.get((ImageView) e.getPickResult().getIntersectedNode());
                 if(pause) {
                     unitInfoLabelUpdates(actor);
                 }
@@ -367,7 +372,7 @@ public class SpaceAI extends Application {
         for(Actor actor : castDirector.getToBeAdded()) {
             actor.getSpriteFrame().setTranslateX(actor.getLocation().getPixelX());
             actor.getSpriteFrame().setTranslateY(actor.getLocation().getPixelY());
-            spriteFrameMap.put(actor.getSpriteFrame(), actor);
+            spriteFrameDict.put(actor.getSpriteFrame(), actor);
             gameScreen.getChildren().add(actor.getSpriteFrame());
             if(actor instanceof Unit) {
                 castDirector.addCurrentUnit((Unit)actor);
@@ -383,7 +388,7 @@ public class SpaceAI extends Application {
     }
     private void removeGameActorNodes() {
         for(Actor actor : castDirector.getRemovedActors()) {
-            spriteFrameMap.remove(actor.getSpriteFrame(), actor);
+            spriteFrameDict.remove(actor.getSpriteFrame(), actor);
             gameScreen.getChildren().remove(actor.getSpriteFrame());
         }
         castDirector.resetRemovedActors();
@@ -434,30 +439,47 @@ public class SpaceAI extends Application {
     // *********************************
     
     private void editorMode() {
+        initializeEditorMode();
         createEditorLeftNode();
         createEditorTopNode();
         createEditorSceneEventHandling();
+    }
+    private void initializeEditorMode() {
+        addedEditorActors = new ArrayList<>();
+        spriteFrameDictEditor = new HashMap<>();
+        editorMode = true;
+        add = true;
+        delete = false;
     }
     private void createEditorLeftNode() {
         hideMainMenu();
         createMapNameEntry();
         createSizeSelection();
+        createAddButton();
+        createDeleteButton();
         createEditorActorSelection();
+        createInitialMineralCountSelection();
         createExportButton();
         createExportErrorLabel();
-        leftBox.getChildren().addAll(mapNameHB, sizeSelectorHB, editorActorSelectorHB, export, exportErrorLabel); 
+        leftBox.getChildren().addAll(mapNameHB, sizeSelectorHB, addButton, deleteButton, editorActorSelectorHB, mineralSelectorHB, export, exportErrorLabel); 
     }
     private void createEditorTopNode() {
         
     }
     private void createEditorSceneEventHandling() {
         gameScreen.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
-            selectedEditorActor.getSpriteFrame().setTranslateX(convertXCoordinate(e.getX()));
-            selectedEditorActor.getSpriteFrame().setTranslateY(convertYCoordinate(e.getY()));
-            if(assertOnScreen(selectedEditorActor)) {
-                gameScreen.getChildren().add(selectedEditorActor.getSpriteFrame());
-                System.out.println(selectedEditorActor.getSpriteFrame().getTranslateX() + ", " + selectedEditorActor.getSpriteFrame().getTranslateY());
-                selectedEditorActor = new EditorActor(selectedEditorActor.getType());
+            if(!(e.getPickResult().getIntersectedNode() instanceof ImageView) && add) {
+                selectedEditorActor.getSpriteFrame().setTranslateX(convertXCoordinate(e.getX()));
+                selectedEditorActor.getSpriteFrame().setTranslateY(convertYCoordinate(e.getY()));
+                if(assertOnScreen() && assertNoCollision() && assertHomeStationNumbers()) {
+                    addEditorActor();
+                }
+            }
+            if(e.getPickResult().getIntersectedNode() instanceof ImageView && delete) {
+                EditorActor editorActor = (EditorActor) spriteFrameDictEditor.get((ImageView) e.getPickResult().getIntersectedNode());
+                EditorActor mirrorEditorActor = editorActor.getMirroredEditorActor();
+                removeEditorActor(editorActor);
+                removeEditorActor(mirrorEditorActor);
             }
         });
     }
@@ -492,9 +514,25 @@ public class SpaceAI extends Application {
         sizeSelectorHB.getChildren().addAll(sizeSelectorLabel, sizeSelector);
         sizeSelectorHB.setSpacing(10);
     }
+    private void createAddButton() {
+        addButton = new Button("Add Actors");
+        addButton.setFocusTraversable(false);
+        addButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            add = true;
+            delete = false;
+        });
+    }
+    private void createDeleteButton() {
+        deleteButton = new Button("Delete Actors");
+        deleteButton.setFocusTraversable(false);
+        deleteButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            add = false;
+            delete = true;
+        });
+    }
     private void createEditorActorSelection() {
         Label editorActorSelectorLabel = new Label("Actor Selection:");
-        selectedEditorActor = new EditorActor(UnitType.HOME_STATION);
+        selectedEditorActor = new EditorActor(UnitType.HOME_STATION, false);
         ChoiceBox editorActorSelector = new ChoiceBox();
         editorActorSelector.setFocusTraversable(false);
         editorActorSelector.setItems(FXCollections.observableArrayList("Home Station (A)", "Small Asteroid", "Large Asteroid",
@@ -511,11 +549,36 @@ public class SpaceAI extends Application {
                     case "Small Planet" : selectedEditorActor.setType(EnvironmentType.SMALL_PLANET); break;
                     case "Large Planet" : selectedEditorActor.setType(EnvironmentType.LARGE_PLANET); break;
                 }
-                System.out.println(selectedEditorActor.getType());
         });
         editorActorSelectorHB = new HBox();
         editorActorSelectorHB.getChildren().addAll(editorActorSelectorLabel, editorActorSelector);
         editorActorSelectorHB.setSpacing(10);
+    }
+    private void createInitialMineralCountSelection() {
+        Label mineralSelectorLabel = new Label("Mineral Count:");
+        mineralCount = 1000;
+        ChoiceBox mineralSelector = new ChoiceBox();
+        mineralSelector.setFocusTraversable(false);
+        mineralSelector.setItems(FXCollections.observableArrayList("500", "1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000"));
+        mineralSelector.getSelectionModel().select("1000");
+        mineralSelector.getSelectionModel().selectedIndexProperty()
+            .addListener((ObservableValue<? extends Number> observableValue, Number value, Number new_value) -> {
+                switch((String) mineralSelector.getItems().get((Integer)new_value)) {
+                    case "500" : mineralCount = 500; break;
+                    case "1000" : mineralCount = 1000; break;
+                    case "1500" : mineralCount = 1500; break;
+                    case "2000" : mineralCount = 2000; break;
+                    case "2500" : mineralCount = 2500; break;
+                    case "3000" : mineralCount = 3000; break;
+                    case "3500" : mineralCount = 3500; break;
+                    case "4000" : mineralCount = 4000; break;
+                    case "4500" : mineralCount = 4500; break;
+                    case "5000" : mineralCount = 5000; break;
+                }
+        });
+        mineralSelectorHB = new HBox();
+        mineralSelectorHB.getChildren().addAll(mineralSelectorLabel, mineralSelector);
+        mineralSelectorHB.setSpacing(10);
     }
     private void createExportButton() {
         export = new Button("Export Map");
@@ -532,25 +595,75 @@ public class SpaceAI extends Application {
         exportErrorLabel = new Label("PLEASE ENTER MAP NAME");
         exportErrorLabel.setVisible(false);
     }
+    private void addEditorActor() {
+        EditorActor mirrorEditorActor = mirrorEditorActor();
+        gameScreen.getChildren().addAll(selectedEditorActor.getSpriteFrame(), mirrorEditorActor.getSpriteFrame());
+        addedEditorActors.add(selectedEditorActor);
+        addedEditorActors.add(mirrorEditorActor);
+        spriteFrameDictEditor.put(selectedEditorActor.getSpriteFrame(), selectedEditorActor);
+        spriteFrameDictEditor.put(mirrorEditorActor.getSpriteFrame(), mirrorEditorActor);
+        selectedEditorActor.setMirroredEditorActor(mirrorEditorActor);
+        mirrorEditorActor.setMirroredEditorActor(selectedEditorActor);
+        selectedEditorActor = new EditorActor(selectedEditorActor.getType(), false);
+    }
+    private void removeEditorActor(EditorActor editorActor) {
+        addedEditorActors.remove(editorActor);
+        spriteFrameDictEditor.remove(editorActor.getSpriteFrame());
+        gameScreen.getChildren().remove(editorActor.getSpriteFrame());
+    }
     private double convertXCoordinate(double coordinate) {
             return coordinate - GameConstants.CENTER_WIDTH/2;
     }
     private double convertYCoordinate(double coordinate) {
             return coordinate - GameConstants.CENTER_HEIGHT/2;
     }
-    private boolean assertOnScreen(EditorActor selectedEditorActor) {
+    private boolean assertOnScreen() {
         if(selectedEditorActor.getSpriteFrame().getTranslateY() >= GameConstants.CENTER_HEIGHT/2 - selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
         if(selectedEditorActor.getSpriteFrame().getTranslateY() <= -GameConstants.CENTER_HEIGHT/2 + selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
         if(selectedEditorActor.getSpriteFrame().getTranslateX() >= GameConstants.CENTER_WIDTH/2 - selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
         if(selectedEditorActor.getSpriteFrame().getTranslateX() <= -GameConstants.CENTER_WIDTH/2 + selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
         return true;
     }
+    private boolean assertNoCollision() {
+        if(addedEditorActors.size() > 0) {
+            for(EditorActor editActor : addedEditorActors) {
+                double dx = selectedEditorActor.getSpriteFrame().getTranslateX() - editActor.getSpriteFrame().getTranslateX();
+                double dy = selectedEditorActor.getSpriteFrame().getTranslateY() - editActor.getSpriteFrame().getTranslateY();
+                if(round(Math.sqrt(dx * dx + dy * dy),14) < selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL + editActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) {
+                    return false;
+                }                   
+            }
+        }
+        return true;
+    }
+    private boolean assertHomeStationNumbers() {
+        if(selectedEditorActor.getType() == UnitType.HOME_STATION) {
+            if(addedEditorActors.size() > 0) {
+                for(EditorActor editActor : addedEditorActors) {
+                    if(editActor.getType() == UnitType.HOME_STATION) {
+                        System.out.println("Only one Homestation per team allowed. Please remove previously place Home Station.");
+                        return false;
+                    }
+                }
+            }   
+        }
+        return true;
+    }
+    private EditorActor mirrorEditorActor() {
+        double mirrorX = -selectedEditorActor.getSpriteFrame().getTranslateX();
+        double mirrorY = -selectedEditorActor.getSpriteFrame().getTranslateY();
+        EditorActor mirrorEditorActor = new EditorActor(selectedEditorActor.getType(), true);
+        mirrorEditorActor.getSpriteFrame().setTranslateX(mirrorX);
+        mirrorEditorActor.getSpriteFrame().setTranslateY(mirrorY);
+               
+        return mirrorEditorActor;
+    }
     private void exportMap() throws IOException {
         String mapFileName = mapNameField.getText().replaceAll("\\s","");
         if(mapFileName.equals("")) {
             exportErrorLabel.setVisible(true);
         }
-        else {
+        else if (validateMap()) {
             exportErrorLabel.setVisible(false);
             BufferedWriter writer = null;
             File mapFile = new File("src/maps/" + mapFileName + ".txt");
@@ -558,11 +671,41 @@ public class SpaceAI extends Application {
             writer.write("mapName:"+ mapNameField.getText());
             writer.newLine();
             writer.write("sizeFactor:"+Integer.toString(selectedSize));
+            writer.newLine();
+            for(EditorActor editorActor : addedEditorActors) {
+                if(editorActor.getType() instanceof EnvironmentType) {
+                    writer.write("environment:"+editorActor.getType()+"/"+editorActor.getSpriteFrame().getTranslateX()*GameConstants.PIXEL_TO_COORDINATE+"/"+
+                            (-editorActor.getSpriteFrame().getTranslateY()*GameConstants.PIXEL_TO_COORDINATE));
+                }
+                else if(editorActor.getType() == UnitType.HOME_STATION) {
+                    if(!editorActor.isMirror()) {
+                        writer.write("homeStationA:"+editorActor.getSpriteFrame().getTranslateX()*GameConstants.PIXEL_TO_COORDINATE+"/"+
+                            (-editorActor.getSpriteFrame().getTranslateY()*GameConstants.PIXEL_TO_COORDINATE));
+                    }
+                    else {
+                        writer.write("homeStationB:"+editorActor.getSpriteFrame().getTranslateX()*GameConstants.PIXEL_TO_COORDINATE+"/"+
+                            (-editorActor.getSpriteFrame().getTranslateY()*GameConstants.PIXEL_TO_COORDINATE));
+                    }
+                }
+                writer.newLine();
+            }
+            writer.write("initialMineralCount:"+Integer.toString(mineralCount));
             writer.close();  
         }
+        else {
+            System.out.println("Map must have home stations.");
+        }
     }
-    
-    // *********************************
-    // ******** EDITOR ANIMATION *******
-    // *********************************
+    private boolean validateMap() {
+        boolean validated = false;
+        if(addedEditorActors.size() > 0) {
+            for(EditorActor editorActor : addedEditorActors) {
+                if(editorActor.getType() == UnitType.HOME_STATION) {
+                    validated = true;
+                }
+            }
+        }
+        return validated;
+    }
+
 }

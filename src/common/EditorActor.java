@@ -30,9 +30,12 @@ public class EditorActor {
     Object type;
     int radius;
     ImageView spriteFrame;
+    boolean mirror;
+    EditorActor mirroredEditorActor;
 
-    public EditorActor(Object type) {
+    public EditorActor(Object type, boolean mirror) {
         this.type = type;
+        this.mirror = mirror;
         if(type instanceof UnitType) {
             this.radius = ((UnitType) type).getBodyRadius();
             this.spriteFrame = new ImageView(((UnitType) type).getSpriteImage()); 
@@ -42,6 +45,7 @@ public class EditorActor {
             this.spriteFrame = new ImageView(((EnvironmentType) type).getSpriteImage()); 
         }
         colorize(type);
+        this.mirroredEditorActor = null;
     }
 
     public Object getType() {
@@ -65,12 +69,24 @@ public class EditorActor {
     public ImageView getSpriteFrame() {
         return spriteFrame;
     }
+    public boolean isMirror() {
+        return this.mirror;
+    }
+    public void setMirroredEditorActor(EditorActor mirroredEditorActor) {
+        this.mirroredEditorActor = mirroredEditorActor;
+    }
+    public EditorActor getMirroredEditorActor() {
+        return this.mirroredEditorActor;
+    }
     private void colorize(Object type) {
         Light.Distant light = new Light.Distant();
         light.setAzimuth(0.0);
         light.setElevation(70);
-        if(type==UnitType.HOME_STATION){
+        if(type==UnitType.HOME_STATION && !mirror){
             light.setColor(Color.RED);
+        }
+        else if(type==UnitType.HOME_STATION && mirror) {
+            light.setColor(Color.BLUE);
         }
         else {
             light.setColor(Color.GOLD);

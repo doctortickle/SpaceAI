@@ -1,2 +1,0 @@
-mapName:testMap
-sizeFactor:3

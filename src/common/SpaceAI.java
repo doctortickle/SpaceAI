@@ -59,17 +59,17 @@ public class SpaceAI extends Application {
             mapNameLabel, exportErrorLabel;
     private Slider speedSlider;
     private int teamAMineralCount, teamBMineralCount;
-    private VBox leftBox, attributeNameBox, changingAttributes, bottomContainer, topContainer, rightContainer; 
+    private VBox leftBox, attributeNameBox, changingAttributes, bottomBox, topBox, rightBox; 
     private HBox mineralCountContainer, mineralNameContainer, sliderContainer, unitInfoContainer, mapNameHB, sizeSelectorHB,
             editorActorSelectorHB, mineralSelectorHB;
-    private Insets unitInfoPadding, bottomContainerPadding, topContainerPadding;  
+    private Insets unitInfoPadding, bottomBoxPadding, topBoxPadding;  
     private GamePlayLoop gamePlayLoop;
     private CastingDirector castDirector;
     private String styleSheet;
     private GameWorld gameWorld;
     private Actor currentSelection;
     private Map map;
-    private Button play, editor, export, addButton, deleteButton;
+    private Button play, editor, export, addButton, deleteButton, mainMenuButton;
     private ChoiceBox mapSelector;
     private ObservableList<String> mapNames;
     private HashMap<String, File> mapDict;
@@ -86,6 +86,7 @@ public class SpaceAI extends Application {
         setStage(primaryStage);
         getCSS();
         addNodesToBorderPane();
+        mainMenu();
     }
 
     public static void main(String[] args) {
@@ -112,7 +113,7 @@ public class SpaceAI extends Application {
         styleSheet = "resources/styleSheet.css";
         scene.getStylesheets().add(styleSheet);
     }
-    private void addNodesToBorderPane() throws IOException {
+    private void addNodesToBorderPane() {
         createBottomNode();
         createTopNode();
         createLeftNode();
@@ -120,76 +121,45 @@ public class SpaceAI extends Application {
         createCenterNode();
     }
     private void createBottomNode() {
-        bottomContainer = new VBox(5);
-        bottomContainerPadding = new Insets(5);
-        bottomContainer.setPadding(bottomContainerPadding);
-        bottomContainer.setAlignment(Pos.CENTER);
-        bottomContainer.setMinWidth(GameConstants.WINDOW_WIDTH);
-        bottomContainer.setMinHeight((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2);
-        root.setBottom(bottomContainer);
-        BorderPane.setAlignment(bottomContainer, Pos.CENTER);
+        bottomBox = new VBox(5);
+        bottomBoxPadding = new Insets(5);
+        bottomBox.setPadding(bottomBoxPadding);
+        bottomBox.setAlignment(Pos.CENTER);
+        bottomBox.setMinWidth(GameConstants.WINDOW_WIDTH);
+        bottomBox.setMinHeight((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2);
+        root.setBottom(bottomBox);
+        BorderPane.setAlignment(bottomBox, Pos.CENTER);
         root.getBottom().setId("bottom-node");
     }
     private void createTopNode() {
-        topContainer = new VBox(5);
-        topContainerPadding = new Insets(5);
-        topContainer.setPadding(topContainerPadding);
-        topContainer.setAlignment(Pos.CENTER);
-        topContainer.setMinWidth(GameConstants.WINDOW_WIDTH);
-        topContainer.setMinHeight((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2);
-        root.setTop(topContainer);
-        BorderPane.setAlignment(topContainer, Pos.CENTER);
+        topBox = new VBox(5);
+        topBoxPadding = new Insets(5);
+        topBox.setPadding(topBoxPadding);
+        topBox.setAlignment(Pos.CENTER);
+        topBox.setMinWidth(GameConstants.WINDOW_WIDTH);
+        topBox.setMinHeight((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2);
+        root.setTop(topBox);
+        BorderPane.setAlignment(topBox, Pos.CENTER);
         root.getBottom().setId("top-node");
     }
     private void createRightNode() {
-        rightContainer = new VBox();
-        rightContainer.setMinWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
-        rightContainer.setMaxWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
-        rightContainer.setMinHeight(GameConstants.CENTER_HEIGHT);
-        rightContainer.setMaxHeight(GameConstants.CENTER_HEIGHT);
-        rightContainer.setAlignment(Pos.CENTER);
+        rightBox = new VBox();
+        rightBox.setMinWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
+        rightBox.setMaxWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
+        rightBox.setMinHeight(GameConstants.CENTER_HEIGHT);
+        rightBox.setMaxHeight(GameConstants.CENTER_HEIGHT);
+        rightBox.setAlignment(Pos.CENTER);
         
-        root.setRight(rightContainer);
-        BorderPane.setAlignment(rightContainer, Pos.CENTER);
+        root.setRight(rightBox);
+        BorderPane.setAlignment(rightBox, Pos.CENTER);
         root.getRight().setId("right-node");
     }
-    private void createLeftNode() throws IOException {
-        //PLAY BUTTON
-        play = new Button("Start Game");
-        play.setFocusTraversable(false);
-        play.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
-            if(!startGame) {
-                try {
-                    startGame();
-                } catch (IOException ex) {
-                    Logger.getLogger(SpaceAI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        //MAP SELECTOR
-        mapSelector = new ChoiceBox();
-        mapSelector.setFocusTraversable(false);
-        importMapNames();
-        mapSelector.setItems(mapNames);
-        selectedMap = mapDict.get(mapNames.get(0));
-        mapSelector.getSelectionModel().selectFirst();
-        mapSelector.getSelectionModel().selectedIndexProperty()
-            .addListener((ObservableValue<? extends Number> observableValue, Number value, Number new_value) -> {
-                selectedMap = mapDict.get((String) mapSelector.getItems().get((Integer)new_value));
-        });
-        //EDITOR BUTTON
-        editor = new Button("Map Editor");
-        editor.setFocusTraversable(false);
-        editor.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
-            if(!startGame) {
-                editorMode = true;
-                editorMode();
-            }
-        });
-        
+    private void createLeftNode() {
         leftBox = new VBox(5);
         leftBox.setMinWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
-        leftBox.getChildren().addAll(mapSelector, play, editor);
+        leftBox.setMaxWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
+        leftBox.setMinHeight(GameConstants.CENTER_HEIGHT);
+        leftBox.setMaxHeight(GameConstants.CENTER_HEIGHT);
         leftBox.setAlignment(Pos.CENTER);
         
         root.setLeft(leftBox);
@@ -202,6 +172,60 @@ public class SpaceAI extends Application {
         gameScreen.setMaxSize(GameConstants.CENTER_WIDTH, GameConstants.CENTER_HEIGHT);
         root.setCenter(gameScreen);
         root.getCenter().setId("center-node");
+    }
+    
+    // *********************************
+    // ********** MAIN MENU ************
+    // *********************************
+    
+    private void mainMenu() throws IOException {
+        initializeMainMenu();
+        createMainLeftNode();
+    }
+    private void initializeMainMenu() {
+        editorMode = false;
+        startGame = false;
+    }
+    private void createMainLeftNode() throws IOException {
+        clearLeftNode();
+        createPlayButton();
+        createMapSelector();
+        createEditorButton();
+        leftBox.getChildren().addAll(mapSelector, play, editor);
+    }
+    private void createPlayButton() {
+        play = new Button("Start Game");
+        play.setFocusTraversable(false);
+        play.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            if(!startGame) {
+                try {
+                    startGame();
+                } catch (IOException ex) {
+                    Logger.getLogger(SpaceAI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });        
+    }
+    private void createMapSelector() throws IOException {
+        mapSelector = new ChoiceBox();
+        mapSelector.setFocusTraversable(false);
+        importMapNames();
+        mapSelector.setItems(mapNames);
+        selectedMap = mapDict.get(mapNames.get(0));
+        mapSelector.getSelectionModel().selectFirst();
+        mapSelector.getSelectionModel().selectedIndexProperty()
+            .addListener((ObservableValue<? extends Number> observableValue, Number value, Number new_value) -> {
+                selectedMap = mapDict.get((String) mapSelector.getItems().get((Integer)new_value));
+        });        
+    }
+    private void createEditorButton() {
+        editor = new Button("Map Editor");
+        editor.setFocusTraversable(false);
+        editor.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            if(!startGame) {
+                editorMode();
+            }
+        });
     }
     private void importMapNames() throws FileNotFoundException, IOException {
         mapNames = FXCollections.observableArrayList();
@@ -295,7 +319,7 @@ public class SpaceAI extends Application {
         teamBMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
         mineralNameContainer.getChildren().addAll(teamAMineralCountName, teamBMineralCountName);
         
-        bottomContainer.getChildren().addAll(mineralCountContainer, mineralNameContainer);
+        bottomBox.getChildren().addAll(mineralCountContainer, mineralNameContainer);
     }
     private void createGameTopNode() {
         speedSlider = new Slider(1, 9, 5);
@@ -325,7 +349,7 @@ public class SpaceAI extends Application {
         
         sliderName = new Label("Game Speed Adjustment"); 
         
-        topContainer.getChildren().addAll(sliderContainer,sliderName);
+        topBox.getChildren().addAll(sliderContainer,sliderName);
     }
     private void createGameRightNode() {
         attributeNameBox = new VBox(5);
@@ -351,7 +375,7 @@ public class SpaceAI extends Application {
         unitInfoContainer.setAlignment(Pos.CENTER);
         unitInfoContainer.getChildren().addAll(attributeNameBox, changingAttributes);
         
-        rightContainer.getChildren().addAll(unitInfoContainer);
+        rightBox.getChildren().addAll(unitInfoContainer);
     }
     private void createStartGameLoop() {
         gamePlayLoop = new GamePlayLoop(this, gameWorld, castDirector);
@@ -440,7 +464,10 @@ public class SpaceAI extends Application {
     
     private void editorMode() {
         initializeEditorMode();
+        createEditorTopNode();
+        createEditorBottomNode();
         createEditorLeftNode();
+        createEditorRightNode();
         createEditorTopNode();
         createEditorSceneEventHandling();
     }
@@ -451,8 +478,15 @@ public class SpaceAI extends Application {
         add = true;
         delete = false;
     }
+    private void createEditorTopNode() {
+        clearTopNode();
+    }
+    private void createEditorBottomNode() {
+        clearBottomNode();
+    }
     private void createEditorLeftNode() {
-        hideMainMenu();
+        clearLeftNode();
+        createMainMenuButton();
         createMapNameEntry();
         createSizeSelection();
         createAddButton();
@@ -461,10 +495,10 @@ public class SpaceAI extends Application {
         createInitialMineralCountSelection();
         createExportButton();
         createExportErrorLabel();
-        leftBox.getChildren().addAll(mapNameHB, sizeSelectorHB, addButton, deleteButton, editorActorSelectorHB, mineralSelectorHB, export, exportErrorLabel); 
+        leftBox.getChildren().addAll(mainMenuButton, mapNameHB, sizeSelectorHB, addButton, deleteButton, editorActorSelectorHB, mineralSelectorHB, export, exportErrorLabel); 
     }
-    private void createEditorTopNode() {
-        
+    private void createEditorRightNode() {
+        clearRightNode();
     }
     private void createEditorSceneEventHandling() {
         gameScreen.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
@@ -483,10 +517,16 @@ public class SpaceAI extends Application {
             }
         });
     }
-    private void hideMainMenu() {
-        play.setVisible(false);
-        mapSelector.setVisible(false);
-        editor.setVisible(false);
+    private void createMainMenuButton() {
+        mainMenuButton = new Button("Main Menu");
+        mainMenuButton.setFocusTraversable(false);
+        mainMenuButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            try {
+                mainMenu();
+            } catch (IOException ex) {
+                Logger.getLogger(SpaceAI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
     private void createMapNameEntry() {
         mapNameLabel = new Label("Map Name:");
@@ -707,5 +747,22 @@ public class SpaceAI extends Application {
         }
         return validated;
     }
-
+ 
+    // *********************************
+    // *********** UTILITY *************
+    // *********************************
+    
+    private void clearTopNode() {
+        topBox.getChildren().removeAll(topBox.getChildren());
+    }
+    private void clearBottomNode() {
+        bottomBox.getChildren().removeAll(bottomBox.getChildren());
+    }
+    private void clearRightNode() {
+        rightBox.getChildren().removeAll(rightBox.getChildren());
+    }
+    private void clearLeftNode() {
+        leftBox.getChildren().removeAll(leftBox.getChildren());
+    }
+    
 }

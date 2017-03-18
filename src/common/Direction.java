@@ -43,7 +43,7 @@ public strictfp class Direction {
     
     public Direction(double radians) {
         this.radians = reduce(radians);
-        this.degrees = calcDegrees(radians);
+        this.degrees = calcDegrees(this.radians);
     }   
     public Direction(double dx, double dy) {
         assertValid(dx);
@@ -52,7 +52,7 @@ public strictfp class Direction {
             dy = 1;
         }
         this.radians = reduce(Math.atan2(dy, dx));
-        this.degrees = calcDegrees(radians);
+        this.degrees = calcDegrees(this.radians);
     }
     public Direction(Location start, Location finish) {
         this(finish.getX() - start.getX(), finish.getY() - start.getY());

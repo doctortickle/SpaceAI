@@ -36,9 +36,10 @@ public class GamePlayLoop extends AnimationTimer {
     
     @Override
     public void handle(long now) {
-        if(!checkForWinner()) {
+        if(!spaceAI.getPause() && !checkForWinner()) {
             if(pulse<gameSpeed) {
             pulse++;
+            System.out.println(pulse);
             }
             else{
                 pulse = 0;
@@ -50,6 +51,9 @@ public class GamePlayLoop extends AnimationTimer {
                 updateActors(); // Runs the space AI Controller
             }     
         }
+        if(spaceAI.getPause()) {
+            System.out.println("Game is paused.");
+        }
         if(checkForWinner()) {
             System.out.println("Team " + gameWorld.getGameWinner().getWinner() + " wins due to " + gameWorld.getGameWinner().getDominationFactor());
             stop();
@@ -60,15 +64,15 @@ public class GamePlayLoop extends AnimationTimer {
         System.out.println("Game speed is set at " + 5/gameSpeed + "x normal speed.");
     }
     private void updateActors() {
-        castDirector.getCurrentUnits().forEach((unit) -> {
+        for(Unit unit : castDirector.getCurrentUnits() ) {
             unit.update();
-        });
-        castDirector.getCurrentWeapons().forEach((weapon) -> {
+        }
+        for(Weapon weapon : castDirector.getCurrentWeapons() ) {
             weapon.update();
-        });
-        castDirector.getCurrentEnvironment().forEach((environment) -> {
+        }
+        for(Environment environment : castDirector.getCurrentEnvironment() ) {
             environment.update();
-        });
+        }
     }
     private boolean checkForWinner() {
         return gameWorld.getGameWinningTeam() != null;

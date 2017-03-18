@@ -55,40 +55,22 @@ public class AICommandA {
     // *********************************
     // ************ FIGHTER ************
     // *********************************
-    boolean reachedOne = false;
-    boolean reachedTwo = false;
-    boolean reachedThree = false;
-    boolean reachedFour = false;
+    boolean reachedOrbit = false;
     private void runFighter() {
         // This code will be run every round.
-        Location one = new Location(0,50);
-        Location two = new Location(0,-50);
-        Location three = new Location(-50,50);
-        Location four = new Location(50,-50);
-        if(ac.canMove(ac.getLocation().directionTo(one)) && !reachedOne) {
-            ac.move(one);
-            if(ac.getLocation().equals(one)){
-                reachedOne = true;
+        List<Environment> nearbyEnvironment = ac.senseEnvironment();
+        if(nearbyEnvironment.size() > 0) {
+            Environment environment = nearbyEnvironment.get(0);
+            if(ac.canOrbit(environment)) {
+            ac.orbitClockwise(environment);
             }
+            if(ac.isReadyToMove()) {
+                ac.move(Direction.getRandomDirection());
+            } 
         }
-        if(ac.canMove(ac.getLocation().directionTo(two)) && !reachedTwo) {
-            ac.move(two);
-            if(ac.getLocation().equals(two)){
-                reachedTwo = true;
-            }
-        }
-        if(ac.canMove(ac.getLocation().directionTo(three)) && !reachedThree) {
-            ac.move(three);
-            if(ac.getLocation().equals(three)){
-                reachedThree = true;
-            }
-        }
-        if(ac.canMove(ac.getLocation().directionTo(four)) && !reachedFour) {
-            ac.move(four);
-            if(ac.getLocation().equals(four)){
-                reachedFour = true;
-            }
-        }
+        else {
+            ac.move(Direction.getRandomDirection());
+        }  
     }
     // *********************************
     // ************ SIEGE **************
@@ -189,8 +171,8 @@ public class AICommandA {
     private void runHomeStation() {
         // This code will be run every round.
         if(builderCount < 5) {
-            if(ac.canConstruct(UnitType.HARVESTER, Direction.SOUTH)) {
-                ac.construct(UnitType.HARVESTER, Direction.SOUTH);
+            if(ac.canConstruct(UnitType.FIGHTER, Direction.SOUTH)) {
+                ac.construct(UnitType.FIGHTER, Direction.SOUTH);
                 builderCount++;
             }
         }

@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class GameWorld {
     
-    static int gameRound;
+    private int gameRound;
     private int uniqueID;
     private final SpaceAI spaceAI;
     private final CastingDirector castDirector;
@@ -366,6 +366,7 @@ public class GameWorld {
     /**
      * Gets mineral count for the requested Team.
      * @param team   defines the team
+     * @return int number of minerals for given team
      */
     public int getMineralCount(Team team) {
         switch(team) {

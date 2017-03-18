@@ -35,6 +35,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.Lighting;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -56,7 +57,7 @@ public class SpaceAI extends Application {
     private StackPane gameScreen;
     private Label teamAMineralCountLabel, teamBMineralCountLabel, teamAMineralCountName, teamBMineralCountName, sliderName,
             IDAttribute, typeAttribute, teamAttribute, healthAttribute, locationAttribute, IDLabel, typeLabel, teamLabel, healthLabel, locationLabel,
-            mapNameLabel, exportErrorLabel;
+            mapNameLabel, exportErrorLabel, fuelLabel, mineralLabel, fuelAttribute, mineralAttribute;
     private Slider speedSlider;
     private int teamAMineralCount, teamBMineralCount;
     private VBox leftBox, attributeNameBox, changingAttributes, bottomBox, topBox, rightBox; 
@@ -69,7 +70,7 @@ public class SpaceAI extends Application {
     private GameWorld gameWorld;
     private Actor currentSelection;
     private Map map;
-    private Button play, editor, export, addButton, deleteButton, mainMenuButton;
+    private Button play, editor, export, addButton, deleteButton, mainMenuButton, clearButton;
     private ChoiceBox mapSelector;
     private ObservableList<String> mapNames;
     private HashMap<String, File> mapDict;
@@ -80,6 +81,8 @@ public class SpaceAI extends Application {
     private TextField mapNameField;
     private EditorActor selectedEditorActor;
     private List<EditorActor> addedEditorActors;
+    private ImageView titleScreenFrame;
+    private Image titleScreen;
     
     @Override
     public void start(Stage primaryStage) throws ActionException, IOException {
@@ -180,11 +183,21 @@ public class SpaceAI extends Application {
     
     private void mainMenu() throws IOException {
         initializeMainMenu();
+        createMainTopNode();
+        createMainBottomNode();
         createMainLeftNode();
+        createMainRightNode();
+        createTitleScreen();
     }
     private void initializeMainMenu() {
         editorMode = false;
         startGame = false;
+    }
+    private void createMainTopNode() {
+        clearTopNode();
+    }
+    private void createMainBottomNode() {
+        clearBottomNode();
     }
     private void createMainLeftNode() throws IOException {
         clearLeftNode();
@@ -192,6 +205,15 @@ public class SpaceAI extends Application {
         createMapSelector();
         createEditorButton();
         leftBox.getChildren().addAll(mapSelector, play, editor);
+    }
+    private void createMainRightNode() {
+        clearRightNode();
+    }
+    private void createTitleScreen() {
+        clearGameScreen();
+        titleScreen = new Image("resources/SpaceAITitleScreen.png", GameConstants.CENTER_WIDTH, GameConstants.CENTER_HEIGHT, true, false, true);
+        titleScreenFrame = new ImageView(titleScreen);
+        gameScreen.getChildren().add(titleScreenFrame);
     }
     private void createPlayButton() {
         play = new Button("Start Game");
@@ -265,6 +287,8 @@ public class SpaceAI extends Application {
         createGameBottomNode();
         createGameTopNode();
         createGameRightNode();
+        createGameLeftNode();
+        createGameScreen();
         createStartGameLoop();
         startGame = true; 
     }
@@ -302,26 +326,8 @@ public class SpaceAI extends Application {
     private void createGameWorld() {
         gameWorld = new GameWorld(this, castDirector, map);
     }
-    private void createGameBottomNode() {
-        mineralCountContainer = new HBox(150);
-        mineralCountContainer.setAlignment(Pos.CENTER);
-        teamAMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.A)));
-        teamAMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
-        teamBMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.B)));
-        teamBMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
-        mineralCountContainer.getChildren().addAll(teamAMineralCountLabel, teamBMineralCountLabel);
-        
-        mineralNameContainer = new HBox(50);
-        mineralNameContainer.setAlignment(Pos.CENTER);
-        teamAMineralCountName = new Label("Team A Mineral Count");
-        teamAMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
-        teamBMineralCountName = new Label("Team B Mineral Count");
-        teamBMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
-        mineralNameContainer.getChildren().addAll(teamAMineralCountName, teamBMineralCountName);
-        
-        bottomBox.getChildren().addAll(mineralCountContainer, mineralNameContainer);
-    }
     private void createGameTopNode() {
+        clearTopNode();
         speedSlider = new Slider(1, 9, 5);
         speedSlider.setShowTickMarks(true);
         speedSlider.setShowTickLabels(true);
@@ -351,7 +357,33 @@ public class SpaceAI extends Application {
         
         topBox.getChildren().addAll(sliderContainer,sliderName);
     }
+    private void createGameBottomNode() {
+        clearBottomNode();
+        mineralCountContainer = new HBox(150);
+        mineralCountContainer.setAlignment(Pos.CENTER);
+        teamAMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.A)));
+        teamAMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
+        teamBMineralCountLabel = new Label(Integer.toString(gameWorld.getMineralCount(Team.B)));
+        teamBMineralCountLabel.setMinWidth(Control.USE_PREF_SIZE);
+        mineralCountContainer.getChildren().addAll(teamAMineralCountLabel, teamBMineralCountLabel);
+        
+        mineralNameContainer = new HBox(50);
+        mineralNameContainer.setAlignment(Pos.CENTER);
+        teamAMineralCountName = new Label("Team A Mineral Count");
+        teamAMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
+        teamBMineralCountName = new Label("Team B Mineral Count");
+        teamBMineralCountName.setMinWidth(Control.USE_PREF_SIZE);
+        mineralNameContainer.getChildren().addAll(teamAMineralCountName, teamBMineralCountName);
+        
+        bottomBox.getChildren().addAll(mineralCountContainer, mineralNameContainer);
+    }
+    private void createGameLeftNode() {
+        clearLeftNode();
+        createMainMenuButton();
+        leftBox.getChildren().addAll(mainMenuButton);
+    }
     private void createGameRightNode() {
+        clearRightNode();
         attributeNameBox = new VBox(5);
         changingAttributes = new VBox(5);
         
@@ -359,15 +391,19 @@ public class SpaceAI extends Application {
         typeAttribute = new Label("Type - ");
         teamAttribute = new Label("Team - ");
         healthAttribute = new Label("Health - ");
+        fuelAttribute = new Label("Fuel - ");
+        mineralAttribute = new Label("Minerals - ");
         locationAttribute = new Label("Location - ");
-        attributeNameBox.getChildren().addAll(IDAttribute, typeAttribute, teamAttribute, healthAttribute, locationAttribute);
+        attributeNameBox.getChildren().addAll(IDAttribute, typeAttribute, teamAttribute, healthAttribute, fuelAttribute, mineralAttribute, locationAttribute);
         
         IDLabel = new Label("None selected");
         typeLabel = new Label("None selected");
         teamLabel = new Label("None selected");
         healthLabel = new Label("None selected");
+        fuelLabel = new Label("None selected");
+        mineralLabel = new Label("None selected");
         locationLabel = new Label("None selected");
-        changingAttributes.getChildren().addAll(IDLabel, typeLabel, teamLabel, healthLabel, locationLabel);
+        changingAttributes.getChildren().addAll(IDLabel, typeLabel, teamLabel, healthLabel, fuelLabel, mineralLabel, locationLabel);
         
         unitInfoContainer = new HBox(5);
         unitInfoPadding = new Insets(5);
@@ -376,6 +412,9 @@ public class SpaceAI extends Application {
         unitInfoContainer.getChildren().addAll(attributeNameBox, changingAttributes);
         
         rightBox.getChildren().addAll(unitInfoContainer);
+    }
+    private void createGameScreen() {
+        clearGameScreen();
     }
     private void createStartGameLoop() {
         gamePlayLoop = new GamePlayLoop(this, gameWorld, castDirector);
@@ -396,17 +435,23 @@ public class SpaceAI extends Application {
         for(Actor actor : castDirector.getToBeAdded()) {
             actor.getSpriteFrame().setTranslateX(actor.getLocation().getPixelX());
             actor.getSpriteFrame().setTranslateY(actor.getLocation().getPixelY());
-            spriteFrameDict.put(actor.getSpriteFrame(), actor);
-            gameScreen.getChildren().add(actor.getSpriteFrame());
             if(actor instanceof Unit) {
+                actor.getSpriteFrame().setFitHeight(((Unit) actor).getType().getBodyRadius()*map.getCoordinateToPixel()*2);
+                actor.getSpriteFrame().setFitWidth(((Unit) actor).getType().getBodyRadius()*map.getCoordinateToPixel()*2);
                 castDirector.addCurrentUnit((Unit)actor);
             }
             if(actor instanceof Weapon) {
+                actor.getSpriteFrame().setFitHeight(((Weapon) actor).getType().getWeaponRadius()*map.getCoordinateToPixel()*2);
+                actor.getSpriteFrame().setFitWidth(((Weapon) actor).getType().getWeaponRadius()*map.getCoordinateToPixel()*2);
                 castDirector.addCurrentWeapon((Weapon)actor);
             }
             if(actor instanceof Environment) {
+                actor.getSpriteFrame().setFitHeight(((Environment) actor).getType().getBodyRadius()*map.getCoordinateToPixel()*2);
+                actor.getSpriteFrame().setFitWidth(((Environment) actor).getType().getBodyRadius()*map.getCoordinateToPixel()*2);
                 castDirector.addCurrentEnvironment((Environment)actor);
             }
+            spriteFrameDict.put(actor.getSpriteFrame(), actor);
+            gameScreen.getChildren().add(actor.getSpriteFrame());
         }
         castDirector.clearToBeAdded();
     }
@@ -434,6 +479,8 @@ public class SpaceAI extends Application {
             typeLabel.setText("None selected");
             teamLabel.setText("None selected");
             healthLabel.setText("None selected");
+            fuelLabel.setText("None selected");
+            mineralLabel.setText("None selected");
             locationLabel.setText("None selected");
         }     
     }
@@ -441,15 +488,21 @@ public class SpaceAI extends Application {
         IDLabel.setText(Integer.toString(actor.getID()));
         if(actor instanceof Unit) {
             typeLabel.setText((((Unit) actor).getType()).name());
-            healthLabel.setText(Integer.toString(actor.getHealth())); 
+            healthLabel.setText(Integer.toString(actor.getHealth()));
+            fuelLabel.setText(Integer.toString(((Unit) actor).getFuel()));
+            mineralLabel.setText("Not applicable");
         }
         else if(actor instanceof Environment) {
             typeLabel.setText((((Environment) actor).getType()).name());
             healthLabel.setText(Integer.toString(actor.getHealth())); 
+            fuelLabel.setText("Not applicable");
+            mineralLabel.setText(Integer.toString(((Environment) actor).getMineralCount()));
         }
         else if(actor instanceof Weapon) {
             typeLabel.setText((((Weapon) actor).getType()).name());
-            healthLabel.setText("Not applicable"); 
+            healthLabel.setText("Not applicable");
+            fuelLabel.setText("Not applicable");
+            mineralLabel.setText("Not applicable");
         }
         teamLabel.setText(actor.getTeam().name()); 
         locationLabel.setText(round(actor.getLocation().getX(),3)+ ", " + round(actor.getLocation().getY(),3));
@@ -469,6 +522,7 @@ public class SpaceAI extends Application {
         createEditorLeftNode();
         createEditorRightNode();
         createEditorTopNode();
+        createEditorGameScreen();
         createEditorSceneEventHandling();
     }
     private void initializeEditorMode() {
@@ -491,21 +545,27 @@ public class SpaceAI extends Application {
         createSizeSelection();
         createAddButton();
         createDeleteButton();
+        createClearButton();
         createEditorActorSelection();
         createInitialMineralCountSelection();
         createExportButton();
         createExportErrorLabel();
-        leftBox.getChildren().addAll(mainMenuButton, mapNameHB, sizeSelectorHB, addButton, deleteButton, editorActorSelectorHB, mineralSelectorHB, export, exportErrorLabel); 
+        leftBox.getChildren().addAll(mainMenuButton, mapNameHB, sizeSelectorHB, 
+                addButton, deleteButton, clearButton, editorActorSelectorHB, 
+                mineralSelectorHB, export, exportErrorLabel); 
     }
     private void createEditorRightNode() {
         clearRightNode();
+    }
+    private void createEditorGameScreen() {
+        clearGameScreen();
     }
     private void createEditorSceneEventHandling() {
         gameScreen.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             if(!(e.getPickResult().getIntersectedNode() instanceof ImageView) && add) {
                 selectedEditorActor.getSpriteFrame().setTranslateX(convertXCoordinate(e.getX()));
                 selectedEditorActor.getSpriteFrame().setTranslateY(convertYCoordinate(e.getY()));
-                if(assertOnScreen() && assertNoCollision() && assertHomeStationNumbers()) {
+                if(assertOnScreen() && assertNoCollision() && assertHomeStationNumbers() && assertNoMirrorEditorActorCollision()) {
                     addEditorActor();
                 }
             }
@@ -514,17 +574,6 @@ public class SpaceAI extends Application {
                 EditorActor mirrorEditorActor = editorActor.getMirroredEditorActor();
                 removeEditorActor(editorActor);
                 removeEditorActor(mirrorEditorActor);
-            }
-        });
-    }
-    private void createMainMenuButton() {
-        mainMenuButton = new Button("Main Menu");
-        mainMenuButton.setFocusTraversable(false);
-        mainMenuButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
-            try {
-                mainMenu();
-            } catch (IOException ex) {
-                Logger.getLogger(SpaceAI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
@@ -545,10 +594,11 @@ public class SpaceAI extends Application {
         sizeSelector.getSelectionModel().selectedIndexProperty()
             .addListener((ObservableValue<? extends Number> observableValue, Number value, Number new_value) -> {
                 switch((String) sizeSelector.getItems().get((Integer)new_value)) {
-                    case "Small" : selectedSize = 1; break;
+                    case "Large" : selectedSize = 1; break;
                     case "Medium" : selectedSize = 2; break;
-                    case "Large" : selectedSize = 3; break;
+                    case "Small" : selectedSize = 3; break;
                 }
+                adjustEditorActorSizes();
         });
         sizeSelectorHB = new HBox();
         sizeSelectorHB.getChildren().addAll(sizeSelectorLabel, sizeSelector);
@@ -568,6 +618,15 @@ public class SpaceAI extends Application {
         deleteButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             add = false;
             delete = true;
+        });
+    }
+    private void createClearButton() {
+        clearButton = new Button("Clear Actors");
+        clearButton.setFocusTraversable(false);
+        clearButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            addedEditorActors.clear();
+            spriteFrameDictEditor.clear();
+            clearGameScreen();
         });
     }
     private void createEditorActorSelection() {
@@ -637,6 +696,10 @@ public class SpaceAI extends Application {
     }
     private void addEditorActor() {
         EditorActor mirrorEditorActor = mirrorEditorActor();
+        selectedEditorActor.getSpriteFrame().setFitWidth(selectedEditorActor.getRadius()*(selectedSize/1)*2);
+        selectedEditorActor.getSpriteFrame().setFitHeight(selectedEditorActor.getRadius()*(selectedSize/1)*2);
+        mirrorEditorActor.getSpriteFrame().setFitWidth(selectedEditorActor.getRadius()*(selectedSize/1)*2);
+        mirrorEditorActor.getSpriteFrame().setFitHeight(selectedEditorActor.getRadius()*(selectedSize/1)*2);
         gameScreen.getChildren().addAll(selectedEditorActor.getSpriteFrame(), mirrorEditorActor.getSpriteFrame());
         addedEditorActors.add(selectedEditorActor);
         addedEditorActors.add(mirrorEditorActor);
@@ -658,10 +721,10 @@ public class SpaceAI extends Application {
             return coordinate - GameConstants.CENTER_HEIGHT/2;
     }
     private boolean assertOnScreen() {
-        if(selectedEditorActor.getSpriteFrame().getTranslateY() >= GameConstants.CENTER_HEIGHT/2 - selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
-        if(selectedEditorActor.getSpriteFrame().getTranslateY() <= -GameConstants.CENTER_HEIGHT/2 + selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
-        if(selectedEditorActor.getSpriteFrame().getTranslateX() >= GameConstants.CENTER_WIDTH/2 - selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
-        if(selectedEditorActor.getSpriteFrame().getTranslateX() <= -GameConstants.CENTER_WIDTH/2 + selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) { return false; }
+        if(selectedEditorActor.getSpriteFrame().getTranslateY() >= GameConstants.CENTER_HEIGHT/2 - selectedEditorActor.getRadius()*(selectedSize/1)) { return false; }
+        if(selectedEditorActor.getSpriteFrame().getTranslateY() <= -GameConstants.CENTER_HEIGHT/2 + selectedEditorActor.getRadius()*(selectedSize/1)) { return false; }
+        if(selectedEditorActor.getSpriteFrame().getTranslateX() >= GameConstants.CENTER_WIDTH/2 - selectedEditorActor.getRadius()*(selectedSize/1)) { return false; }
+        if(selectedEditorActor.getSpriteFrame().getTranslateX() <= -GameConstants.CENTER_WIDTH/2 + selectedEditorActor.getRadius()*(selectedSize/1)) { return false; }
         return true;
     }
     private boolean assertNoCollision() {
@@ -669,7 +732,7 @@ public class SpaceAI extends Application {
             for(EditorActor editActor : addedEditorActors) {
                 double dx = selectedEditorActor.getSpriteFrame().getTranslateX() - editActor.getSpriteFrame().getTranslateX();
                 double dy = selectedEditorActor.getSpriteFrame().getTranslateY() - editActor.getSpriteFrame().getTranslateY();
-                if(round(Math.sqrt(dx * dx + dy * dy),14) < selectedEditorActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL + editActor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) {
+                if(round(Math.sqrt(dx * dx + dy * dy),14) < selectedEditorActor.getRadius()*(selectedSize/1) + editActor.getRadius()*(selectedSize/1)) {
                     return false;
                 }                   
             }
@@ -689,6 +752,19 @@ public class SpaceAI extends Application {
         }
         return true;
     }
+    private boolean assertNoMirrorEditorActorCollision() {
+        double mirrorX = -selectedEditorActor.getSpriteFrame().getTranslateX();
+        double mirrorY = -selectedEditorActor.getSpriteFrame().getTranslateY();
+        return assertNoCollision(mirrorX, mirrorY);
+    }
+    private boolean assertNoCollision(double mirrorX, double mirrorY) {
+        double dx = selectedEditorActor.getSpriteFrame().getTranslateX() - mirrorX;
+        double dy = selectedEditorActor.getSpriteFrame().getTranslateY() - mirrorY;
+        if(round(Math.sqrt(dx * dx + dy * dy),14) < (selectedEditorActor.getRadius()*(selectedSize/1))*2) {
+            return false;
+        }                   
+        return true;
+    }
     private EditorActor mirrorEditorActor() {
         double mirrorX = -selectedEditorActor.getSpriteFrame().getTranslateX();
         double mirrorY = -selectedEditorActor.getSpriteFrame().getTranslateY();
@@ -697,6 +773,14 @@ public class SpaceAI extends Application {
         mirrorEditorActor.getSpriteFrame().setTranslateY(mirrorY);
                
         return mirrorEditorActor;
+    }
+    private void adjustEditorActorSizes() {
+        addedEditorActors.stream().map((editorActor) -> {
+            editorActor.getSpriteFrame().setFitWidth(editorActor.getRadius()*(selectedSize/1)*2);
+            return editorActor;
+        }).forEachOrdered((editorActor) -> {
+            editorActor.getSpriteFrame().setFitHeight(editorActor.getRadius()*(selectedSize/1)*2);
+        });
     }
     private void exportMap() throws IOException {
         String mapFileName = mapNameField.getText().replaceAll("\\s","");
@@ -714,17 +798,17 @@ public class SpaceAI extends Application {
             writer.newLine();
             for(EditorActor editorActor : addedEditorActors) {
                 if(editorActor.getType() instanceof EnvironmentType) {
-                    writer.write("environment:"+editorActor.getType()+"/"+editorActor.getSpriteFrame().getTranslateX()*GameConstants.PIXEL_TO_COORDINATE+"/"+
-                            (-editorActor.getSpriteFrame().getTranslateY()*GameConstants.PIXEL_TO_COORDINATE));
+                    writer.write("environment:"+editorActor.getType()+"/"+editorActor.getSpriteFrame().getTranslateX()*(1d/selectedSize)+"/"+
+                            (-editorActor.getSpriteFrame().getTranslateY()*(1d/selectedSize)));
                 }
                 else if(editorActor.getType() == UnitType.HOME_STATION) {
                     if(!editorActor.isMirror()) {
-                        writer.write("homeStationA:"+editorActor.getSpriteFrame().getTranslateX()*GameConstants.PIXEL_TO_COORDINATE+"/"+
-                            (-editorActor.getSpriteFrame().getTranslateY()*GameConstants.PIXEL_TO_COORDINATE));
+                        writer.write("homeStationA:"+editorActor.getSpriteFrame().getTranslateX()*(1d/selectedSize)+"/"+
+                            (-editorActor.getSpriteFrame().getTranslateY()*(1d/selectedSize)));
                     }
                     else {
-                        writer.write("homeStationB:"+editorActor.getSpriteFrame().getTranslateX()*GameConstants.PIXEL_TO_COORDINATE+"/"+
-                            (-editorActor.getSpriteFrame().getTranslateY()*GameConstants.PIXEL_TO_COORDINATE));
+                        writer.write("homeStationB:"+editorActor.getSpriteFrame().getTranslateX()*(1d/selectedSize)+"/"+
+                            (-editorActor.getSpriteFrame().getTranslateY()*(1d/selectedSize)));
                     }
                 }
                 writer.newLine();
@@ -753,16 +837,34 @@ public class SpaceAI extends Application {
     // *********************************
     
     private void clearTopNode() {
-        topBox.getChildren().removeAll(topBox.getChildren());
+        topBox.getChildren().clear();
     }
     private void clearBottomNode() {
-        bottomBox.getChildren().removeAll(bottomBox.getChildren());
+        bottomBox.getChildren().clear();
     }
     private void clearRightNode() {
-        rightBox.getChildren().removeAll(rightBox.getChildren());
+        rightBox.getChildren().clear();
     }
     private void clearLeftNode() {
-        leftBox.getChildren().removeAll(leftBox.getChildren());
+        leftBox.getChildren().clear();
+    }
+    private void clearGameScreen() {
+        if(gamePlayLoop != null) {
+            gamePlayLoop.stop();
+        }
+        gameScreen.getChildren().clear();
+    }
+    private void createMainMenuButton() {
+        mainMenuButton = new Button("Main Menu");
+        mainMenuButton.setFocusTraversable(false);
+        mainMenuButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            try {
+                mainMenu();
+                
+            } catch (IOException ex) {
+                Logger.getLogger(SpaceAI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
     
 }

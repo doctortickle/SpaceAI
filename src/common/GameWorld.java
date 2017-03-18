@@ -34,11 +34,11 @@ public class GameWorld {
     private int teamAMineralCount, teamBMineralCount;
     private Location teamAHomeStation, teamBHomeStation;
     private int gameSpeed;
-    private QuadTree quad;
-    private List<Actor> allActors;
+    private final QuadTree quad;
+    private final List<Actor> allActors;
     private GhostCircle ghostCircle;
-    private GameWinner gameWinner;
-    private Map map;
+    private final GameWinner gameWinner;
+    private final Map map;
 
     /**
      * Instantiates the GameWorld class and sets the starting value of class variables.
@@ -103,6 +103,24 @@ public class GameWorld {
      * Provides unique identification number.
      * @return   increments uniqueID 
      */
+    double getPixelToCoordinate() {
+        return Map.getPixelToCoordinate();
+    }// MOVE TO MAP 
+    double getCoordinateToPixel() {
+        return Map.getCoordinateToPixel();
+    }// MOVE TO MAP 
+    double getMinXCoordinate() {
+        return -((GameConstants.CENTER_WIDTH/2d)*getPixelToCoordinate());
+    }// MOVE TO MAP 
+    double getMaxXCoordinate() {
+        return (GameConstants.CENTER_WIDTH/2d)*getPixelToCoordinate();
+    }// MOVE TO MAP 
+    double getMinYCoordinate() {
+        return -((GameConstants.CENTER_HEIGHT/2d)*getPixelToCoordinate());
+    }// MOVE TO MAP 
+    double getMaxYCoordinate() {
+        return (GameConstants.CENTER_HEIGHT/2d)*getPixelToCoordinate();
+    }// MOVE TO MAP 
     private synchronized int getUniqueID() {
         return uniqueID++;
     }

@@ -34,10 +34,10 @@ public strictfp class WeaponController {
     public WeaponController(Weapon weapon, GameWorld gameWorld) {
         this.weapon = weapon;
         this.gameWorld = gameWorld;
-        this.leftBoundary = GameConstants.MIN_X_COORDINATE;
-        this.rightBoundary = GameConstants.MAX_X_COORDINATE;
-        this.bottomBoundary = GameConstants.MIN_Y_COORDINATE;
-        this.topBoundary = GameConstants.MAX_Y_COORDINATE;
+        this.leftBoundary = gameWorld.getMinXCoordinate();
+        this.rightBoundary = gameWorld.getMaxXCoordinate();
+        this.bottomBoundary = gameWorld.getMinYCoordinate();
+        this.topBoundary = gameWorld.getMaxYCoordinate();
     }
     
     // *********************************
@@ -160,16 +160,16 @@ public strictfp class WeaponController {
         Image newImage = null;
         switch(weapon.getType()) {
             case SMALL_BOMB : newImage = new Image("images/SMALL_BOMB_EXPLOSION.png", 
-                    weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
-                    weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
+                    weapon.getType().getExplosionRadius()*gameWorld.getCoordinateToPixel()*2, 
+                    weapon.getType().getExplosionRadius()*gameWorld.getCoordinateToPixel()*2, 
                     true, false, true); break;
             case LARGE_BOMB : newImage = new Image("images/LARGE_BOMB_EXPLOSION.png", 
-                    weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
-                    weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
+                    weapon.getType().getExplosionRadius()*gameWorld.getCoordinateToPixel()*2, 
+                    weapon.getType().getExplosionRadius()*gameWorld.getCoordinateToPixel()*2, 
                     true, false, true); break;
             case MINE : newImage = new Image("images/MINE_EXPLOSION.png", 
-                    weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
-                    weapon.getType().getExplosionRadius()*GameConstants.COORDINATE_TO_PIXEL*2, 
+                    weapon.getType().getExplosionRadius()*gameWorld.getCoordinateToPixel()*2, 
+                    weapon.getType().getExplosionRadius()*gameWorld.getCoordinateToPixel()*2, 
                     true, false, true); break;
         }
         weapon.getSpriteFrame().setImage(newImage);

@@ -32,29 +32,33 @@ public strictfp class Map {
     
     private String mapName;
     private double sizeFactor;
+    private static double pixelToCoordinate, coordinateToPixel;
     private final List<Object[]> environmentList;
     private Location homeStationAStartPosition;
     private Location homeStationBStartPosition;
     private int startingMineralCount;
     private FileReader fr;
     private BufferedReader br;
-    private final File mapFile;
+    private final File mapFile;  
 
     public Map(File mapFile) throws IOException {
         this.mapFile = mapFile;
         this.mapName = null;
-        this.sizeFactor = 0;
+        this.sizeFactor = 2;
         this.environmentList = new ArrayList<>();
         this.homeStationAStartPosition = null;
         this.homeStationBStartPosition = null;
         this.startingMineralCount = 0;
+        Map.pixelToCoordinate = 1d/this.sizeFactor;
+        Map.coordinateToPixel = this.sizeFactor/1d;       
         fileReader();
     }
     
     private void fileReader() throws FileNotFoundException, IOException {
         fr = new FileReader(mapFile);
         br = new BufferedReader(fr);
-        String line = null;
+        String line;
+        line = null;
         while ( (line = br.readLine()) != null) {
             String[] array = line.split(":");
             switch(array[0]) {
@@ -72,6 +76,8 @@ public strictfp class Map {
     }
     private void setSizeFactor(String sizeFactor) {
         this.sizeFactor = Integer.parseInt(sizeFactor);
+        Map.pixelToCoordinate = 1d/this.sizeFactor;
+        Map.coordinateToPixel = this.sizeFactor/1d;   
     }
     private void setInitialEnvironment(String environment) {
         EnvironmentType environmentType;
@@ -118,6 +124,12 @@ public strictfp class Map {
     public double getSizeFactor() {
         return sizeFactor;
     }
+    static double getPixelToCoordinate() {
+        return pixelToCoordinate;
+    }
+    static double getCoordinateToPixel() {
+        return coordinateToPixel;
+    }
     public List<Object[]> getEnvironmentList() {
         return environmentList;
     }
@@ -130,6 +142,4 @@ public strictfp class Map {
     public int getStartingMineralCount() {
         return startingMineralCount;
     }
-    
-
 }

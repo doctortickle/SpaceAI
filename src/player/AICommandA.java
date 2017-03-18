@@ -19,7 +19,6 @@ package player;
 import common.AIController;
 import common.Direction;
 import common.Environment;
-import common.Location;
 import common.UnitType;
 import java.util.List;
 
@@ -99,27 +98,14 @@ public class AICommandA {
         // This code will be run every round.
         List<Environment> nearbyEnvironment = ac.senseEnvironment();
         if(nearbyEnvironment.size() > 0) {
-            Environment environment = nearbyEnvironment.get(0);
-            if(ac.canOrbit(environment)) {
-                ac.orbitClockwise(environment);
-                /*if(ac.canConstruct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite()) && dockCount == 0 ) {
-                    ac.construct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite());
-                    dockCount++;
-                }*/
-                if(environment.canBeHarvested()) {
-                    System.out.println("HERE!");
-                    if(ac.canConstruct(UnitType.HARVESTING_FACILITY, ac.getLocation().directionTo(environment.getLocation()))) {
-                        ac.construct(UnitType.HARVESTING_FACILITY, ac.getLocation().directionTo(environment.getLocation()));   
-                    }
+            Direction[] directions = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+            for(Direction direction : directions) {
+                if(ac.canConstruct(UnitType.SMALL_DOCK, direction)) {
+                    ac.construct(UnitType.SMALL_DOCK, direction); 
+                    break;
                 }
-            }
-            else {
-                ac.move(ac.getLocation().directionTo(environment.getLocation()));
-            }
-            if(ac.isReadyToMove()) {
-                ac.move(Direction.getRandomDirection());
-            }
-
+            }           
+            ac.move(Direction.getRandomDirection());
         }
         else {
             ac.move(Direction.getRandomDirection());
@@ -133,16 +119,14 @@ public class AICommandA {
         List<Environment> nearbyEnvironment = ac.senseEnvironment();
         if(nearbyEnvironment.size() > 0) {
             Environment environment = nearbyEnvironment.get(0);
-            if(ac.canOrbit(environment)) {
-                ac.orbitClockwise(environment);
-                /*if(ac.canConstruct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite()) && dockCount == 0 ) {
-                    ac.construct(UnitType.SMALL_DOCK, ac.getLocation().directionTo(environment.getLocation()).opposite());
-                    dockCount++;
-                }*/
-                if(environment.canBeHarvested()) {
-                    System.out.println("HERE!");
-                    if(ac.canConstruct(UnitType.HARVESTING_FACILITY, ac.getLocation().directionTo(environment.getLocation()))) {
-                        ac.construct(UnitType.HARVESTING_FACILITY, ac.getLocation().directionTo(environment.getLocation()));   
+            if(environment.canBeHarvested()) {
+                if(ac.getLocation().distanceTo(environment.getLocation()) < environment.getType().getBodyRadius() + UnitType.HARVESTING_FACILITY.getHarvestingRadius() + ac.getBodyRadius()) {
+                    Direction[] directions = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+                    for(Direction direction : directions) {
+                        if(ac.canConstruct(UnitType.HARVESTING_FACILITY, direction)) {
+                            ac.construct(UnitType.HARVESTING_FACILITY, direction); 
+                            break;
+                        }
                     }
                 }
             }
@@ -156,7 +140,7 @@ public class AICommandA {
         }
         else {
             ac.move(Direction.getRandomDirection());
-        }
+        }          
     }
     // *********************************
     // *********** REFUELER ************
@@ -168,12 +152,27 @@ public class AICommandA {
     // ********* HOME STATION **********
     // *********************************
     int builderCount = 0;
+    int harvesterCount = 0;
     private void runHomeStation() {
         // This code will be run every round.
-        if(builderCount < 5) {
-            if(ac.canConstruct(UnitType.FIGHTER, Direction.SOUTH)) {
-                ac.construct(UnitType.FIGHTER, Direction.SOUTH);
-                builderCount++;
+        if(builderCount < 2) {
+            Direction[] directions = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+            for(Direction direction : directions) {
+                if(ac.canConstruct(UnitType.BUILDER, direction)) {
+                    ac.construct(UnitType.BUILDER, direction);
+                    builderCount++;
+                    break;
+                }
+            }
+        }
+        if(harvesterCount < 2) {
+            Direction[] directions = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+            for(Direction direction : directions) {
+                if(ac.canConstruct(UnitType.HARVESTER, direction)) {
+                    ac.construct(UnitType.HARVESTER, direction);
+                    harvesterCount++;
+                    break;
+                }
             }
         }
     }

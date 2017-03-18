@@ -34,37 +34,37 @@ public strictfp enum EnvironmentType {
      */
     SMALL_ASTEROID    (1000,    0,      10,      5000,   (Math.PI)/6,
     /*              maxHP   trvSpd    Rad     MinMax      RotV    */
-                    new Image("images/TestImage.png", 10*GameConstants.COORDINATE_TO_PIXEL*2, 10*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)),
+                    new Image("images/TestImage.png")),
     /**
      * A large asteroid, capable of being harvested by a HARVESTER or hosting a MINING_FACILITY.
      */
     LARGE_ASTEROID    (3000,    0,     20,      12000,  (Math.PI)/9,
     /*              maxHP   trvSpd    Rad     MinMax      RotV    */
-                    new Image("images/TestImage.png", 20*GameConstants.COORDINATE_TO_PIXEL*2, 20*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)),
+                    new Image("images/TestImage.png")),
     /**
      * A small meteor, capable of being harvested by a HARVESTER.
      */
     SMALL_METEOR  (700,       3,      3,      500,    (Math.PI)/6,
     /*              maxHP   trvSpd    Rad    MinMax      RotV    */
-                    new Image("images/TestImage.png", 3*GameConstants.COORDINATE_TO_PIXEL*2, 3*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)),
+                    new Image("images/TestImage.png")),
     /**
      * A large meteor, capable of being harvested by a HARVESTER.
      */
     LARGE_METEOR  (1500,      2,       6,     1000,   (Math.PI)/9,
     /*              maxHP   trvSpd    Rad    MinMax      RotV    */
-                    new Image("images/TestImage.png", 6*GameConstants.COORDINATE_TO_PIXEL*2, 6*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)),
+                    new Image("images/TestImage.png")),
     /**
      * A small planet, capable of hosting a SMALL_DOCK, LARGE_DOCK, or CAPITAL_DOCK. Maximum capacity of 2.
      */
     SMALL_PLANET    (10000,    0,     30,      0,      (Math.PI)/9,
     /*              maxHP   trvSpd    Rad    MinMax      RotV    */
-                    new Image("images/TestImage.png", 30*GameConstants.COORDINATE_TO_PIXEL*2, 30*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true)),
+                    new Image("images/TestImage.png")),
     /**
      * A large planet, capable of hosting a SMALL_DOCK, LARGE_DOCK, or CAPITAL_DOCK. Maximum capacity of 2.
      */
     LARGE_PLANET    (30000,    0,     50,      0,      (Math.PI)/12,
     /*              maxHP   trvSpd    Rad    MinMax      RotV    */
-                    new Image("images/LARGE_PLANET.png", 50*GameConstants.COORDINATE_TO_PIXEL*2, 50*GameConstants.COORDINATE_TO_PIXEL*2, true, false, true));
+                    new Image("images/LARGE_PLANET.png"));
 
     /**
      * The maximum (not current) health of a given EnvironmentType.

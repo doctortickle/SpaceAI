@@ -1,0 +1,13 @@
+mapName:Medium Test
+sizeFactor:2
+environment:LARGE_ASTEROID/-149.0/34.5
+environment:LARGE_ASTEROID/149.0/-34.5
+environment:LARGE_ASTEROID/-47.0/89.5
+environment:LARGE_ASTEROID/47.0/-89.5
+environment:LARGE_ASTEROID/70.5/83.0
+environment:LARGE_ASTEROID/-70.5/-83.0
+environment:LARGE_ASTEROID/-58.5/-30.5
+environment:LARGE_ASTEROID/58.5/30.5
+homeStationA:-153.0/140.0
+homeStationB:153.0/-140.0
+initialMineralCount:1000

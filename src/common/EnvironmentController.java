@@ -31,10 +31,10 @@ public strictfp class EnvironmentController {
     public EnvironmentController(Environment environment, GameWorld gameWorld) {
         this.environment = environment;
         this.gameWorld = gameWorld;
-        this.leftBoundary = GameConstants.MIN_X_COORDINATE;
-        this.rightBoundary = GameConstants.MAX_X_COORDINATE;
-        this.bottomBoundary = GameConstants.MIN_Y_COORDINATE;
-        this.topBoundary = GameConstants.MAX_Y_COORDINATE;
+        this.leftBoundary = gameWorld.getMinXCoordinate();
+        this.rightBoundary = gameWorld.getMaxXCoordinate();
+        this.bottomBoundary = gameWorld.getMinYCoordinate();
+        this.topBoundary = gameWorld.getMaxYCoordinate();
     }
     
     // *********************************

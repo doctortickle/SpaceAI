@@ -1,0 +1,17 @@
+mapName:Battleground
+sizeFactor:2
+homeStationA:-204.5/156.5
+homeStationB:204.5/-156.5
+environment:LARGE_PLANET/-134.5/97.0
+environment:LARGE_PLANET/134.5/-97.0
+environment:LARGE_ASTEROID/-179.5/22.0
+environment:LARGE_ASTEROID/179.5/-22.0
+environment:LARGE_ASTEROID/-96.0/25.5
+environment:LARGE_ASTEROID/96.0/-25.5
+environment:LARGE_ASTEROID/-51.5/125.0
+environment:LARGE_ASTEROID/51.5/-125.0
+environment:SMALL_PLANET/-164.0/-60.0
+environment:SMALL_PLANET/164.0/60.0
+environment:SMALL_PLANET/-104.0/-133.5
+environment:SMALL_PLANET/104.0/133.5
+initialMineralCount:2000

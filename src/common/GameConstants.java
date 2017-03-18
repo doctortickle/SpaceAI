@@ -31,9 +31,6 @@ public strictfp interface GameConstants {
     // ****** ANIMATION CONSTANTS ******
     // *********************************
     
-    final double SIZE_FACTOR = 2d; // Bigger size factor = bigger units and a smaller map. Image sprites go up to SIZE_FACTOR 3.
-    final double PIXEL_TO_COORDINATE = 1d/SIZE_FACTOR;
-    final double COORDINATE_TO_PIXEL = SIZE_FACTOR/1d;
     final int FRAMES_PER_ROUND_9 = 1;
     final int FRAMES_PER_ROUND_8 = 2;
     final int FRAMES_PER_ROUND_7 = 3;
@@ -52,10 +49,6 @@ public strictfp interface GameConstants {
     // *********************************
     
     final double MAX_OBJECT_RADIUS = EnvironmentType.LARGE_PLANET.getBodyRadius();
-    final double MIN_X_COORDINATE = -((CENTER_WIDTH/2d)*PIXEL_TO_COORDINATE);
-    final double MAX_X_COORDINATE = ((CENTER_WIDTH/2d)*PIXEL_TO_COORDINATE);
-    final double MIN_Y_COORDINATE = -((CENTER_HEIGHT/2d)*PIXEL_TO_COORDINATE);
-    final double MAX_Y_COORDINATE = ((CENTER_HEIGHT/2d)*PIXEL_TO_COORDINATE);
     final double TOP_LEFT_X_PIXEL = -(CENTER_WIDTH/2d);
     final double TOP_LEFT_Y_PIXEL = -(CENTER_HEIGHT/2d);
     

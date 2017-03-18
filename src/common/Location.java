@@ -17,8 +17,8 @@
 package common;
 
 import static common.DecimalUtils.round;
-import static common.GameConstants.COORDINATE_TO_PIXEL;
-import static common.GameConstants.PIXEL_TO_COORDINATE;
+import static common.Map.getCoordinateToPixel;
+import static common.Map.getPixelToCoordinate;
 
 /**
  *
@@ -60,13 +60,13 @@ public strictfp class Location {
     }
     
     private double coordinateToPixel(double i) {
-        return i*COORDINATE_TO_PIXEL;      
+        return i*getCoordinateToPixel();      
     }
     private double pixelToCoordinate(double i) {
         if(i==0) {
             return 0;
         }
-        return i*PIXEL_TO_COORDINATE;      
+        return i*getPixelToCoordinate();      
     }
     public double getX() {
         return x;

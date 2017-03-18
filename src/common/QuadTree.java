@@ -18,6 +18,8 @@ package common;
 
 import java.util.ArrayList;
 import java.util.List;
+import static common.Map.getCoordinateToPixel;
+import static common.Map.getPixelToCoordinate;
 
 /**
  *
@@ -71,11 +73,11 @@ public class QuadTree {
         double xMidpoint = x + (width / 2);
         double yMidpoint = y + (height / 2);
         // Object can completely fit within the top quadrants
-        boolean topQuadrant = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) < yMidpoint);
+        boolean topQuadrant = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + (actor.getRadius()*getCoordinateToPixel()) < yMidpoint);
         // Object can completely fit within the bottom quadrants
-        boolean bottomQuadrant = (actor.getLocation().getPixelY() > yMidpoint && actor.getLocation().getPixelY() - (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) > yMidpoint);
+        boolean bottomQuadrant = (actor.getLocation().getPixelY() > yMidpoint && actor.getLocation().getPixelY() - (actor.getRadius()*getCoordinateToPixel()) > yMidpoint);
         // Object can completely fit within the left quadrants
-        if (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) < xMidpoint) {
+        if (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + (actor.getRadius()*getCoordinateToPixel()) < xMidpoint) {
             if (topQuadrant) {
                 index = 3;
             }
@@ -84,7 +86,7 @@ public class QuadTree {
             }
         }
          // Object can completely fit within the right quadrants
-        else if (actor.getLocation().getPixelX() > xMidpoint && actor.getLocation().getPixelX() - (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) > xMidpoint) {
+        else if (actor.getLocation().getPixelX() > xMidpoint && actor.getLocation().getPixelX() - (actor.getRadius()*getCoordinateToPixel()) > xMidpoint) {
             if (topQuadrant) {
                 index = 0;
             }
@@ -128,10 +130,10 @@ public class QuadTree {
         else if (index == -1 && nodes[0] != null) {
             double xMidpoint = x + (width / 2);
             double yMidpoint = y + (height / 2);
-            boolean topHalf = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) < yMidpoint);
-            boolean bottomHalf = (actor.getLocation().getPixelY() > yMidpoint && actor.getLocation().getPixelY() - (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) > yMidpoint);
-            boolean rightHalf = (actor.getLocation().getPixelX() > xMidpoint && actor.getLocation().getPixelX() - (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) > xMidpoint);
-            boolean leftHalf = (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + (actor.getRadius()*GameConstants.COORDINATE_TO_PIXEL) < xMidpoint);
+            boolean topHalf = (actor.getLocation().getPixelY() < yMidpoint && actor.getLocation().getPixelY() + (actor.getRadius()*getCoordinateToPixel()) < yMidpoint);
+            boolean bottomHalf = (actor.getLocation().getPixelY() > yMidpoint && actor.getLocation().getPixelY() - (actor.getRadius()*getCoordinateToPixel()) > yMidpoint);
+            boolean rightHalf = (actor.getLocation().getPixelX() > xMidpoint && actor.getLocation().getPixelX() - (actor.getRadius()*getCoordinateToPixel()) > xMidpoint);
+            boolean leftHalf = (actor.getLocation().getPixelX() < xMidpoint && actor.getLocation().getPixelX() + (actor.getRadius()*getCoordinateToPixel()) < xMidpoint);
             if(topHalf) {
                 nodes[0].retrieve(returnActors, actor); 
                 nodes[3].retrieve(returnActors, actor);

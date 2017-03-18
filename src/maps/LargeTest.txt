@@ -1,0 +1,21 @@
+mapName:Large Test
+sizeFactor:1
+environment:LARGE_PLANET/-364.0/16.0
+environment:LARGE_PLANET/364.0/-16.0
+environment:LARGE_METEOR/-211.0/154.0
+environment:LARGE_METEOR/211.0/-154.0
+environment:LARGE_METEOR/-149.0/35.0
+environment:LARGE_METEOR/149.0/-35.0
+environment:LARGE_METEOR/-219.0/-59.0
+environment:LARGE_METEOR/219.0/59.0
+environment:LARGE_METEOR/-302.0/-123.0
+environment:LARGE_METEOR/302.0/123.0
+homeStationA:37.0/280.0
+homeStationB:-37.0/-280.0
+environment:SMALL_PLANET/-322.0/-189.0
+environment:SMALL_PLANET/322.0/189.0
+environment:SMALL_PLANET/-162.0/-156.0
+environment:SMALL_PLANET/162.0/156.0
+environment:SMALL_PLANET/-66.0/156.0
+environment:SMALL_PLANET/66.0/-156.0
+initialMineralCount:1000

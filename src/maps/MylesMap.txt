@@ -1,0 +1,11 @@
+mapName:Myles Map
+sizeFactor:2
+homeStationA:-26.0/142.5
+homeStationB:26.0/-142.5
+environment:SMALL_PLANET/-137.0/10.0
+environment:SMALL_PLANET/137.0/-10.0
+environment:SMALL_PLANET/48.5/18.5
+environment:SMALL_PLANET/-48.5/-18.5
+environment:LARGE_PLANET/-174.0/-72.0
+environment:LARGE_PLANET/174.0/72.0
+initialMineralCount:2000

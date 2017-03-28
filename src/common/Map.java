@@ -118,10 +118,10 @@ public strictfp class Map {
         this.startingMineralCount = Integer.parseInt(mineralCount);
     }  
 
-    public String getMapName() {
+    String getMapName() {
         return mapName;
     }
-    public double getSizeFactor() {
+    double getSizeFactor() {
         return sizeFactor;
     }
     static double getPixelToCoordinate() {
@@ -130,16 +130,28 @@ public strictfp class Map {
     static double getCoordinateToPixel() {
         return coordinateToPixel;
     }
-    public List<Object[]> getEnvironmentList() {
+    static double getMinXCoordinate() {
+        return -((GameConstants.CENTER_WIDTH/2d)*getPixelToCoordinate());
+    }// MOVE TO MAP 
+    static double getMaxXCoordinate() {
+        return (GameConstants.CENTER_WIDTH/2d)*getPixelToCoordinate();
+    }// MOVE TO MAP 
+    static double getMinYCoordinate() {
+        return -((GameConstants.CENTER_HEIGHT/2d)*getPixelToCoordinate());
+    }// MOVE TO MAP 
+    static double getMaxYCoordinate() {
+        return (GameConstants.CENTER_HEIGHT/2d)*getPixelToCoordinate();
+    }// MOVE TO MAP 
+    List<Object[]> getEnvironmentList() {
         return environmentList;
     }
-    public Location getHomeStationAStartPosition() {
+    Location getHomeStationAStartPosition() {
         return homeStationAStartPosition;
     }
-    public Location getHomeStationBStartPosition() {
+    Location getHomeStationBStartPosition() {
         return homeStationBStartPosition;
     }
-    public int getStartingMineralCount() {
+    int getStartingMineralCount() {
         return startingMineralCount;
     }
 }

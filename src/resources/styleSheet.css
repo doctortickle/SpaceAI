@@ -1,25 +1,25 @@
 #root {
-	-fx-background-color: #ffff66;
+	-fx-background-color: #757e8e;
 }
 
 #top-node {
-	-fx-background-color: #ffff66;
+	-fx-background-color: #757e8e;
 }
 
 #right-node {
-	-fx-background-color: #ffff66;
+	-fx-background-color: #757e8e;
 }
 
 #left-node {
-	-fx-background-color: #ffff66;
+	-fx-background-color: #757e8e;
 }
 
 #bottom-node {
-	-fx-background-color: #ffff66;
+	-fx-background-color: #757e8e;
 }
 
 #center-node {
 	-fx-background-color: #000000;
-	-fx-border-color: -fx-text-box-border;
+	-fx-border-color: #000000;
   	-fx-border-width: 1;
 }

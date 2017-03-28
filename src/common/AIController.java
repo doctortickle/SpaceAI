@@ -40,10 +40,10 @@ public strictfp class AIController {
     AIController(Unit unit, GameWorld gameWorld) {
         this.unit = unit;
         this.gameWorld = gameWorld;
-        this.leftBoundary = gameWorld.getMinXCoordinate();
-        this.rightBoundary = gameWorld.getMaxXCoordinate();
-        this.bottomBoundary = gameWorld.getMinYCoordinate();
-        this.topBoundary = gameWorld.getMaxYCoordinate();
+        this.leftBoundary = Map.getMinXCoordinate();
+        this.rightBoundary = Map.getMaxXCoordinate();
+        this.bottomBoundary = Map.getMinYCoordinate();
+        this.topBoundary = Map.getMaxYCoordinate();
         this.defaultDirection = new Direction(0);
     }
 

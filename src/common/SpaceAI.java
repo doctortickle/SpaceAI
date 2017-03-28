@@ -14,7 +14,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,7 +33,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -105,11 +103,10 @@ public class SpaceAI extends Application {
         root = new BorderPane();
         root.setId("root");
         scene = new Scene(root, GameConstants.WINDOW_WIDTH, GameConstants.WINDOW_HEIGHT);
-        primaryStage.setMinWidth(GameConstants.WINDOW_WIDTH);
-        primaryStage.setMaxWidth(GameConstants.WINDOW_WIDTH);
-        primaryStage.setMinHeight(GameConstants.WINDOW_HEIGHT+((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2));
-        primaryStage.setMaxHeight(GameConstants.WINDOW_HEIGHT+((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2));
+        primaryStage.setMinWidth(GameConstants.CENTER_WIDTH);
+        primaryStage.setMinHeight(GameConstants.CENTER_HEIGHT);
         primaryStage.setScene(scene);
+        primaryStage.setFullScreen(true);
         primaryStage.show();
     }
     private void getCSS() {
@@ -128,46 +125,62 @@ public class SpaceAI extends Application {
         bottomBoxPadding = new Insets(5);
         bottomBox.setPadding(bottomBoxPadding);
         bottomBox.setAlignment(Pos.CENTER);
-        bottomBox.setMinWidth(GameConstants.WINDOW_WIDTH);
-        bottomBox.setMinHeight((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2);
+        bottomBox.setMinHeight((scene.getHeight() - GameConstants.CENTER_HEIGHT)/2);
+        scene.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+                bottomBox.setMinHeight(((Double) newSceneHeight - GameConstants.CENTER_HEIGHT)/2);
+            }
+        });
+        
         root.setBottom(bottomBox);
-        BorderPane.setAlignment(bottomBox, Pos.CENTER);
         root.getBottom().setId("bottom-node");
+        root.getBottom().applyCss();
     }
     private void createTopNode() {
         topBox = new VBox(5);
         topBoxPadding = new Insets(5);
         topBox.setPadding(topBoxPadding);
         topBox.setAlignment(Pos.CENTER);
-        topBox.setMinWidth(GameConstants.WINDOW_WIDTH);
-        topBox.setMinHeight((GameConstants.WINDOW_HEIGHT-GameConstants.CENTER_HEIGHT)/2);
+        topBox.setMinHeight((scene.getHeight() - GameConstants.CENTER_HEIGHT)/2);
+        scene.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+                topBox.setMinHeight(((Double) newSceneHeight - GameConstants.CENTER_HEIGHT)/2);
+            }
+        });
+        
         root.setTop(topBox);
-        BorderPane.setAlignment(topBox, Pos.CENTER);
-        root.getBottom().setId("top-node");
+        root.getTop().setId("top-node");
+        root.getTop().applyCss();
     }
     private void createRightNode() {
-        rightBox = new VBox();
-        rightBox.setMinWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
-        rightBox.setMaxWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
-        rightBox.setMinHeight(GameConstants.CENTER_HEIGHT);
-        rightBox.setMaxHeight(GameConstants.CENTER_HEIGHT);
+        rightBox = new VBox(5);
         rightBox.setAlignment(Pos.CENTER);
+        rightBox.setMaxHeight(GameConstants.CENTER_HEIGHT);
+        rightBox.setMinWidth((scene.getWidth() - GameConstants.CENTER_WIDTH)/2);
+        scene.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+                rightBox.setMinWidth(((Double) newSceneWidth - GameConstants.CENTER_WIDTH)/2);
+            }
+        });
         
         root.setRight(rightBox);
-        BorderPane.setAlignment(rightBox, Pos.CENTER);
         root.getRight().setId("right-node");
+        root.getRight().applyCss();
     }
     private void createLeftNode() {
         leftBox = new VBox(5);
-        leftBox.setMinWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
-        leftBox.setMaxWidth((GameConstants.WINDOW_WIDTH-GameConstants.CENTER_WIDTH)/2);
-        leftBox.setMinHeight(GameConstants.CENTER_HEIGHT);
-        leftBox.setMaxHeight(GameConstants.CENTER_HEIGHT);
         leftBox.setAlignment(Pos.CENTER);
+        leftBox.setMaxHeight(GameConstants.CENTER_HEIGHT);
+        leftBox.setMinWidth((scene.getWidth() - GameConstants.CENTER_WIDTH)/2);
+        scene.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+                leftBox.setMinWidth(((Double) newSceneWidth - GameConstants.CENTER_WIDTH)/2);
+            }
+        });
         
         root.setLeft(leftBox);
-        BorderPane.setAlignment(leftBox, Pos.CENTER);
         root.getLeft().setId("left-node");
+        root.getLeft().applyCss();
     }
     private void createCenterNode() {
         gameScreen = new StackPane();
@@ -175,6 +188,7 @@ public class SpaceAI extends Application {
         gameScreen.setMaxSize(GameConstants.CENTER_WIDTH, GameConstants.CENTER_HEIGHT);
         root.setCenter(gameScreen);
         root.getCenter().setId("center-node");
+        root.getCenter().applyCss();
     }
     
     // *********************************
@@ -425,7 +439,7 @@ public class SpaceAI extends Application {
     // ****** GAME ANIMATION ***********
     // *********************************
     
-    public void update() {
+    void update() {
         removeGameActorNodes();
         addGameActorNodes();
         updateMineralCountLabels();
@@ -865,6 +879,5 @@ public class SpaceAI extends Application {
                 Logger.getLogger(SpaceAI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-    }
-    
+    }    
 }

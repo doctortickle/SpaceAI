@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and open the template in the editorButton.
  */
 package common;
 
@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
@@ -48,19 +50,19 @@ import javafx.stage.Stage;
  *
  * @author Dylan Russell
  */
-public class SpaceAI extends Application {
-    private boolean startGame, pause, editorMode, delete, add;
+class SpaceAI extends Application {
+    private boolean startGame, pause, editorMode, delete, add, recordReplay;
     private Scene scene;
     private BorderPane root;
     private StackPane gameScreen;
     private Label teamAMineralCountLabel, teamBMineralCountLabel, teamAMineralCountName, teamBMineralCountName, sliderName,
             IDAttribute, typeAttribute, teamAttribute, healthAttribute, locationAttribute, IDLabel, typeLabel, teamLabel, healthLabel, locationLabel,
-            mapNameLabel, exportErrorLabel, fuelLabel, mineralLabel, fuelAttribute, mineralAttribute;
+            mapNameLabel, exportErrorLabel, fuelLabel, mineralLabel, fuelAttribute, mineralAttribute, replayNameLabel;
     private Slider speedSlider;
     private int teamAMineralCount, teamBMineralCount;
     private VBox leftBox, attributeNameBox, changingAttributes, bottomBox, topBox, rightBox; 
     private HBox mineralCountContainer, mineralNameContainer, sliderContainer, unitInfoContainer, mapNameHB, sizeSelectorHB,
-            editorActorSelectorHB, mineralSelectorHB;
+            editorActorSelectorHB, mineralSelectorHB, replayHB;
     private Insets unitInfoPadding, bottomBoxPadding, topBoxPadding;  
     private GamePlayLoop gamePlayLoop;
     private CastingDirector castDirector;
@@ -68,7 +70,7 @@ public class SpaceAI extends Application {
     private GameWorld gameWorld;
     private Actor currentSelection;
     private Map map;
-    private Button play, editor, export, addButton, deleteButton, mainMenuButton, clearButton;
+    private Button play, editorButton, exportButton, addButton, deleteButton, mainMenuButton, clearButton;
     private ChoiceBox mapSelector;
     private ObservableList<String> mapNames;
     private HashMap<String, File> mapDict;
@@ -76,11 +78,12 @@ public class SpaceAI extends Application {
     private HashMap<ImageView, EditorActor> spriteFrameDictEditor;
     private File selectedMap;
     private int selectedSize, mineralCount;
-    private TextField mapNameField;
+    private TextField mapNameField, replayNameField;
     private EditorActor selectedEditorActor;
     private List<EditorActor> addedEditorActors;
     private ImageView titleScreenFrame;
     private Image titleScreen;
+    private CheckBox replayCB;
     
     @Override
     public void start(Stage primaryStage) throws ActionException, IOException {
@@ -90,7 +93,7 @@ public class SpaceAI extends Application {
         mainMenu();
     }
 
-    public static void main(String[] args) {
+    private static void main(String[] args) {
         launch(args);
     }
     
@@ -217,8 +220,9 @@ public class SpaceAI extends Application {
         clearLeftNode();
         createPlayButton();
         createMapSelector();
+        createReplayEntry();
         createEditorButton();
-        leftBox.getChildren().addAll(mapSelector, play, editor);
+        leftBox.getChildren().addAll(mapSelector, play, replayHB, editorButton);
     }
     private void createMainRightNode() {
         clearRightNode();
@@ -254,10 +258,24 @@ public class SpaceAI extends Application {
                 selectedMap = mapDict.get((String) mapSelector.getItems().get((Integer)new_value));
         });        
     }
+    private void createReplayEntry() {
+        replayNameLabel = new Label("Replay Name: ");
+        replayNameField = new TextField ();
+        replayCB = new CheckBox("Record");
+        replayCB.setSelected(true);
+        recordReplay = true;
+        replayCB.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+            recordReplay = new_val;
+            System.out.println(recordReplay);
+        });
+        replayHB = new HBox();
+        replayHB.getChildren().addAll(replayNameLabel, replayNameField, replayCB);
+        replayHB.setSpacing(10);
+    }
     private void createEditorButton() {
-        editor = new Button("Map Editor");
-        editor.setFocusTraversable(false);
-        editor.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+        editorButton = new Button("Map Editor");
+        editorButton.setFocusTraversable(false);
+        editorButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             if(!startGame) {
                 editorMode();
             }
@@ -430,7 +448,7 @@ public class SpaceAI extends Application {
     private void createGameScreen() {
         clearGameScreen();
     }
-    private void createStartGameLoop() {
+    private void createStartGameLoop() throws IOException {
         gamePlayLoop = new GamePlayLoop(this, gameWorld, castDirector);
         gamePlayLoop.start(); 
     }
@@ -521,9 +539,7 @@ public class SpaceAI extends Application {
         teamLabel.setText(actor.getTeam().name()); 
         locationLabel.setText(round(actor.getLocation().getX(),3)+ ", " + round(actor.getLocation().getY(),3));
     }
-    GameWorld getGameWorld() {
-        return gameWorld;
-    } 
+
     
     // *********************************
     // ********* EDITOR MODE ***********
@@ -566,7 +582,7 @@ public class SpaceAI extends Application {
         createExportErrorLabel();
         leftBox.getChildren().addAll(mainMenuButton, mapNameHB, sizeSelectorHB, 
                 addButton, deleteButton, clearButton, editorActorSelectorHB, 
-                mineralSelectorHB, export, exportErrorLabel); 
+                mineralSelectorHB, exportButton, exportErrorLabel); 
     }
     private void createEditorRightNode() {
         clearRightNode();
@@ -694,9 +710,9 @@ public class SpaceAI extends Application {
         mineralSelectorHB.setSpacing(10);
     }
     private void createExportButton() {
-        export = new Button("Export Map");
-        export.setFocusTraversable(false);
-        export.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+        exportButton = new Button("Export Map");
+        exportButton.setFocusTraversable(false);
+        exportButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
             try {
                 exportMap();
             } catch (IOException ex) {
@@ -845,30 +861,34 @@ public class SpaceAI extends Application {
         }
         return validated;
     }
- 
+    
+    // *********************************
+    // *********** REPLAYS *************
+    // *********************************
+
     // *********************************
     // *********** UTILITY *************
     // *********************************
     
-    private void clearTopNode() {
+    void clearTopNode() {
         topBox.getChildren().clear();
     }
-    private void clearBottomNode() {
+    void clearBottomNode() {
         bottomBox.getChildren().clear();
     }
-    private void clearRightNode() {
+    void clearRightNode() {
         rightBox.getChildren().clear();
     }
-    private void clearLeftNode() {
+    void clearLeftNode() {
         leftBox.getChildren().clear();
     }
-    private void clearGameScreen() {
+    void clearGameScreen() {
         if(gamePlayLoop != null) {
             gamePlayLoop.stop();
         }
         gameScreen.getChildren().clear();
     }
-    private void createMainMenuButton() {
+    void createMainMenuButton() {
         mainMenuButton = new Button("Main Menu");
         mainMenuButton.setFocusTraversable(false);
         mainMenuButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
@@ -879,5 +899,25 @@ public class SpaceAI extends Application {
                 Logger.getLogger(SpaceAI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-    }    
+    }
+    
+    // *********************************
+    // *********** GETTERS *************
+    // *********************************
+    
+    GameWorld getGameWorld() {
+        return gameWorld;
+    }     
+    boolean getRecordReplay() {
+        return recordReplay;
+    }
+    String getReplayName() {
+        if(replayNameField.getText().replaceAll("\\s","").equals("")) {
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
+            return timeStamp;   
+        }
+        else {
+            return replayNameField.getText().replaceAll("\\s","");
+        }
+    }
 }

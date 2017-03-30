@@ -16,10 +16,7 @@
  */
 package player;
 
-import common.AIController;
-import common.Direction;
-import common.Environment;
-import common.UnitType;
+import common.*;
 import java.util.List;
 
 

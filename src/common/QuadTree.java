@@ -2,16 +2,16 @@
  * Copyright (C) 2017 dr4ur
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU General License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU General License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU General License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package common;
@@ -19,28 +19,30 @@ package common;
 import java.util.ArrayList;
 import java.util.List;
 import static common.Map.getCoordinateToPixel;
-import static common.Map.getPixelToCoordinate;
 
 /**
  *
  * @author Dyaln Russell
  */
-public class QuadTree {
+class QuadTree {
 
-    private int MAX_OBJECTS = 10;
-    private int MAX_LEVELS = 5;
-    private int level;
-    private List actors;
-    private double width, height, x, y;
-    private QuadTree[] nodes;
+    private final int MAX_OBJECTS = 10;
+    private final int MAX_LEVELS = 5;
+    private final int level;
+    private final List actors;
+    private final double width;
+    private final double height;
+    private final double x;
+    private final double y;
+    private final QuadTree[] nodes;
     
-    public double getX() {
+    double getX() {
         return this.x;
     }
-    public double getY() {
+    double getY() {
         return this.y;
     }
-    public QuadTree(int level, double width, double height, double x, double y) {
+    QuadTree(int level, double width, double height, double x, double y) {
         this.level = level;
         this.actors = new ArrayList();
         this.width = width;
@@ -49,7 +51,7 @@ public class QuadTree {
         this.y = y; //Top left y
         nodes = new QuadTree[4];
      }
-    public void clear() {
+    void clear() {
         actors.clear();
 
         for (int i = 0; i < nodes.length; i++) {
@@ -96,7 +98,7 @@ public class QuadTree {
         }
         return index;
     }
-    public void insert(Actor actor) {
+    void insert(Actor actor) {
         if(nodes[0] != null) {
             int index = getIndex(actor);
             if (index != -1) {
@@ -122,7 +124,7 @@ public class QuadTree {
             }
         }
     }
-    public List retrieve(List returnActors, Actor actor) {
+    List retrieve(List returnActors, Actor actor) {
         int index = getIndex(actor);
         if (index != -1 && nodes[0] != null) {
             nodes[index].retrieve(returnActors, actor);

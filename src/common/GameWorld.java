@@ -2,16 +2,16 @@
  * Copyright (C) 2017 dr4ur
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU General License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU General License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU General License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package common;
@@ -25,7 +25,7 @@ import java.util.List;
  * 
  * This class makes certain calculations pertaining to the game world.
  */
-public class GameWorld {
+class GameWorld {
     
     private int gameRound;
     private int uniqueID;
@@ -45,7 +45,7 @@ public class GameWorld {
      * @param spaceAI        an instance of the SpaceAI class that facilitates game animation.
      * @param castDirector   an instance of the CastingDirector class that communicates current unit count and status  
      */
-    public GameWorld(SpaceAI spaceAI, CastingDirector castDirector, Map map) {
+    GameWorld(SpaceAI spaceAI, CastingDirector castDirector, Map map) {
         this.spaceAI = spaceAI;
         this.castDirector = castDirector;
         this.gameSpeed = GameConstants.FRAMES_PER_ROUND_5;
@@ -59,7 +59,7 @@ public class GameWorld {
     /**
      * Begins and updates game rounds and unit losses.    
      */
-    public void update() {
+    void update() {
         gameRound++;
         if(gameRound==1) {
             initializeStartingUnits();
@@ -269,7 +269,7 @@ public class GameWorld {
      * @param location     defines the location of unit to be added
      * @param team         defines the team of the unit to be added
      */
-    public void addUnit(UnitType type, Location location, Team team){
+    void addUnit(UnitType type, Location location, Team team){
         Unit unit = new Unit(spaceAI, type, getUniqueID(), location, team);
         castDirector.addToBeAdded(unit);
     }
@@ -277,7 +277,7 @@ public class GameWorld {
      * Adds unit to castDirector.
      * @param unit          unit to be added
      */
-    public void addUnit(Unit unit) {
+    void addUnit(Unit unit) {
         castDirector.addToBeAdded(unit);
     }
     /**
@@ -287,7 +287,7 @@ public class GameWorld {
      * @param team         defines the team of the weapon to be added
      * @param direction    defines the direction of the weapon to be added
      */
-    public void addWeapon(WeaponType type, Location location, Team team, Direction direction){
+    void addWeapon(WeaponType type, Location location, Team team, Direction direction){
         Weapon weapon = new Weapon(spaceAI, type, getUniqueID(), location, team, direction);
         castDirector.addToBeAdded(weapon);
     }
@@ -296,7 +296,7 @@ public class GameWorld {
      * @param type         defines the type of environment to be added 
      * @param location     defines the location of environment to be added
      */
-    public void addEnvironment(EnvironmentType type, Location location){
+    void addEnvironment(EnvironmentType type, Location location){
         Environment environment = new Environment(spaceAI, type, getUniqueID(), location);
         castDirector.addToBeAdded(environment);
     }
@@ -304,49 +304,49 @@ public class GameWorld {
      * Removes actor from the CastingDirector castDirector class.
      * @param actor         defines the actor to be removed 
      */
-    public void removeActor(Actor actor) {
+    void removeActor(Actor actor) {
         castDirector.addToRemovedActors(actor);
     }
     /**
      * Gets Game Speed. 
      * @return gameSpeed
      */    
-    public int getGameSpeed() {
+    int getGameSpeed() {
         return this.gameSpeed;
     }
     /**
      * Sets the Game Speed.
      * @param gameSpeed    defines the speed of the game by the frame per seconds in the Game Constants class.
      */
-    public void setGameSpeed(int gameSpeed) {
+    void setGameSpeed(int gameSpeed) {
         this.gameSpeed = gameSpeed;
     }
     /**
      * Gets the Game Round.
      * @return gameRound
      */
-    public int getGameRound() {
+    int getGameRound() {
         return gameRound;
     }
     /**
      * Gets the Game Winner.
      * @return gameWinner
      */
-    public GameWinner getGameWinner() {
+    GameWinner getGameWinner() {
         return gameWinner;
     }
     /**
      * Gets the Game Winning Team.
      * @return gameWinner.getWinner()
      */
-    public Team getGameWinningTeam() {
+    Team getGameWinningTeam() {
         return gameWinner.getWinner();
     }
     /**
      * Runs method updateQuadtree.
      * @return quad
      */
-    public QuadTree getUpdatedQuad() {
+    QuadTree getUpdatedQuad() {
         updateQuadTree();
         return quad;
     }
@@ -355,7 +355,7 @@ public class GameWorld {
      * @param team   defines the team
      * @return int number of minerals for given team
      */
-    public int getMineralCount(Team team) {
+    int getMineralCount(Team team) {
         switch(team) {
             case A : {return teamAMineralCount;}
             case B : {return teamBMineralCount;}
@@ -367,7 +367,7 @@ public class GameWorld {
      * @param i         the amount to be decreased
      * @param team      defines the team's mineral count to decrease
      */
-    public void decreaseMineralCount(int i, Team team) {
+    void decreaseMineralCount(int i, Team team) {
         switch(team) {
             case A : {this.teamAMineralCount -= i; break;}
             case B : {this.teamBMineralCount -= i; break;}
@@ -379,7 +379,7 @@ public class GameWorld {
      * @param i         the amount to be increased
      * @param team      defines the team's mineral count to increase
      */
-    public void increaseMineralCount(int i, Team team) {
+    void increaseMineralCount(int i, Team team) {
         switch(team) {
             case A : {this.teamAMineralCount += i; break;}
             case B : {this.teamBMineralCount += i; break;}
@@ -391,7 +391,7 @@ public class GameWorld {
      * @param team    defines the team's home location
      * @return 
      */
-    public Location getInitialHomeStationLocation(Team team) {
+    Location getInitialHomeStationLocation(Team team) {
         switch(team) {
             case A : {return teamAHomeStation;}
             case B : {return teamBHomeStation;}
@@ -404,7 +404,7 @@ public class GameWorld {
      * @param location      the desired location the player would like to check is or is not occupied
      * @return false
      */
-    public boolean checkIfLocationIsEmpty(Location location) {
+    boolean checkIfLocationIsEmpty(Location location) {
         ghostCircle = new GhostCircle(0,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -428,7 +428,7 @@ public class GameWorld {
      * @param radius        the desired radius the player would like to check is or is not occupied
      * @return 
      */
-    public boolean checkIfLocationIsEmpty(Location location, int radius) {
+    boolean checkIfLocationIsEmpty(Location location, int radius) {
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -453,7 +453,7 @@ public class GameWorld {
      * @param ID            the desired ID the player would like to check is or is not occupying the desired location     
      * @return 
      */
-    public boolean checkIfLocationIsEmpty(Location location, int radius, int ID) { // Checks if location is empty except for the unit represented by "ID"
+    boolean checkIfLocationIsEmpty(Location location, int radius, int ID) { // Checks if location is empty except for the unit represented by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -476,7 +476,7 @@ public class GameWorld {
      * @param radius        defines the radius size of the Actor who's radius will be queried
      * @return returnCollisions
      */
-    public List returnActorsInCircle(Location location, int radius) { // Returns all actors in circle.
+    List returnActorsInCircle(Location location, int radius) { // Returns all actors in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -500,7 +500,7 @@ public class GameWorld {
      * @param ID            defines the ID of the actor that will be excluded from the method's query
      * @return returnCollisions
      */
-    public List returnActorsInCircle(Location location, int radius, int ID) { // Returns all actors in circle. Returns actors in circle except for the unit represented by "ID"
+    List returnActorsInCircle(Location location, int radius, int ID) { // Returns all actors in circle. Returns actors in circle except for the unit represented by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -524,7 +524,7 @@ public class GameWorld {
      * @param radius        defines the radius size of the unit who's radius will be queried
      * @return returnCollisions
      */
-    public List returnUnitsInCircle(Location location, int radius) { // Returns all units in circle.
+    List returnUnitsInCircle(Location location, int radius) { // Returns all units in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -549,7 +549,7 @@ public class GameWorld {
      * @param ID            defines the ID of the unit that will be excluded from the method's query
      * @return returnCollisions
      */
-    public List returnUnitsInCircle(Location location, int radius, int ID) { // Returns all units in circle except the unit indicated by "ID"
+    List returnUnitsInCircle(Location location, int radius, int ID) { // Returns all units in circle except the unit indicated by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -574,7 +574,7 @@ public class GameWorld {
      * @param radius        defines the radius size of all actors, excluding Weapons, who's radius will be queried
      * @return returnCollisions
      */
-    public List returnNonWeaponsInCircle(Location location, int radius) { // Does not return weapons.
+    List returnNonWeaponsInCircle(Location location, int radius) { // Does not return weapons.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -599,7 +599,7 @@ public class GameWorld {
      * @param ID            defines the ID of the unit that will be excluded from the method's query 
      * @return returnCollisions
      */
-    public List returnNonWeaponsInCircle(Location location, int radius, int ID) { // Does not return weapons. Returns actors in circle except for the unit represented by "ID"
+    List returnNonWeaponsInCircle(Location location, int radius, int ID) { // Does not return weapons. Returns actors in circle except for the unit represented by "ID"
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -624,7 +624,7 @@ public class GameWorld {
      * @param radius        defines the radius size of the weapon who's radius will be queried
      * @return returnCollisions
      */
-    public List returnWeaponsInCircle(Location location, int radius) { // Returns all weapons in circle.
+    List returnWeaponsInCircle(Location location, int radius) { // Returns all weapons in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -648,7 +648,7 @@ public class GameWorld {
     * @param radius        defines the radius size of the environment variable who's radius will be queried
     * @return returnCollisions
     */
-    public List returnEnvironmentInCircle(Location location, int radius) { // Returns all environment in circle.
+    List returnEnvironmentInCircle(Location location, int radius) { // Returns all environment in circle.
         ghostCircle = new GhostCircle(radius,location);
         quad.insert(ghostCircle);
         List<Actor> returnActors = new ArrayList();
@@ -671,7 +671,7 @@ public class GameWorld {
      * @param team      defines the team to be passed to obtain the Unit Count
      * @return count
      */
-    public int getUnitCount(Team team) {
+    int getUnitCount(Team team) {
         int count = 0;
         count = castDirector.getCurrentUnits().stream().filter((unit) -> (unit.getTeam() == team)).map((_item) -> 1).reduce(count, Integer::sum);
         return count;
@@ -682,7 +682,7 @@ public class GameWorld {
      * @param type      defines the type to be passed to obtain the Unit Count
      * @return count
      */
-    public int getUnitCount(Team team, UnitType type) {
+    int getUnitCount(Team team, UnitType type) {
         int count = 0;
         count = castDirector.getCurrentUnits().stream().filter((unit) -> (unit.getTeam() == team && unit.getType() == type)).map((_item) -> 1).reduce(count, Integer::sum);
         return count;

@@ -74,25 +74,25 @@ public strictfp class Location {
     public double getY() {
         return y;
     }
-    public void setX(double x) {
+    void setX(double x) {
         this.x = x == Float.NaN ? 0 : x;
         this.pixelX = coordinateToPixel(x);
     } 
-    public void setY(double y) {
+    void setY(double y) {
         this.y = y == Float.NaN ? 0 : y;
         this.pixelY = -coordinateToPixel(y);
     }
-    public double getPixelX() {
+    double getPixelX() {
         return pixelX;
     }
-    public double getPixelY() {
+    double getPixelY() {
         return pixelY;
     }
-    public void setPixelX(double x) {
+    void setPixelX(double x) {
         this.pixelX = x;
         this.x = pixelToCoordinate(x) == Float.NaN ? 0 : pixelToCoordinate(x);
     }
-    public void setPixelY(double y) {
+    void setPixelY(double y) {
         this.pixelY = y;
         this.y = -pixelToCoordinate(y) == Float.NaN ? 0 : -pixelToCoordinate(y);
     }

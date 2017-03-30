@@ -28,7 +28,7 @@ import java.util.List;
  *
  * @author dr4ur
  */
-public strictfp class Map {
+strictfp class Map {
     
     private String mapName;
     private double sizeFactor;
@@ -41,7 +41,7 @@ public strictfp class Map {
     private BufferedReader br;
     private final File mapFile;  
 
-    public Map(File mapFile) throws IOException {
+    Map(File mapFile) throws IOException {
         this.mapFile = mapFile;
         this.mapName = null;
         this.sizeFactor = 2;

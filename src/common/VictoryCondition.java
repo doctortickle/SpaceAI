@@ -25,7 +25,7 @@ package common;
  * 
  * This class enumerates the conditions by which a player can win.
  */
-public enum VictoryCondition {
+enum VictoryCondition {
     
     /**
      * In the case that the max numbers of rounds are met and all other win 

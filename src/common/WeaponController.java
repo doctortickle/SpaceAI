@@ -23,7 +23,7 @@ import javafx.scene.image.Image;
  *
  * @author dr4ur
  */
-public strictfp class WeaponController {
+strictfp class WeaponController {
     private final Weapon weapon;
     private final GameWorld gameWorld;
     private final double leftBoundary;
@@ -31,7 +31,7 @@ public strictfp class WeaponController {
     private final double bottomBoundary;
     private final double topBoundary;    
     
-    public WeaponController(Weapon weapon, GameWorld gameWorld) {
+    WeaponController(Weapon weapon, GameWorld gameWorld) {
         this.weapon = weapon;
         this.gameWorld = gameWorld;
         this.leftBoundary = Map.getMinXCoordinate();
@@ -56,7 +56,7 @@ public strictfp class WeaponController {
         if(location.getX() <= leftBoundary + weapon.getType().getWeaponRadius()) { return false; }
         return true;
     }    
-    public final void move(Direction direction) {
+    final void move(Direction direction) {
         Location movePoint = weapon.getLocation().add(weapon.getType().getLaunchSpeed(), direction);
         if  (checkBoundaries(movePoint)) {
             updateSpriteAndLocation(movePoint);   
@@ -72,7 +72,7 @@ public strictfp class WeaponController {
     // ***** COLLISION AND DAMAGE ******
     // *********************************
     
-    public boolean collide(Actor actor) {
+    boolean collide(Actor actor) {
         switch(weapon.getType()) {
             case SMALL_LASER        : return laserCollision(actor);
             case LARGE_LASER        : return laserCollision(actor); 
@@ -83,7 +83,7 @@ public strictfp class WeaponController {
             default                 : return laserCollision(actor);
         }
     }   
-    public void damageApplication(Actor actor) {
+    void damageApplication(Actor actor) {
         switch(weapon.getType()) {
             case SMALL_LASER        : laserDamageApplication(actor); return;
             case LARGE_LASER        : laserDamageApplication(actor); return; 

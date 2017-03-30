@@ -185,7 +185,7 @@ public strictfp enum WeaponType {
      * @return Image sprite image for a given WeaponType.
      * @see #spriteImage
      */
-    public Image getSpriteImage() {
+    Image getSpriteImage() {
         return spriteImage;
     }     
 }

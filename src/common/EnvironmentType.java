@@ -142,11 +142,11 @@ public strictfp enum EnvironmentType {
      * Returns the rotational velocity of a given EnvironmentType.
      * @return double rotational velocity of a given EnvironmentType.
      */
-    public double getRotationV() {
+    double getRotationV() {
         return rotationV;
     }
 
-    public Image getSpriteImage() {
+    Image getSpriteImage() {
         return spriteImage;
     }
      

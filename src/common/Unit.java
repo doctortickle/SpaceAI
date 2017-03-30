@@ -171,7 +171,7 @@ public final class Unit extends Actor {
      * @return int current fuel in this unit's tank
      * @see #fuel
      */
-    public int getFuel() {
+    int getFuel() {
         return fuel;
     }
     /**
@@ -297,7 +297,7 @@ public final class Unit extends Actor {
      * @return boolean stalled
      * @see #stalled
      */
-    public boolean isStalled() {
+    boolean isStalled() {
         return stalled;
     }
     /**

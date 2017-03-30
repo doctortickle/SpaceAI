@@ -18,10 +18,13 @@ import javafx.scene.paint.Color;
  * @author Dylan Russell
  */
 public abstract class Actor {
-    private int ID, health, radius;
+
+    private final int ID;
+    private int health;
+    private final int radius;
     private Location location;
-    private final Team team;
-    private ImageView spriteFrame;
+    private final Team team;    
+    private final ImageView spriteFrame;
 
     Actor(int ID, int health, int radius, Location location, Team team, Image spriteImage) {
         this.ID = ID;

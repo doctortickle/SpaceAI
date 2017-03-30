@@ -25,7 +25,7 @@ package common;
  * 
  * GameConstants are stored here.
  */
-public strictfp interface GameConstants {
+strictfp interface GameConstants {
     
     // *********************************
     // ****** ANIMATION CONSTANTS ******

@@ -227,6 +227,9 @@ public strictfp class AIController {
     public final int getFuel() {
         return unit.getFuel();
     } 
+    public final boolean isStalled() {
+        return unit.isStalled();
+    }    
     public final int getFuelMax() {
         return unit.getType().getFuelMax();
     }

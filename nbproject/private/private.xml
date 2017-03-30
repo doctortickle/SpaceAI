@@ -3,11 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/GameWorld.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/Location.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/Map.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/QuadTree.java</file>
-            <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/player/AICommandA.java</file>
             <file>file:/Users/dr4ur/NetBeansProjects/SpaceAI/src/common/SpaceAI.java</file>
         </group>
     </open-files>

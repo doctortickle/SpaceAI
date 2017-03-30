@@ -58,7 +58,7 @@ public strictfp enum EnvironmentType {
      */
     SMALL_PLANET    (10000,    0,     30,      0,      (Math.PI)/9,
     /*              maxHP   trvSpd    Rad    MinMax      RotV    */
-                    new Image("images/TestImage.png")),
+                    new Image("images/SMALL_PLANET.png")),
     /**
      * A large planet, capable of hosting a SMALL_DOCK, LARGE_DOCK, or CAPITAL_DOCK. Maximum capacity of 2.
      */

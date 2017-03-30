@@ -103,12 +103,6 @@ class GameWorld {
      * Provides unique identification number.
      * @return   increments uniqueID 
      */
-    /*double getPixelToCoordinate() {
-        return Map.getPixelToCoordinate();
-    }// MOVE TO MAP 
-    double getCoordinateToPixel() {
-        return Map.getCoordinateToPixel();
-    }// MOVE TO MAP */
 
     private synchronized int getUniqueID() {
         return uniqueID++;

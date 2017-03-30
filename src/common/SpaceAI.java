@@ -50,7 +50,7 @@ import javafx.stage.Stage;
  *
  * @author Dylan Russell
  */
-class SpaceAI extends Application {
+public class SpaceAI extends Application {
     private boolean startGame, pause, editorMode, delete, add, recordReplay;
     private Scene scene;
     private BorderPane root;
@@ -129,10 +129,8 @@ class SpaceAI extends Application {
         bottomBox.setPadding(bottomBoxPadding);
         bottomBox.setAlignment(Pos.CENTER);
         bottomBox.setMinHeight((scene.getHeight() - GameConstants.CENTER_HEIGHT)/2);
-        scene.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-                bottomBox.setMinHeight(((Double) newSceneHeight - GameConstants.CENTER_HEIGHT)/2);
-            }
+        scene.heightProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) -> {
+            bottomBox.setMinHeight(((Double) newSceneHeight - GameConstants.CENTER_HEIGHT)/2);
         });
         
         root.setBottom(bottomBox);
@@ -145,10 +143,8 @@ class SpaceAI extends Application {
         topBox.setPadding(topBoxPadding);
         topBox.setAlignment(Pos.CENTER);
         topBox.setMinHeight((scene.getHeight() - GameConstants.CENTER_HEIGHT)/2);
-        scene.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-                topBox.setMinHeight(((Double) newSceneHeight - GameConstants.CENTER_HEIGHT)/2);
-            }
+        scene.heightProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) -> {
+            topBox.setMinHeight(((Double) newSceneHeight - GameConstants.CENTER_HEIGHT)/2);
         });
         
         root.setTop(topBox);
@@ -160,10 +156,8 @@ class SpaceAI extends Application {
         rightBox.setAlignment(Pos.CENTER);
         rightBox.setMaxHeight(GameConstants.CENTER_HEIGHT);
         rightBox.setMinWidth((scene.getWidth() - GameConstants.CENTER_WIDTH)/2);
-        scene.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-                rightBox.setMinWidth(((Double) newSceneWidth - GameConstants.CENTER_WIDTH)/2);
-            }
+        scene.widthProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) -> {
+            rightBox.setMinWidth(((Double) newSceneWidth - GameConstants.CENTER_WIDTH)/2);
         });
         
         root.setRight(rightBox);
@@ -175,10 +169,8 @@ class SpaceAI extends Application {
         leftBox.setAlignment(Pos.CENTER);
         leftBox.setMaxHeight(GameConstants.CENTER_HEIGHT);
         leftBox.setMinWidth((scene.getWidth() - GameConstants.CENTER_WIDTH)/2);
-        scene.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-                leftBox.setMinWidth(((Double) newSceneWidth - GameConstants.CENTER_WIDTH)/2);
-            }
+        scene.widthProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) -> {
+            leftBox.setMinWidth(((Double) newSceneWidth - GameConstants.CENTER_WIDTH)/2);
         });
         
         root.setLeft(leftBox);
@@ -262,8 +254,8 @@ class SpaceAI extends Application {
         replayNameLabel = new Label("Replay Name: ");
         replayNameField = new TextField ();
         replayCB = new CheckBox("Record");
-        replayCB.setSelected(true);
-        recordReplay = true;
+        replayCB.setSelected(false);
+        recordReplay = false;
         replayCB.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
             recordReplay = new_val;
             System.out.println(recordReplay);
@@ -468,18 +460,18 @@ class SpaceAI extends Application {
             actor.getSpriteFrame().setTranslateX(actor.getLocation().getPixelX());
             actor.getSpriteFrame().setTranslateY(actor.getLocation().getPixelY());
             if(actor instanceof Unit) {
-                actor.getSpriteFrame().setFitHeight(((Unit) actor).getType().getBodyRadius()*map.getCoordinateToPixel()*2);
-                actor.getSpriteFrame().setFitWidth(((Unit) actor).getType().getBodyRadius()*map.getCoordinateToPixel()*2);
+                actor.getSpriteFrame().setFitHeight(((Unit) actor).getType().getBodyRadius()*Map.getCoordinateToPixel()*2);
+                actor.getSpriteFrame().setFitWidth(((Unit) actor).getType().getBodyRadius()*Map.getCoordinateToPixel()*2);
                 castDirector.addCurrentUnit((Unit)actor);
             }
             if(actor instanceof Weapon) {
-                actor.getSpriteFrame().setFitHeight(((Weapon) actor).getType().getWeaponRadius()*map.getCoordinateToPixel()*2);
-                actor.getSpriteFrame().setFitWidth(((Weapon) actor).getType().getWeaponRadius()*map.getCoordinateToPixel()*2);
+                actor.getSpriteFrame().setFitHeight(((Weapon) actor).getType().getWeaponRadius()*Map.getCoordinateToPixel()*2);
+                actor.getSpriteFrame().setFitWidth(((Weapon) actor).getType().getWeaponRadius()*Map.getCoordinateToPixel()*2);
                 castDirector.addCurrentWeapon((Weapon)actor);
             }
             if(actor instanceof Environment) {
-                actor.getSpriteFrame().setFitHeight(((Environment) actor).getType().getBodyRadius()*map.getCoordinateToPixel()*2);
-                actor.getSpriteFrame().setFitWidth(((Environment) actor).getType().getBodyRadius()*map.getCoordinateToPixel()*2);
+                actor.getSpriteFrame().setFitHeight(((Environment) actor).getType().getBodyRadius()*Map.getCoordinateToPixel()*2);
+                actor.getSpriteFrame().setFitWidth(((Environment) actor).getType().getBodyRadius()*Map.getCoordinateToPixel()*2);
                 castDirector.addCurrentEnvironment((Environment)actor);
             }
             spriteFrameDict.put(actor.getSpriteFrame(), actor);
@@ -488,10 +480,12 @@ class SpaceAI extends Application {
         castDirector.clearToBeAdded();
     }
     private void removeGameActorNodes() {
-        for(Actor actor : castDirector.getRemovedActors()) {
+        castDirector.getRemovedActors().stream().map((actor) -> {
             spriteFrameDict.remove(actor.getSpriteFrame(), actor);
+            return actor;
+        }).forEachOrdered((actor) -> {
             gameScreen.getChildren().remove(actor.getSpriteFrame());
-        }
+        });
         castDirector.resetRemovedActors();
     }    
     private void updateMineralCountLabels() {
@@ -870,25 +864,25 @@ class SpaceAI extends Application {
     // *********** UTILITY *************
     // *********************************
     
-    void clearTopNode() {
+    private void clearTopNode() {
         topBox.getChildren().clear();
     }
-    void clearBottomNode() {
+    private void clearBottomNode() {
         bottomBox.getChildren().clear();
     }
-    void clearRightNode() {
+    private void clearRightNode() {
         rightBox.getChildren().clear();
     }
-    void clearLeftNode() {
+    private void clearLeftNode() {
         leftBox.getChildren().clear();
     }
-    void clearGameScreen() {
+    private void clearGameScreen() {
         if(gamePlayLoop != null) {
             gamePlayLoop.stop();
         }
         gameScreen.getChildren().clear();
     }
-    void createMainMenuButton() {
+    private void createMainMenuButton() {
         mainMenuButton = new Button("Main Menu");
         mainMenuButton.setFocusTraversable(false);
         mainMenuButton.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {

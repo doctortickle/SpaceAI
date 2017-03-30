@@ -35,7 +35,9 @@ class GamePlayLoop extends AnimationTimer {
         this.gameWorld = gameWorld;
         this.castDirector = castDirector;
         this.gameSpeed = gameWorld.getGameSpeed();
-        this.replay = new Replay(spaceAI.getReplayName());
+        if(spaceAI.getRecordReplay()) {
+            this.replay = new Replay(spaceAI.getReplayName());
+        }
     }
     
     @Override

@@ -23,7 +23,7 @@ import static common.Map.getPixelToCoordinate;
 
 /**
  *
- * @author Dyaln Russell
+ * @author Dylan Russell
  */
 public class QuadTree {
 
